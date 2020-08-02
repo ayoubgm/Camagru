@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../../public/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../../../public/css/signup.css"/>
+    <link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signup.css"/>
     <title>Registration</title>
 </head>
 <body>
@@ -12,7 +12,7 @@
 		<div class="card w-100">
 			<div class="row no-gutters">
 				<div class="col-md-4">
-					<img src="../../../public/images/background-img4.jpg" class="card-img">
+					<img src="<?php echo PUBLIC_FOLDER; ?>/images/background-img4.jpg" class="card-img">
 				</div>
 				<div class="col-md-8">
 					<div class="card-body">
@@ -60,8 +60,8 @@
 						</form>
 					</div>
 					<div class="card-footer text-muted w-100">
-						<a href="#">Home</a>
-						<a href="#" id="link-signin">Log in</a>
+						<a href="<?php echo SERVER; ?>">Home</a>
+						<a href="<?php echo SERVER; ?>/signin" id="link-signin">Log in</a>
 					</div>
 				</div>
 			</div>
