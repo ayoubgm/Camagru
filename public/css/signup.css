@@ -1,0 +1,65 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Arial';
+}
+
+body {
+	background-image: url('../images/background-img2.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-attachment: fixed;
+}
+
+.container {
+	padding: 20px 0px;
+}
+
+.card div div img {
+	height: 100%;
+	width: 100%;
+}
+
+.card-body p{
+	letter-spacing: 3px;
+	font-weight: bold;
+	font-size: 20pt;
+	color: rgb(54, 54, 54);
+}
+
+.card-body form {
+	color: rgb(77, 77, 77);
+	padding: 20px 0px;
+}
+
+.form-group {
+	margin-top: 20px;
+}
+
+.card-body form button{
+	position: relative;
+	left: 80px;
+	top: 20px;
+}
+
+.register {
+	margin: 10px 0px 40px 0px;
+}
+
+.register button {
+	float: right;
+}
+
+.card-footer {
+	position: absolute;
+	bottom: 0;
+}
+
+.card-footer a {
+	color: rgb(90, 90, 90);
+}
+
+.card-footer a#link-signin{
+	float: right;
+}

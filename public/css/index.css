@@ -1,78 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial';
+}
 
 body {
-    margin: 0;
-    padding: 0;
     background-image: url('../images/background-img2.png');
-    background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
     background-attachment: fixed;
-    box-sizing: border-box;
 }
 
-img.logo{
-    width: 40px;
-    height: 50px;
-    cursor: pointer;
-}
-
-li, a, a#btn-signin, a#btn-signup {
-    font-family: 'Arial';
-    font-weight: 500;
-    font-size: 15px;
-    color: #edf0f1;
-}
-
-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 15px;
-    background-color: #1c1c20;
-}
-
-ul.nav_links {
-    list-style: none;
-}
-
-ul.nav_links li {
-    display: inline-block;
-}
-
-ul.nav_links li a{
-    transition: all 0.3s ease 0s;
-    padding: 6px 20px;
-    width: 100%;
-    text-decoration: none;
-}
-
-ul.nav_links li a:hover{
-    background-color: rgba(0, 136, 169, 1);
-    border-radius: 50px;
-    color: #edf0f1;
-}
-
-a#btn-signin, a#btn-signup {
-    background-color: rgba(0, 136, 169, 1);
-    border: none;
-    border-radius: 50px;
-    transition: all 0.3s ease 0s;
-    padding: 9px 25px;
-    text-decoration: none;
-}
-
-a#btn-signin:hover, a#btn-signup:hover {
-    background-color: rgb(0, 98, 122);
-}
-
-footer p{
-    font-weight: 200;
-    font-size: 12px;
-    text-align: center;
-    background-color: #1c1c20;
+div.jumbotron{
+    background-color: rgba(158, 158, 158, 0.486);
     color: white;
-    position: absolute;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    bottom: 0;
 }
+
+div.jumbotron p{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+    div.jumbotron p{
+        font-size: 18px;
+        font-weight: 500;
+        transition: all 0.5s ease;
+    }
+}
+
