@@ -24,4 +24,6 @@
 I will use for this project MVC design pattern (concept), it separates application logic, interfaces, etc.<br/>
 
 ## `So How MVC works ?`
-![Image of MVC structure](https://i.ibb.co/FgSsXxb/MVC.png)
+![Image of MVC structure 1](https://i.ibb.co/FgSsXxb/MVC.png)
+<br/>
+![Image of MVC structure 2](https://i.ibb.co/Cn3vzZP/MVC1.png)
