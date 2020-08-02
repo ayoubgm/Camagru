@@ -8,15 +8,19 @@
 :heavy_check_mark: Cross origin resources sharing<br/>
 
 ## `Technologies used`<br/>
-:dizzy: Apache
-:anger: MySQL
-:sparkles: PHP
-:alien: HTML5/CSS3
-:eyes: Bootstrap
-:fire: Javacript
-:neckbeard: Ajax
+:dizzy: Apache<br/>
+:anger: MySQL<br/>
+:sparkles: PHP<br/>
+:alien: HTML5/CSS3<br/>
+:eyes: Bootstrap<br/>
+:fire: Javacript<br/>
+:neckbeard: Ajax<br/>
 
 ## `Objectives`<br/>
+:thought_balloon: Ability to take a picture by webcam.<br/>
+:thought_balloon: Allowing to user mix taken picture with other images.
 
-:thought_balloon: Ability to take a picture by webcam
-:thought_balloon: Allowing to user mix taken picture with other images
+## `How the project will be stuctured ?`<br/>
+I will use for this project MVC design pattern (concept), it separates application logic, interfaces, etc.<br/>
+
+## `So How MVC works ?`<br/>
