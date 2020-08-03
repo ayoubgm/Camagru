@@ -7,6 +7,10 @@
 		
 		public function __construct()
 		{
+			require_once(CONFIG . 'config.php');
+			
+			$objsetup = new Setup();
+			$objsetup->setup();
 			$url = $this->parseURL();
 			
 			if ( isset($url[0]) && file_exists( CONTROLLERS . ucfirst($url[0]) .'.php' ) ) {
