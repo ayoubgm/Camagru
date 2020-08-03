@@ -13,7 +13,14 @@
 
 		public function		signup()
 		{
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup');
+			switch($_SERVER['REQUEST_METHOD']) {
+				case 'GET':
+					$this->call_view('home' . DIRECTORY_SEPARATOR .'signup');
+					break;
+				case 'POST':
+					print_r($_POST);
+					break;
+			}
 		}
 
 		public function		notfound()
