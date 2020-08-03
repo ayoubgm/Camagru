@@ -33,18 +33,10 @@ body {
 	padding: 20px 0px;
 }
 
-.form-group {
-	margin-top: 20px;
-}
-
 .card-body form button{
 	position: relative;
 	left: 80px;
 	top: 20px;
-}
-
-.register {
-	margin: 10px 0px 40px 0px;
 }
 
 .register button {
