@@ -1,14 +1,21 @@
 <?php
 	class Controller {
 		
-		public function     call_model( $model )
+		protected $view;
+
+		public function     call_model ( $model )
 		{
 			if ( file_exists(MODELS . $model . '.php') ) { return new $model(); }
 		}
 
-		public function 	call_view( $view )
+		public function 	call_view ( $view_name, $view_data = [] )
 		{
-			if ( file_exists(VIEWS . $view . '.php') ) { require_once(VIEWS . $view . '.php'); }
+			$this->view = new View($view_name, $view_data);
+			return $this->view;
+		}
+
+		public function		call_middleware ( $middleware ) {
+			if ( file_exists(MIDDLEWARES . $middleware . '.php') ) { return new $middleware; }
 		}
 
 	}

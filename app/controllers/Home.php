@@ -1,24 +1,30 @@
 <?php
-	class Home extends Controller{
+	class Home extends Controller {
 
 		public function		index ()
 		{
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'index');
+			$indexView = $this->call_view('home' . DIRECTORY_SEPARATOR .'index');
+			$indexView->render();
 		}
 
 		public function		signin()
 		{
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'signin');
+			$signinView = $this->call_view('home' . DIRECTORY_SEPARATOR .'signin');
+			$signinView->render();
 		}
 
 		public function		signup()
 		{
 			switch($_SERVER['REQUEST_METHOD']) {
 				case 'GET':
-					$this->call_view('home' . DIRECTORY_SEPARATOR .'signup');
+					$signupView = $this->call_view('home' . DIRECTORY_SEPARATOR .'signup');
+					$signupView->render();
 					break;
 				case 'POST':
-					print_r($_POST);
+					$userMiddleware = $this->call_middleware('UserMiddleware');
+					$userMiddleware->signup($this, $_POST);
+					$userModel = $this->call_model('UserModel');
+					$userModel->save($_POST);
 					break;
 			}
 		}
