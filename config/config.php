@@ -1,5 +1,6 @@
 <?php
 	class DB {
+
 		private static $HOST = "localhost";
 		private static $USER = "root";
 		private static $PASSWORD = "";
@@ -24,14 +25,12 @@
 			{
 				$statement = self::connect()->prepare( $query );
 				$statement->execute($params);
-				if ( explode(' ', $query)[0] == 'SELECT' ){
-					$data = $statement->fetchAll();
-					return $data;
-				}
+				if ( explode(' ', $query)[0] == 'SELECT' ) { return $statement->fetchAll(); }
 			}
 			catch ( PDOException $e ) {
-				echo 'Connection failed: ' . $e->getMessage();
+				echo 'Query failed: ' . $e->getMessage();
 			}
 		}
+		
 	}
 ?>
