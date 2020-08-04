@@ -3,6 +3,7 @@
 	define("APP", ROOT . 'app' . DIRECTORY_SEPARATOR);
 	define("HELPERS", APP . 'helpers' . DIRECTORY_SEPARATOR);
 	define("CONTROLLERS", APP . 'controllers' . DIRECTORY_SEPARATOR);
+	define("MIDDLEWARES", APP . 'middlewares' . DIRECTORY_SEPARATOR);
 	define("MODELS", APP . 'models' . DIRECTORY_SEPARATOR);
 	define("VIEWS", APP . 'views' . DIRECTORY_SEPARATOR);
 	define("VALIDATORS", APP . 'views' . DIRECTORY_SEPARATOR);
@@ -27,7 +28,7 @@
 			str_replace('\\', '/', dirname(__DIR__).'/camagru_git/public')
 		)
 	);
-	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, VALIDATORS, CONFIG, PUBLIC_DIR, CSS, JS, IMAGES];
+	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, MIDDLEWARES, CONFIG, PUBLIC_DIR, CSS, JS, IMAGES];
 	set_include_path( get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $modules) );	
 	spl_autoload_register('spl_autoload', false);
 	$router = new Router();
