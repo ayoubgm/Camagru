@@ -18,6 +18,3 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`modifyat` DATETIME DEFAULT NULL,
 	CONSTRAINT uk_email_username UNIQUE ( email, username )
 );
-
-INSERT INTO `users`(`firstname`, `lastname`, `email`, `username`, `password`, `address`)
-values ( "ayoub", "guismi", "i.guismi@gmail.com", "aguismi", "safaa123ayoub", "385 hay el phsphate ...");

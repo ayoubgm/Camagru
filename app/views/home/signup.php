@@ -17,8 +17,7 @@
 				<div class="col-md-8">
 					<div class="card-body">
 						<p class="card-title">Registration</p>
-						<form action="<?php echo SERVER; ?>/signup" method="POST">
-						<!-- onsubmit="return validateRegisterData();" -->
+						<form action="<?php echo SERVER; ?>/signup" method="POST" onsubmit="return validateRegisterData();">
 							<div class="form-row">
 								<div class="form-group col-lg-6 m-0 mb-1">
 									<label for="inputFirstName">Firstname <span class="text-danger">*</span>:</label>
@@ -31,8 +30,8 @@
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['firstname']) ){
 											echo $_POST['firstname'];
 										} ?>"
-										/>
-										<!-- oninput="validateFirstName(this)" -->
+										oninput="validateFirstName(this)"
+									/>
 								</div>
 								<div class="form-group col-lg-6 m-0 mb-1">
 									<label for="inputLastName">Lastname <span class="text-danger">*</span>:</label>
@@ -43,8 +42,8 @@
 										id="inputLastName"
 										placeholder="lastname"
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['lastname']) ){ echo $_POST['lastname']; } ?>"
-										/>
-										<!-- oninput="validateLastName(this)" -->
+										oninput="validateLastName(this)"
+									/>
 								</div>
 							</div>
 							<div class="form-row">
@@ -57,8 +56,8 @@
 										id="inputUsername"
 										placeholder="username"
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['username']) ){ echo $_POST['username']; } ?>"
-										/>
-										<!-- oninput="validateUsername(this)" -->
+										oninput="validateUsername(this)"
+									/>
 								</div>
 								<div class="form-group col-lg-8 m-0 mb-1">
 									<label for="inputEmail">Email <span class="text-danger">*</span>:</label>
@@ -69,8 +68,8 @@
 										id="inputEmail"
 										placeholder="email"
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['email']) ){ echo $_POST['email']; } ?>"
-										/>
-										<!-- oninput="validateEmail(this)" -->
+										oninput="validateEmail(this)"
+									/>
 								</div>
 							</div>
 							<div class="form-row">
@@ -83,8 +82,8 @@
 										id="inputAddress"
 										placeholder="address"
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['address']) ){ echo $_POST['address']; } ?>"
+										oninput="validateAddress(this)"
 									/>
-										<!-- oninput="validateAddress(this)" -->
 								</div>
 							</div>
 							<div class="form-row">
@@ -97,8 +96,8 @@
 										id="inputPassword"
 										placeholder="password"
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['password']) ){ echo $_POST['password']; } ?>"
-										/>
-										<!-- oninput="validatePassword(this)" -->
+										oninput="validatePassword(this)"
+									/>
 								</div>
 								<div class="form-group col-lg-6 m-0 mb-1">
 									<label for="inputConfirmationPass">Confirmation password <span class="text-danger">*</span>:</label>
@@ -109,8 +108,8 @@
 										id="inputConfirmationPass"
 										placeholder="Confirmation password"
 										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['confirmation_password']) ){ echo $_POST['confirmation_password']; } ?>"
-										/>
-										<!-- oninput="validateConfPass(this)" -->
+										oninput="validateConfPass(this)"
+									/>
 								</div>
 							</div>
 							<div class="form-row register m-4">
@@ -123,11 +122,12 @@
 							</div>
 							<div class="col-lg-12 text-center mb-5">
 								<span id="msg" class="w-100 
-									<?php 
-										if ( $this->view_data['success'] == "false" ) { echo "text-danger"; }
-										else { echo "text-success"; }
-									?>">
-									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg']; ?>
+										<?php 
+											if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
+											else { echo "text-danger"; }
+										?>
+									">
+									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 								</span>
 							</div>
 						</form>
