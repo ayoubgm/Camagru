@@ -55,5 +55,23 @@
 			return( $stt->fetch() );
 		}
 
+		protected function		isActiveAccount ( $username ) {
+			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
+			$stt->execute([ $username ]);
+			$userData = $stt->fetch();
+			
+			return ( empty($userData['activationToken']) );
+		}
+
+		protected function		isThePasswordIsValid( $username, $password )
+		{
+			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
+			$stt->execute([ $username ]);
+			$userData = $stt->fetch();
+
+			return ( password_verify($password, $userData['password']) );
+		}
+
+
 	}
 ?>

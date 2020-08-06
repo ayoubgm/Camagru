@@ -1,41 +1,59 @@
 <?php
 	class UserMiddleware extends Middleware{
 		
-		private function 	setError ( $controller, $data ) {
-			$view = $controller->call_view('home' . DIRECTORY_SEPARATOR .'signup', $data);
-			$view->render();
+		private function 	setError ( $controller, $data, $target ) {
+			switch ( $target ) {
+				case "signup":
+					$controller->call_view('home' . DIRECTORY_SEPARATOR .'signup', $data)->render();
+				break;
+				case "signin":
+					$controller->call_view('home' . DIRECTORY_SEPARATOR .'signin', $data)->render();
+				break;
+			}
 		}
 
 		// Middleware for validating register data
 		public function      signup ( $controller, $data ) {
 			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email'] || !$data['password'] || !$data['confirmation_password'] ) {
-				$this->setError( $controller, ['success' => "false", 'msg' => "Invalid data provided !" ]);
+				return "Invalid data provided !";
 			} else if ( $error = $this->validateFirstname( $data['firstname'] ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => $error ]);
+				return $error;
 			} else if ( $error = $this->validateLastname( $data['lastname'] ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => $error ]);
+				return $error;
 			} else if ( $error = $this->validateUsername( $data['username'] ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => $error ]);
+				return $error;
 			} else if ( $error = $this->validateEmail( $data['email'] ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => $error ]);
+				return $error;
 			} else if ( $error = $this->validateAddress( $data['address'] ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => $error ]);
+				return $error;
 			} else if ( $error = $this->validatePassword( $data['password'] ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => $error ]);
+				return $error;
 			} else if ( $data['password'] != $data['confirmation_password'] ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => "Passwords doesn't match !" ]);
+				return "Passwords doesn't match !";
 			} else if ( $this->isFullnameExists( strtolower( $data['firstname'] ), strtolower( $data['lastname'] ) ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => "The fullname is already exists !" ]);
+				return "The fullname is already exists !";
 			} else if ( $this->isUsernameExists( strtolower( $data['username']) ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => "The username is already exists !" ]);
+				return "The username is already exists !";
 			} else if ( $this->isEmailExists( strtolower( $data['email']) ) ) {
-				$this->setError( $controller, [ 'success' => "false", 'msg' => "The email is already exists !" ]);
+				return "The email is already exists !";
+			} else {
+				return null;
 			}
 		}
 
 		// Middleware for validating sign in data
-        public function      signin ( $data ) {
-
+        public function      signin ( $controller, $data ) {
+			if ( !$data['username'] || !$data['password'] ) {
+				return "Invalid data provided !";
+			} else if ( !$this->isUsernameExists( strtolower( $data['username']) ) ) {
+				return "The username does't exists !";
+			} else if ( !$this->isActiveAccount( strtolower( $data['username' ]) ) ) {
+				return "You must activate your account first !";
+			} else if ( !$this->isThePasswordIsValid( strtolower( $data['username' ]), $data['password'] ) ) {
+				return "Incorrect password !";
+			} else {
+				return null;
+			}
         }
 
 	}
