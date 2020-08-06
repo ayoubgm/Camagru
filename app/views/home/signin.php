@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signin.css"/>
-    <title>Sign in</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signin.css"/>
+	<title>Sign in</title>
 </head>
 <body>
-    <div class="container">
+	<div class="container">
 		<div class="card w-100">
 			<div class="row no-gutters">
 				<div class="col-md-4">
@@ -68,7 +68,7 @@
 					</div>
 				</div>
 			</div>
-		  </div>
-      </div>
+		</div>
+	</div>
 </body>
 </html>
