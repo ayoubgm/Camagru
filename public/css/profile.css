@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial';
+}
+
+body {
+    background-image: url('../images/background-img7.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.card {
+    margin-top: 20px;
+}
+
+.card-body .card-title{
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 18pt;
+    color: rgb(54, 54, 54);
+}
+
+.card-body .full-name{
+    font-weight: bold;
+    font-size: 18pt;
+    text-transform: uppercase;
+    color: rgba(0, 136, 169, 1);
+}
+
+.card-body .user-infos {
+    text-align: center;
+    padding: 50px 0px;
+}
+
+.card-body .user-infos span#field{
+    font-weight: bold;
+    color: rgb(68, 68, 68);
+}
+
+div a#btn-edit {
+    float: right;
+}
