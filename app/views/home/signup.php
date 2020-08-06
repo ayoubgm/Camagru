@@ -112,15 +112,7 @@
 									/>
 								</div>
 							</div>
-							<div class="form-row register m-4">
-								<input
-									type="submit"
-									class="offset-2 col-8 btn btn-outline-primary w-50"
-									value="Register"
-									id="btn-signup"
-								/>
-							</div>
-							<div class="col-lg-12 text-center mb-5">
+							<div class="row text-center px-5 py-2" style="height: 70px;">
 								<span id="msg" class="w-100 
 										<?php 
 											if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
@@ -129,6 +121,15 @@
 									">
 									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 								</span>
+							</div>
+							<div class="form-row register my-4">
+								<input
+									type="submit"
+									class="offset-2 col-8 btn btn-outline-primary w-50"
+									value="Register"
+									id="btn-signup"
+									name="btn-signup"
+								/>
 							</div>
 						</form>
 					</div>
