@@ -20,23 +20,35 @@
 		
 		public function		signup()
 		{
-			switch($_SERVER['REQUEST_METHOD']) {
+			switch( $_SERVER['REQUEST_METHOD'] ) {
 				case 'GET':
 					$this->call_view('home' . DIRECTORY_SEPARATOR .'signup')->render();
 				break;
 				case 'POST':
-					$userMiddleware = $this->call_middleware('UserMiddleware');
-					$userMiddleware->signup($this, $_POST);
-					$userModel = $this->call_model('UserModel');
-					try {
-						if ( $userModel->save($_POST) ) {
-							// $this->sendMail("Confirmation mail", strtolower($_POST['email']));
-							$view = $this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', [ 'success' => "true", 'msg' => "Successful registration, you will receive an email for activation account !" ])->render();
+					if ( isset($_POST['btn-signup']) ) {
+						if ( $error = $this->call_middleware('UserMiddleware')->signup($this, $_POST) != true ) {
+							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', $error )->render();
 						} else {
-							$view = $this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', [ 'success' => "false", 'msg' => "Registration failed !" ] )->render();
+							try {
+								if ( $this->call_model('UserModel')->save($_POST) ) {
+									// $this->sendMail("Confirmation mail", strtolower($_POST['email']));
+									$this->call_view(
+										'home' . DIRECTORY_SEPARATOR .'signup',
+										[ 'success' => "true", 'msg' => "Successful registration, you will receive an email for activation account !" ]
+									)->render();
+								} else {
+									$this->call_view(
+										'home' . DIRECTORY_SEPARATOR .'signup',
+										[ 'success' => "true", 'msg' => "Registration failed !" ]
+									)->render();
+								}
+							} catch ( Exception $e ) {
+								$this->call_view(
+									'home' . DIRECTORY_SEPARATOR .'signup',
+									[ 'success' => "false", 'msg' => "Something goes wrong, try later !" ]
+								)->render();
+							}
 						}
-					} catch ( Exception $e ) {
-						$view = $this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ] )->render();
 					}
 				break;
 			}
@@ -44,7 +56,26 @@
 		
 		public function		signin()
 		{
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'signin')->render();
+			switch ( $_SERVER['REQUEST_METHOD'] ) {
+				case "GET":
+					$this->call_view('home' . DIRECTORY_SEPARATOR .'signin')->render();
+				break;
+				case "POST":
+					if ( ($error = $this->call_middleware('UserMiddleware')->signin($this, $_POST)) != null){
+						$this->call_view(
+							'home' . DIRECTORY_SEPARATOR .'signin',
+							[ 'success' => "false", 'msg' => $error ]
+						)->render();
+					} else {
+						$userData = $this->call_model('UserModel')->findUserByUsername($_POST['username']);
+						session_start();
+						$_SESSION['userid'] = $userData['id'];
+						$_SESSION['username'] = $userData['username'];
+						$this->call_view( 'home', [ 'success' => "true" ] )->render();
+						header("Location: /camagru_git/home");
+					}
+				break;
+			}
 		}
 		
 		public function		notfound()
