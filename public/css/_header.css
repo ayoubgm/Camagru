@@ -41,6 +41,50 @@ nav {
     display: none;
 }
 
+nav .btn-auth img#profile-img {
+    border: 1px solid white;
+    border-radius: 100%;
+    padding: 0px;
+    width: 55px;
+    cursor: pointer;
+}
+
+nav .btn-auth img.active .dropdown {
+    display: block;
+}
+
+nav .btn-auth img#notif-img {
+    padding: 0px;
+    margin-right: 20px;
+    width: 30px;
+    cursor: pointer;
+}
+
+nav .btn-auth .dropdown {
+    height: 105px;
+    position: absolute;
+    top: 60px;
+    right: 80px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    display: none;
+}
+
+nav .btn-auth .dropdown ul {
+    list-style: none;
+}
+
+nav .btn-auth .dropdown ul li a {
+    color: #1c1c20;
+    text-decoration: none;
+    font-size: 11pt;
+}
+
+nav .btn-auth .dropdown #profile, nav .btn-auth .dropdown #settings, nav .btn-auth .dropdown #logout {
+    width: 25px;
+}
+
 a#btn-signin:hover, a#btn-signup:hover {
     background-color: rgb(0, 98, 122);
 }

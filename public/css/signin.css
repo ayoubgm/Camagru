@@ -25,20 +25,26 @@ body {
 
 .card-body form {
     color: rgb(77, 77, 77);
-    padding: 80px 0px;
+    padding: 80px 150px;
 }
 
-.card-body form button{
+.card-body form #btn-login{
     position: relative;
-    left: 80px;
-    top: 20px;
+    left: 40px;
 }
+
+#area-msg {
+    height: 50px;
+}
+
+/* #area-msg #msg {
+    position: relative;
+    left: 70px;
+}*/
 
 .reset-pass {
-    position: relative;
-    font-size: 9pt;
+    font-size: 8pt;
     color: rgb(77, 77, 77);
-    left: 65px;
 }
 
 .card-footer {
@@ -52,4 +58,25 @@ body {
 
 .card-footer a#link-signup{
     float: right;
+}
+
+@media (max-width: 1199.98px) {
+    .card-body form { padding: 50px 115px; }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .card-body form { padding: 40px 80px; }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .card-body form { padding: 50px 50px; }
+    #btn-login { left: 15px; }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .card-body form { padding: 50px 40px; }
+}
+
+@media (max-width: 575.98px) {
+    .card-body form { padding: 50px 40px; }
 }
