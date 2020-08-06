@@ -9,8 +9,7 @@
 		{
 			require_once(CONFIG . 'config.php');
 			
-			$objsetup = new Setup();
-			$objsetup->setup();
+			
 			$url = $this->parseURL();
 			
 			if ( isset($url[0]) && file_exists( CONTROLLERS . ucfirst($url[0]) .'.php' ) ) {
@@ -35,6 +34,10 @@
 				}
 			}
 			$this->params = $url ? array_values($url) : [];
+			// if ( $this->controller instanceof Home && $this->method === "index" ) {
+			// 	$objsetup = new Setup();
+			// 	$objsetup->setup();
+			// }
 			call_user_func_array([$this->controller, $this->method], $this->params);
 		}
 		
