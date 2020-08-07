@@ -25,15 +25,21 @@
 			: null;
 		}
 
-		protected function		validatePassword ( $password ) {
-			return ( !preg_match( "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/", $password ) )
-			? "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !"
-			: null;
+		protected function		validateGender ( $gender ) {
+			return ( $gender == "male" || $gender == "female" )
+			? null
+			: "The gender should be either male or female !";
 		}
 
 		protected function		validateAddress ( $address ) {
 			return ( !preg_match("/^[a-zA-Z0-9\s,'-]*$/", $address) )
 			? "The address should be contains letters or numbers ( ',', ' or - ) !"
+			: null;
+		}
+
+		protected function		validatePassword ( $password ) {
+			return ( !preg_match( "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/", $password ) )
+			? "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !"
 			: null;
 		}
 
