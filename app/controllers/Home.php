@@ -26,7 +26,7 @@
 				break;
 				case 'POST':
 					if ( isset($_POST['btn-signup']) ) {
-						if ( $error = $this->call_middleware('UserMiddleware')->signup($this, $_POST) != true ) {
+						if ( ( $error = $this->call_middleware('UserMiddleware')->signup($_POST) ) != null ) {
 							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', $error )->render();
 						} else {
 							try {
@@ -61,7 +61,7 @@
 					$this->call_view('home' . DIRECTORY_SEPARATOR .'signin')->render();
 				break;
 				case "POST":
-					if ( ($error = $this->call_middleware('UserMiddleware')->signin($this, $_POST)) != null){
+					if ( ($error = $this->call_middleware('UserMiddleware')->signin($_POST)) != null){
 						$this->call_view(
 							'home' . DIRECTORY_SEPARATOR .'signin',
 							[ 'success' => "false", 'msg' => $error ]
