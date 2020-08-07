@@ -73,7 +73,24 @@
 								</div>
 							</div>
 							<div class="form-row">
-								<div class="form-group col-lg-12 m-0 mb-1">
+								<div class="form-group col-lg-2 m-0 mb-1">
+									<label for="inputGender">Gender <span class="text-danger">*</span>:</label>
+									<select class="custom-select" name="gender">
+										<option
+										<?php 
+											if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "male"){
+												echo "Selected";
+											}
+										?> value="male">Male</option>
+										<option
+										<?php 
+											if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "female"){
+												echo "Selected";
+											}
+										?> value="female">Female</option>
+									</select>
+								</div>	
+								<div class="form-group col-lg-10 m-0 mb-1">
 									<label for="inputAddress">Address :</label>
 									<input
 										type="text"
