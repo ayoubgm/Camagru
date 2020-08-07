@@ -20,16 +20,20 @@
 					$this->method = strtolower($url[1]);
 					unset($url[1]);
 				} else {
-					if ( !$this->controller instanceof Home ) { $this->method = 'notfound'; }
+					if ( !$this->controller instanceof Home ) {
+						$this->controller = new Home();
+						$this->method = 'notfound';
+					}
 				}
 			} else {
 				$this->controller = new $this->controller();
 				
-				if ( isset($url[0]) ) {
-					if (method_exists($this->controller, strtolower($url[0]))) {
+				if ( isset($url[0]) && method_exists($this->controller, strtolower($url[0]))) {
 						$this->method = strtolower($url[0]);
-					} else {
-						$this->method = "notfound";
+				} else {
+					if ( !$this->controller instanceof Home ) {
+						$this->controller = new Home();
+						$this->method = 'notfound';
 					}
 				}
 			}
