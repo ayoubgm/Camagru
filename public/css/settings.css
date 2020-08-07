@@ -1,0 +1,30 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Arial';
+}
+
+body {
+	background-image: url('../images/background-img9.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-attachment: fixed;
+}
+
+.container .row div{
+    padding: 20px;
+    font-size: 16pt;
+    border-radius: 8px;
+}
+
+.container .row div a{
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.container .row div a:hover {
+    background-color: #004aad;
+    color: white;
+}
