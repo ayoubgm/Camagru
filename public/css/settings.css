@@ -12,19 +12,33 @@ body {
 	background-attachment: fixed;
 }
 
-.container .row div{
+.container .card {
+    padding: 30px;
+    z-index: -1;
+}
+
+.card .card-body .card-title span {
+    letter-spacing: 3px;
+	font-weight: bold;
+	font-size: 18pt;
+    color: rgb(65, 65, 65);
+    float: left;
+}
+
+.card .card-body div.row div#choice{
     padding: 20px;
     font-size: 16pt;
     border-radius: 8px;
 }
 
-.container .row div a{
+.card .card-body div.row div a{
     padding: 10px;
     text-decoration: none;
     border-radius: 8px;
+    transition: all 0.3s ease-in 0s;
 }
 
-.container .row div a:hover {
+.card .card-body div.row div a:hover {
     background-color: #004aad;
     color: white;
 }

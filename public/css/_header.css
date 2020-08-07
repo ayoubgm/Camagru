@@ -69,6 +69,7 @@ nav .btn-auth .dropdown {
     background-color: #fff;
     border-radius: 8px;
     display: none;
+    z-index: 1;
 }
 
 nav .btn-auth .dropdown ul {

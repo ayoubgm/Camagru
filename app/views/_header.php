@@ -11,13 +11,10 @@
 		<li><a href="<?php echo SERVER . '/signup'; ?>" id="btn-signup">Signup</a></li>
 	</ul>
 	<div class="btn-auth">
-		<?php if ( !isset($_SESSION['userid']) ) {
-		?>
+		<?php if ( !isset($_SESSION['userid']) ) { ?>
 			<a href="<?php echo SERVER; ?>/signin" id="btn-signin">Signin</a>
 			<a href="<?php echo SERVER; ?>/signup" id="btn-signup">Signup</a>
-		<?php
-		} else {
-		?>
+		<?php } else { ?>
 			<img src="<?php echo PUBLIC_FOLDER; ?>/images/notification.png"? id="notif-img">
 			<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="profile-img" onclick="showMenu()">
 			<div class="dropdown">
@@ -36,9 +33,7 @@
 					</a></li>
 				</ul>
 			</div>
-		<?php
-		}
-		?>
+		<?php } ?>
 	</div>
 	<div class="burger">
 		<div class="line1"></div>

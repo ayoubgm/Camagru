@@ -17,14 +17,21 @@
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
 	<div class="container">
-        <div class="row offset-lg-1 mt-5 text-center">
-            <div class="col-lg-5 bg-white m-2">
-                <img src="<?php echo PUBLIC_FOLDER; ?>/images/change-password.png"/></br>
-                <a href="<?php echo SERVER; ?>/user/change-password">Change password</a>
-            </div>
-            <div class="col-lg-5 bg-white m-2">
-                <img src="<?php echo PUBLIC_FOLDER; ?>/images/notif-email.png"/></br>
-                <a href="<?php echo SERVER; ?>/user/notification-preference">Notification email preference</a> 
+        <div class="card mt-5 text-center">
+            <div class="card-body"> 
+                <p class="row card-title">
+                    <span>Settings</span>
+                </p>
+                <div class="row">
+                    <div class="col-lg-6 bg-white m-2" id="choice">
+                        <img src="<?php echo PUBLIC_FOLDER; ?>/images/change-password.png"/></br>
+                        <a href="<?php echo SERVER; ?>/user/change-password">Change password</a>
+                    </div>
+                    <div class="col-lg-5 bg-white m-2" id="choice">
+                        <img src="<?php echo PUBLIC_FOLDER; ?>/images/notif-email.png"/></br>
+                        <a href="<?php echo SERVER; ?>/user/notification-preference">Notification email preference</a> 
+                    </div>
+                </div>
             </div>
         </div>
 	</div>
