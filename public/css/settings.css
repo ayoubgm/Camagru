@@ -14,7 +14,6 @@ body {
 
 .container .card {
     padding: 30px;
-    z-index: -1;
 }
 
 .card .card-body .card-title span {
@@ -31,14 +30,14 @@ body {
     border-radius: 8px;
 }
 
-.card .card-body div.row div a{
+.card .card-body div.row div#choice a{
     padding: 10px;
     text-decoration: none;
     border-radius: 8px;
     transition: all 0.3s ease-in 0s;
 }
 
-.card .card-body div.row div a:hover {
+.card .card-body div.row div#choice a:hover {
     background-color: #004aad;
     color: white;
 }

@@ -19,9 +19,9 @@
 	<div class="container">
         <div class="card mt-5 text-center">
             <div class="card-body"> 
-                <p class="row card-title">
-                    <span>Settings</span>
-                </p>
+				<div class="row">
+					<p class="card-title"><span>Settings</span></p>
+				</div>
                 <div class="row">
                     <div class="col-lg-6 bg-white m-2" id="choice">
                         <img src="<?php echo PUBLIC_FOLDER; ?>/images/change-password.png"/></br>
