@@ -1,12 +1,8 @@
 <?php
-	class Home extends Controller {
+	class homeController extends Controller {
 
-		public function		index ()
-		{
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'index')->render();
-		}
-
-		// private function 	sendMail ( $subject, $to ) {
+		// private function 	sendMail ( $subject, $to )
+		// {
 		// 	switch ( $subject ) {
 		// 		case "Confirmation mail":
 		// 			$headers = 'From: ' .$to . "\r\n".'Reply-To: ' . $to. "\r\n".'X-Mailer: PHP/' . phpversion();
@@ -17,6 +13,11 @@
 		// 		break;
 		// 	}
 		// }
+
+		public function		index ()
+		{
+			$this->call_view('home' . DIRECTORY_SEPARATOR .'index')->render();
+		}
 		
 		public function		signup()
 		{
@@ -26,6 +27,7 @@
 				break;
 				case 'POST':
 					if ( isset($_POST['btn-signup']) ) {
+						unset( $_POST['btn-signup'] );
 						if ( ( $error = $this->call_middleware('UserMiddleware')->signup($_POST) ) != null ) {
 							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', $error )->render();
 						} else {
@@ -37,16 +39,10 @@
 										[ 'success' => "true", 'msg' => "Successful registration, you will receive an email for activation account !" ]
 									)->render();
 								} else {
-									$this->call_view(
-										'home' . DIRECTORY_SEPARATOR .'signup',
-										[ 'success' => "true", 'msg' => "Registration failed !" ]
-									)->render();
+									$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', [ 'success' => "false", 'msg' => "Registration failed !" ] )->render();
 								}
 							} catch ( Exception $e ) {
-								$this->call_view(
-									'home' . DIRECTORY_SEPARATOR .'signup',
-									[ 'success' => "false", 'msg' => "Something goes wrong, try later !" ]
-								)->render();
+								$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ])->render();
 							}
 						}
 					}
@@ -61,18 +57,18 @@
 					$this->call_view('home' . DIRECTORY_SEPARATOR .'signin')->render();
 				break;
 				case "POST":
-					if ( ($error = $this->call_middleware('UserMiddleware')->signin($_POST)) != null){
-						$this->call_view(
-							'home' . DIRECTORY_SEPARATOR .'signin',
-							[ 'success' => "false", 'msg' => $error ]
-						)->render();
-					} else {
-						$userData = $this->call_model('UserModel')->findUserByUsername($_POST['username']);
-						session_start();
-						$_SESSION['userid'] = $userData['id'];
-						$_SESSION['username'] = $userData['username'];
-						$this->call_view( 'home', [ 'success' => "true" ] )->render();
-						header("Location: /camagru_git/home");
+					if ( isset( $_POST['btn-signin'] ) ) {
+						unset( $_POST['btn-signin'] );
+						if ( ($error = $this->call_middleware('UserMiddleware')->signin($_POST)) != null){
+							$this->call_view('home' . DIRECTORY_SEPARATOR .'signin', [ 'success' => "false", 'msg' => $error ] )->render();
+						} else {
+							$userData = $this->call_model('UserModel')->findUserByUsername($_POST['username']);
+							session_start();
+							$_SESSION['userid'] = $userData['id'];
+							$_SESSION['username'] = $userData['username'];
+							$this->call_view( 'home', [ 'success' => "true" ] )->render();
+							header("Location: /camagru_git/home");
+						}
 					}
 				break;
 			}
