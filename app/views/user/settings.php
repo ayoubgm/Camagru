@@ -29,7 +29,7 @@
                     </div>
                     <div class="col-lg-5 bg-white m-2" id="choice">
                         <img src="<?php echo PUBLIC_FOLDER; ?>/images/notif-email.png"/></br>
-                        <a href="<?php echo SERVER; ?>/user/notification_preference">Notification email preference</a> 
+                        <a href="<?php echo SERVER; ?>/user/notifications_preferences">Notification email preference</a> 
                     </div>
                 </div>
             </div>

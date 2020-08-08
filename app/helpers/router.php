@@ -24,14 +24,14 @@
 				$this->controller = new $this->controller();
 				// if $url[0] not a controller it can be a method of home controller 
 				if ( isset($url[0]) && method_exists($this->controller, strtolower($url[0]) ) ) { $this->method = strtolower($url[0]); }
-				else if ( !$this->controller instanceof homeController ) { $this->method = 'notfound'; }
+				else { $this->method = 'notfound'; }
 			}
-			// if ( $this->controller instanceof Home && $this->method === "index" ) {
+			// if ( $this->controller instanceof homeController && $this->method === "index" ) {
 			// 	$objsetup = new Setup();
 			// 	$objsetup->setup();
 			// }
 			$this->params = $url ? array_values($url) : [];
-			call_user_func_array([$this->controller, $this->method], $this->params);
+			call_user_func_array([$this->controller, $this->method], [ $this->params ]);
 		}
 		
 		protected function parseURL()

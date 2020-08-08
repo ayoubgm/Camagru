@@ -10,7 +10,8 @@
 
 		public function 	call_view ( $view_name, $view_data = [] )
 		{
-			return new View($view_name, $view_data);
+			$this->view = new View($view_name, $view_data);
+			return $this->view;
 		}
 
 		public function		call_middleware ( $middleware )
