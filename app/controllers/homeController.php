@@ -16,6 +16,7 @@
 
 		public function		index ()
 		{
+			session_start();
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'index')->render();
 		}
 		
@@ -74,12 +75,12 @@
 			}
 		}
 
-		public function		reset_password ( ) {
+		public function		reset_password ( )
+		{
 			session_start();
 			if ( isset( $_SESSION['userid'] ) ) {
 				header("Location: /camagru_git/home");
 			} else {
-				// request to reset password with user email
 				switch ( $_SERVER['REQUEST_METHOD'] ) {
 					case "GET":
 						$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password')->render();
@@ -116,6 +117,53 @@
 						}
 					break;
 				}
+			}
+		}
+
+		public function		new_password ( $data )
+		{
+			session_start();
+			if ( isset( $_SESSION['userid'] ) ) {
+				header("Location: /camagru_git/home");
+			} else if ( !isset( $data[0] ) || !isset( $data[1] ) ){
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', [ 'success' => "false", 'msg' => "No token found !" ] )->render();
+			} else if ( $data[0] === "token" && $data[1] ) {
+				switch ( $_SERVER['REQUEST_METHOD'] ) {
+					case "GET":
+						$this->call_view('home' . DIRECTORY_SEPARATOR .'new_password', [ 'data' => $data[1] ])->render();
+					break;
+					case "POST":
+						if ( isset( $_POST['btn-submit'] ) ) {
+							unset( $_POST['btn-submit'] );
+							$_POST['token'] = $data[1];
+							if ( ( $error = $this->call_middleware('UserMiddleware')->new_password( $_POST ) ) != null ) {
+								$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', [ 'success' => "false", 'msg' => $error, 'data' => $data[1] ] )->render();
+							} else {
+								try {
+									if ( $this->call_model('UserModel')->newpassword( array( 'newpassword' =>  password_hash($_POST['newpassword'], PASSWORD_ARGON2I), 'token' => $data[1] ) ) ) {
+										$this->call_view(
+											'home' . DIRECTORY_SEPARATOR .'new_password',
+											[ 'success' => "true", 'msg' => "Your password has been changed successfully !", 'data' => $data[1] ]
+										)->render();
+									} else {
+										$this->call_view(
+											'home' . DIRECTORY_SEPARATOR .'new_password',
+											[ 'success' => "false", 'msg' => "Failed to change your password !", 'data' => $data[1] ]
+										)->render();
+									}
+								} catch ( Exception $e ) {
+									echo $e;
+									$this->call_view(
+										'home' . DIRECTORY_SEPARATOR .'new_password',
+										[ 'success' => "false", 'msg' => "Something goes wrong while changing your password !", 'data' => $data[1] ]
+									)->render();
+								}
+							}
+						}
+					break;
+				}
+			} else {
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', [ 'success' => "false", 'msg' => "No token found !" ])->render();
 			}
 		}
 		
