@@ -73,6 +73,51 @@
 				break;
 			}
 		}
+
+		public function		reset_password ( ) {
+			session_start();
+			if ( isset( $_SESSION['userid'] ) ) {
+				header("Location: /camagru_git/home");
+			} else {
+				// request to reset password with user email
+				switch ( $_SERVER['REQUEST_METHOD'] ) {
+					case "GET":
+						$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password')->render();
+					break;
+					case "POST":
+						if ( isset( $_POST['btn-reset'] ) ) {
+							unset( $_POST['btn-reset'] );
+							if ( ( $error = $this->call_middleware('UserMiddleware')->reset_password($_POST['email']) ) != null ) {
+								$this->call_view(
+									'home' . DIRECTORY_SEPARATOR .'reset_password',
+									[ 'success' => "false", 'msg' => $error ]
+								)->render();
+							} else {
+								try {
+									if ( $this->call_model('UserModel')->resetpassword($_POST['email']) ) {
+										$this->call_view(
+											'home' . DIRECTORY_SEPARATOR .'reset_password',
+											[ 'success' => "true", 'msg' => "A direct link for reset password has been sent successfully !" ]
+										)->render();
+										// $this->sendMail("Reset password", strtolower($_POST['email']));
+									} else {
+										$this->call_view(
+											'home' . DIRECTORY_SEPARATOR .'reset_password',
+											[ 'success' => "false", 'msg' => "Failed to reset your password !" ]
+										)->render();
+									}
+								} catch ( Exception $e ) {
+									$this->call_view(
+										'home' . DIRECTORY_SEPARATOR .'reset_password',
+										[ 'success' => "false", 'msg' => "Something goes wrong while reseting your password !" ]
+									)->render();
+								}
+							}
+						}
+					break;
+				}
+			}
+		}
 		
 		public function		notfound()
 		{

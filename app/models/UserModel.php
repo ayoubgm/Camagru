@@ -1,13 +1,15 @@
 <?php
 	class UserModel extends DB {
 
-		public function 	findUserByUsername ( $username ) {
+		public function			findUserByUsername ( $username )
+		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
 			$stt->execute([ $username ]);
 			return( $stt->fetch(PDO::FETCH_ASSOC) );
 		}
 
-		public function 	findUserById ( $userid ) {
+		public function			findUserById ( $userid )
+		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE id = ?");
 			$stt->execute([ $userid ]);
 			$data =  $stt->fetch(PDO::FETCH_ASSOC);
@@ -24,7 +26,8 @@
 			);
 		}
 
-		public function 	save ( $data ) {
+		public function			save ( $data )
+		{
 			$newUser = array(
 				strtolower($data['firstname']),
 				strtolower($data['lastname']),
@@ -40,25 +43,33 @@
 			return $stt->execute( $newUser );
 		}
 
-		public function		edit ( $userID, $editedData ) {
+		public function			edit ( $userID, $editedData )
+		{
 			$editedData['id'] = $userID;
 			$query = 'UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?';
 			$stt = $this->connect()->prepare( $query );
 			return $stt->execute( array_values($editedData) );
 		}
 
-		public function		change_password ( $userID, $newPassword )
+		public function			change_password ( $userID, $newPassword )
 		{
 			$query = 'UPDATE users SET `password` = ? WHERE id = ?';
 			$stt = $this->connect()->prepare( $query );
 			return $stt->execute([ $newPassword, $userID ]);
 		}
 
-		public function change_preference_email_notifs ( $userid, $value )
+		public function			change_preference_email_notifs ( $userid, $value )
 		{
 			$query = 'UPDATE users SET notifEmail = ? WHERE id = ?';
 			$stt = $this->connect()->prepare( $query );
 			return $stt->execute([ $value, $userid ]);
+		}
+
+		public function			resetpassword ( $email )
+		{
+			$query = 'UPDATE users SET recoveryToken = ? WHERE email = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ]);
 		}
 
 	}

@@ -48,5 +48,12 @@
 			else { return null; }
 		}
 
+		public function		reset_password ( $email ) {
+			if ( $email == "" ) { return "the email can't be empty !"; }
+			else if ( $error = $this->validateEmail( $email ) ) { return $error; }
+			else if ( !$this->isEmailExists( strtolower( $email ) ) ) { return "The email is not found !"; }
+			else { return null; }
+		}
+
 	}
 ?>
