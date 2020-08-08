@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`address` VARCHAR(255) NULL,
 	`activationToken` VARCHAR(255) NOT NULL,
 	`recoveryToken` VARCHAR(255) DEFAULT NULL,
+	`notifEmail` BOOLEAN DEFAULT 1,
 	`createdat` DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`modifyat` DATETIME DEFAULT NULL,
 	CONSTRAINT uk_email_username UNIQUE ( email, username )
