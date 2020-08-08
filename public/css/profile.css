@@ -23,6 +23,13 @@ body {
 	color: rgb(54, 54, 54);
 }
 
+
+.card-body .card-title #btn-edit #icon-edit {
+	width: 40px;
+	height: 40px;
+	margin-right: 20px;
+}
+
 .card-body .full-name{
 	font-weight: bold;
 	font-size: 18pt;
@@ -31,8 +38,8 @@ body {
 }
 
 .card-body .user-infos {
-	text-align: center;
-	padding: 50px 0px;
+	text-align: left;
+	padding: 50px 50px;
 }
 
 .card-body .user-infos span#field{
