@@ -57,7 +57,7 @@
 							<div class="row">
 								<input type="submit" class="btn btn-primary w-75 mb-3" id="btn-login" value="Log in" name="btn-signin"/></br>
 								<span class="reset-pass">
-									Forget your password ? <a href="<?php echo SERVER; ?>/reset-password" id="link-reset"> Reset password</a>
+									Forget your password ? <a href="<?php echo SERVER; ?>/reset_password" id="link-reset"> Reset password</a>
 								</span>
 							</div>
 						</form>

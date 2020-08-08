@@ -27,17 +27,9 @@
 					<img src="<?php echo PUBLIC_FOLDER; ?>/images/notifications_preferences.png"/></br>
 				</div>
 				<hr/>
-				<div class="p-5">
+				<div class="p-4">
 					<form method="POST" action="<?php echo SERVER; ?>/user/notifications_preferences/notificationsemail/<?php echo ( $data['notifEmail'] == '1' ) ? '0' : '1';?>">
 						<div class="text-center">
-							<span
-								id="msg"
-								class="m-5 
-									<?php if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "false" ) { echo "text-danger"; } ?>
-								"
-							>
-								<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg']; ?>
-							</span></br>
 							<div class="form-row edit">
 								<input
 									type="submit"

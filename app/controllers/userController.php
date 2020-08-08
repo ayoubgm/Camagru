@@ -150,18 +150,10 @@
 						}
 					}
 					else {
-						$this->call_view(
-							'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-							[ 'success' => "false", 'msg' => "Something is wrong !", 'data' => $userData ]
-						)->render();
+						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
 					}
-				} else if ( !isset( $data[0] ) && !isset( $data[1] ) ) {
+				} else {
 					$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
-				} else if ( !isset( $data[0] ) || !isset( $data[1] ) ) {
-					$this->call_view(
-						'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-						[ 'success' => "false", 'msg' => "Something is wrong !", 'data' => $userData ]
-					)->render();
 				}
 			} else {
 				header("Location: /camagru_git/home");
