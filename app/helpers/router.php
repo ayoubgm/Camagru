@@ -23,8 +23,10 @@
 			} else {
 				$this->controller = new $this->controller();
 				// if $url[0] not a controller it can be a method of home controller 
-				if ( isset($url[0]) && method_exists($this->controller, strtolower($url[0]) ) ) { $this->method = strtolower($url[0]); }
-				else { $this->method = 'notfound'; }
+				if ( isset($url[0]) ) {
+					if ( method_exists($this->controller, strtolower($url[0]) ) ){ $this->method = strtolower($url[0]); unset($url[0]); }
+					else { $this->method = 'notfound'; }
+				}
 			}
 			// if ( $this->controller instanceof homeController && $this->method === "index" ) {
 			// 	$objsetup = new Setup();
