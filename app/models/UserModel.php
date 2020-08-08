@@ -72,5 +72,12 @@
 			return $stt->execute([ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ]);
 		}
 
+		public function			newpassword ( $data )
+		{
+			$query = 'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ $data['newpassword'], $data['token'] ]);
+		}
+
 	}
 ?>
