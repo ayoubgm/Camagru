@@ -1,8 +1,10 @@
 <?php
-	class UserMiddleware extends Middleware{
+	class UserMiddleware extends Middleware
+	{
 
 		// Middleware for validating register data
-		public function      signup ( $data ) {
+		public function      signup ( $data )
+		{
 			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email'] || !$data['password'] || !$data['confirmation_password'] ) { return "Invalid data provided !"; }
 			else if ( $error = $this->validateFirstname( $data['firstname'] ) ) { return $error; }
 			else if ( $error = $this->validateLastname( $data['lastname'] ) ) { return $error; }
@@ -19,7 +21,8 @@
 		}
 
 		// Middleware for validating sign in data
-        public function      signin ( $data ) {
+		public function      signin ( $data )
+		{
 			if ( !$data['username'] || !$data['password'] ) { return "Invalid data provided !"; }
 			else if ( !$this->isUsernameExists( strtolower( $data['username']) ) ) { return "The username does't exists !"; }
 			else if ( !$this->isActiveAccount( strtolower( $data['username' ]) ) ) { return "You must activate your account first !"; }
@@ -28,7 +31,8 @@
 		}
 		
 		// Middleware for validating edited data
-		public function      edit ( $userID, $data ) {
+		public function      edit ( $userID, $data )
+		{
 			if ( isset( $data['firstname']) && ( $error = $this->validateFirstname( $data['firstname'] ) ) ) { return $error; }
 			else if ( isset( $data['lastname']) && ( $error = $this->validateLastname( $data['lastname'] ) ) ) { return $error; }
 			else if ( isset( $data['username']) && ( $error = $this->validateUsername( $data['username'] ) ) ) { return $error; }
@@ -40,7 +44,8 @@
 			else { return null; }
 		}
 
-		public function		change_password ( $id, $data ) {
+		public function		change_password ( $id, $data )
+		{
 			if ( $error = $this->validateNewPassword( $data['oldpassword'] ) ) { return $error; }
 			else if ( $error = $this->validateOldPassword( $data['newpassword'] ) ) { return $error; }
 			else if ( $data['newpassword'] != $data['confirmation_password'] ) { return "Passwords doesn't match !"; }
@@ -48,10 +53,20 @@
 			else { return null; }
 		}
 
-		public function		reset_password ( $email ) {
+		public function		reset_password ( $email )
+		{
 			if ( $email == "" ) { return "the email can't be empty !"; }
 			else if ( $error = $this->validateEmail( $email ) ) { return $error; }
 			else if ( !$this->isEmailExists( strtolower( $email ) ) ) { return "The email is not found !"; }
+			else { return null; }
+		}
+
+		public function		new_password ( $data )
+		{
+			if ( $data['newpassword'] == "" || $data['confirmation_password'] == "" || $data['token'] == "" ) { return "Invalid data provided !"; }
+			else if ( $error = $this->validatePassword( $data['newpassword'] ) ) { return $error; }
+			else if ( $data['newpassword'] != $data['confirmation_password'] ) { return "Passwords doesn't match !"; }
+			if ( !$this->isTokenValid( $data['token'] ) ) { return "The recovery token is invalid or has already expired !"; }
 			else { return null; }
 		}
 
