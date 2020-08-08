@@ -172,11 +172,15 @@
 
 	const 			setError = ( target, msgerror ) => {
 		target.style.border = "1px solid red";
+		msg.classList.add("text-danger");
+		msg.classList.remove("text-success");
 		msg.innerHTML = msgerror;
 	}
 
 	const 			setSuccess = ( target ) => {
 		msg.innerHTML = "";
+		msg.classList.remove("text-danger");
+		msg.classList.add("text-success");
 		target.style.border = "1px solid green";
 	}
 

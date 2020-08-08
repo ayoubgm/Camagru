@@ -22,10 +22,12 @@
 			<div class="card-body">
 				<p class="card-title">
 					<span>Profile</span>
-					<a href="<?php echo SERVER; ?>/user/edit" class="btn btn-dark w-25" id="btn-edit">Edit</a>
+					<a href="<?php echo SERVER; ?>/user/edit" class="btn btn-dark w-25" id="btn-edit">
+						<img id="icon-edit" src="<?php echo PUBLIC_FOLDER; ?>/images/icone-edit.png"/>Edit
+					</a>
 				</p>
-				<div class="full-name text-center">
-					<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"/></br>
+				<div class="full-name text-center mt-5">
+					<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-profile.png"/></br>
 					</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
 				</div>
 				<hr/>

@@ -25,11 +25,11 @@
                 <div class="row">
                     <div class="col-lg-6 bg-white m-2" id="choice">
                         <img src="<?php echo PUBLIC_FOLDER; ?>/images/change-password.png"/></br>
-                        <a href="<?php echo SERVER; ?>/user/change-password">Change password</a>
+                        <a href="<?php echo SERVER; ?>/user/change_password">Change password</a>
                     </div>
                     <div class="col-lg-5 bg-white m-2" id="choice">
                         <img src="<?php echo PUBLIC_FOLDER; ?>/images/notif-email.png"/></br>
-                        <a href="<?php echo SERVER; ?>/user/notification-preference">Notification email preference</a> 
+                        <a href="<?php echo SERVER; ?>/user/notification_preference">Notification email preference</a> 
                     </div>
                 </div>
             </div>
