@@ -30,7 +30,7 @@
 							unset( $_POST['btn-edit'] ); unset( $userData['id'] ); unset( $userData['createdat'] );
 							$editedData = array_replace_recursive( $userData, $_POST );
 							if ( ($error = $this->call_middleware('UserMiddleware')->edit( $userID, $editedData )) != null){
-								$this->call_view('user' . DIRECTORY_SEPARATOR .'edit_infos', [ 'success' => "false", 'msg' => $error ])->render();
+								$this->call_view('user' . DIRECTORY_SEPARATOR .'edit_infos', [ 'success' => "false", 'msg' => $error, 'data' => $editedData ])->render();
 							} else {
 								try {
 									if ( $this->call_model('UserModel')->edit( $userID, $editedData ) ) {

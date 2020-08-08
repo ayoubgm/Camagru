@@ -31,10 +31,12 @@
 		public function      edit ( $userID, $data ) {
 			if ( isset( $data['firstname']) && ( $error = $this->validateFirstname( $data['firstname'] ) ) ) { return $error; }
 			else if ( isset( $data['lastname']) && ( $error = $this->validateLastname( $data['lastname'] ) ) ) { return $error; }
-			else if ( isset( $data['usertname']) && ( $error = $this->validateUsername( $data['username'] ) ) ) { return $error; }
+			else if ( isset( $data['username']) && ( $error = $this->validateUsername( $data['username'] ) ) ) { return $error; }
 			else if ( isset( $data['email']) && ( $error = $this->validateEmail( $data['email'] ) ) ) { return $error; }
 			else if ( isset( $data['gender']) && ( $error = $this->validateGender( $data['gender'] ) ) ) { return $error; }
 			else if ( isset( $data['address']) && ( $error = $this->validateAddress( $data['address'] ) ) ) { return $error; }
+			else if ( isset( $data['username']) && $this->isUsernameEditedExists( $userID, $data['username'] ) ) { return "The username is already exists !"; }
+			else if ( isset( $data['email']) && $this->isEmailEditedExists( $userID, $data['email'] ) ) { return "The email is already exists !"; }
 			else { return null; }
 		}
 

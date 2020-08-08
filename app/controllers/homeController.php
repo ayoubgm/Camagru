@@ -29,7 +29,7 @@
 					if ( isset($_POST['btn-signup']) ) {
 						unset( $_POST['btn-signup'] );
 						if ( ( $error = $this->call_middleware('UserMiddleware')->signup($_POST) ) != null ) {
-							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', $error )->render();
+							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signup', [ 'success' => "false", 'msg' => $error ])->render();
 						} else {
 							try {
 								if ( $this->call_model('UserModel')->save($_POST) ) {

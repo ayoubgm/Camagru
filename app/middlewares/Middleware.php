@@ -97,6 +97,18 @@
 			return ( password_verify($password, $userData['password']) );
 		}
 
+		protected function		isUsernameEditedExists ( $userid, $username ) {
+			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ? AND id <> ?");
+			$stt->execute([ $username, $userid ]);
+			return( $stt->fetch() );
+		}
+
+		protected function		isEmailEditedExists ( $userid, $email ) {
+			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE email = ? AND id <> ?");
+			$stt->execute([ $email, $userid ]);
+			return( $stt->fetch() );
+		}
+
 
 	}
 ?>
