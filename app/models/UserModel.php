@@ -24,9 +24,7 @@
 		}
 
 		public function 	save ( $data ) {
-			$query = 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?)';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute(array(
+			$newUser = array(
 				strtolower($data['firstname']),
 				strtolower($data['lastname']),
 				strtolower($data['username']),
@@ -35,7 +33,10 @@
 				strtolower($data['address']),
 				password_hash($data['password'], PASSWORD_ARGON2I),
 				base64_encode( strtolower($data['email']) . date("Y-m-d H:i:s") )
-			));
+			);
+			$query = 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?)';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute( $newUser );
 		}
 
 		public function		edit ( $userID, $editedData ) {
@@ -43,6 +44,13 @@
 			$query = 'UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?';
 			$stt = $this->connect()->prepare( $query );
 			return $stt->execute( array_values($editedData) );
+		}
+
+		public function		change_password ( $userID, $newPassword )
+		{
+			$query = 'UPDATE users SET `password` = ? WHERE id = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ $newPassword, $userID ]);
 		}
 
 	}
