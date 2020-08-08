@@ -43,6 +43,21 @@
 			: null;
 		}
 
+		protected function		validateOldPassword ( $oldpassword )
+		{
+			return ( $this->validatePassword( $oldpassword ) )
+			? "The old password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !"
+			: null;
+		}
+
+		protected function		validateNewPassword ( $newpassword )
+		{
+			return ( $this->validatePassword( $newpassword ) )
+			? "The new password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !"
+			: null;
+		}
+		
+
 		protected function		isFullnameExists ( $firstname, $lastname ) {
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE firstname = ? AND lastname = ?");
 			$stt->execute([ $firstname, $lastname ]);
@@ -69,12 +84,16 @@
 			return ( empty($userData['activationToken']) );
 		}
 
-		protected function		isThePasswordIsValid( $username, $password )
+		protected function		isThePasswordIsValid( $id, $username, $password )
 		{
-			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
-			$stt->execute([ $username ]);
+			if (  $id != null ) {
+				$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE id = ?");
+				$stt->execute([ $id ]);
+			} else if ( $username != null ){
+				$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
+				$stt->execute([ $username ]);
+			}
 			$userData = $stt->fetch();
-
 			return ( password_verify($password, $userData['password']) );
 		}
 
