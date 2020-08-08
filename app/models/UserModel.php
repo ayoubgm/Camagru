@@ -19,6 +19,7 @@
 				'email' => $data['email'],
 				'gender' => $data['gender'],
 				'address' => $data['address'],
+				'notifEmail' => $data['notifEmail'],
 				'createdat' => $data['createdat']
 			);
 		}
@@ -51,6 +52,13 @@
 			$query = 'UPDATE users SET `password` = ? WHERE id = ?';
 			$stt = $this->connect()->prepare( $query );
 			return $stt->execute([ $newPassword, $userID ]);
+		}
+
+		public function change_preference_email_notifs ( $userid, $value )
+		{
+			$query = 'UPDATE users SET notifEmail = ? WHERE id = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ $value, $userid ]);
 		}
 
 	}

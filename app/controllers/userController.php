@@ -112,6 +112,62 @@
 			}
 		}
 
+		public function		notifications_preferences ( $data )
+		{
+			if ( isset( $_SESSION['userid'] ) ) {
+				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				
+				if ( isset( $data[0] ) && isset( $data[1] ) ) {
+					if (
+						( isset( $data[0] ) && $data[0] === "notificationsemail" ) &&
+						( isset( $data[1] ) && ( $data[1] !== "1" || $data[1] !== "0" ) )
+					) {
+						switch( $_SERVER['REQUEST_METHOD'] ) {
+							case 'GET':
+								$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+							break;
+							case 'POST':
+								if ( isset( $_POST['btn-change-preference'] ) ) {
+									unset( $_POST['btn-change-preference'] );
+									try {
+										if ( $this->call_model('UserModel')->change_preference_email_notifs( $_SESSION['userid'], $data[1] ) ) {
+											$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+											$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+										} else {
+											$this->call_view(
+												'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+												[ 'success' => "false", 'msg' => "Failed to change your notifications preference !", 'data' => $userData ]
+											)->render();
+										}
+									} catch ( Exception $e ) {
+										$this->call_view(
+											'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+											[ 'success' => "false", 'msg' => "Something is wrong, try later !", 'data' => $userData ]
+										)->render();
+									}
+								}
+							break;
+						}
+					}
+					else {
+						$this->call_view(
+							'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+							[ 'success' => "false", 'msg' => "Something is wrong !", 'data' => $userData ]
+						)->render();
+					}
+				} else if ( !isset( $data[0] ) && !isset( $data[1] ) ) {
+					$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+				} else if ( !isset( $data[0] ) || !isset( $data[1] ) ) {
+					$this->call_view(
+						'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+						[ 'success' => "false", 'msg' => "Something is wrong !", 'data' => $userData ]
+					)->render();
+				}
+			} else {
+				header("Location: /camagru_git/home");
+			}
+		}
+
 		public function     logout ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
