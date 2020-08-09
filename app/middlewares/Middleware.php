@@ -122,14 +122,20 @@
 			return( $stt->fetch() );
 		}
 
-		protected function		isTokenValid ( $token )
+		protected function		isRecoveryTokenValid ( $token )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE recoveryToken = ?");
 			$stt->execute([ $token ]);
 			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return ( $data )
-			? array( 'id' => $data['id'] )
-			: null;
+			return ( $data ) ? array( 'id' => $data['id'] ) : null;
+		}
+
+		public function			isActivationTokenValid ( $token )
+		{
+			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE activationToken = ?");
+			$stt->execute([ $token ]);
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
+			return ( $data ) ? array( 'id' => $data['id'] ) : null;
 		}
 
 	}
