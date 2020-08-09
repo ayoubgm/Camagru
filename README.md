@@ -1,6 +1,6 @@
 # Camagru<br/>
 
-## `New notions to discover`<br/>
+## `:heavy_dollar_sign: New notions to discover`<br/>
 :dart: Responsice design<br/>
 :dart: DOM manipulation<br/>
 :dart: SQL debugging<br/>
@@ -43,3 +43,5 @@ I will use for this project MVC design pattern (concept), it separates applicati
 ![Image of MVC structure 1](https://i.ibb.co/FgSsXxb/MVC.png)
 <br/>
 ![Image of MVC structure 2](https://i.ibb.co/Cn3vzZP/MVC1.png)
+
+## :camera: `Screen shots`</br>
