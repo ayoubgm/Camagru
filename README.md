@@ -1,6 +1,6 @@
 # Camagru<br/>
 
-## `:heavy_dollar_sign: New notions to discover`<br/>
+## :heavy_dollar_sign: `New notions to discover`<br/>
 :dart: Responsice design<br/>
 :dart: DOM manipulation<br/>
 :dart: SQL debugging<br/>
