@@ -1,5 +1,7 @@
 <?php
-	$token = $this->view_data['data'];
+	if ( isset( $this->view_data['data'] ) ) {
+		$token = $this->view_data['data'];
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">

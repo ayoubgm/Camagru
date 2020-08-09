@@ -66,7 +66,13 @@
 			if ( $data['newpassword'] == "" || $data['confirmation_password'] == "" || $data['token'] == "" ) { return "Invalid data provided !"; }
 			else if ( $error = $this->validatePassword( $data['newpassword'] ) ) { return $error; }
 			else if ( $data['newpassword'] != $data['confirmation_password'] ) { return "Passwords doesn't match !"; }
-			if ( !$this->isTokenValid( $data['token'] ) ) { return "The recovery token is invalid or has already expired !"; }
+			else if ( !$this->isTokenValid( $data['token'] ) ) { return "The recovery token is invalid or has already expired !"; }
+			else { return null; }
+		}
+
+		public function		validateToken ( $token ) {
+			if ( !$token ) { return "No token found !"; }
+			else if ( !$this->isTokenValid( $token ) ) { return "The recovery token is invalid or has already expired !"; }
 			else { return null; }
 		}
 
