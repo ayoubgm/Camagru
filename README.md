@@ -9,10 +9,10 @@
 
 ## `Features`<br/>
 ### `User features`<br/>
-:white_check_mark: The application should allow a user to register by asking at least a valid email, username and a password.
-:white_check_mark: Confirmation password via a unique link.
+:white_check_mark: The application should allow a user to register by asking at least a valid email, username and a password.<br/>
+:white_check_mark: Confirmation password via a unique link.<br/>
 :white_check_mark: The user should be able to connect to the application using his username and password, he can also send</br>
-                   a password reinitialisation mail, if he forget his password.
+                   a password reinitialisation mail, if he forget his password.<br/>
 
 ## `Technologies used`<br/>
 :dizzy: Apache<br/>
