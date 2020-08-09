@@ -79,5 +79,12 @@
 			return $stt->execute([ $data['newpassword'], $data['token'] ]);
 		}
 
+		public function			activateAccount ( $data )
+		{
+			$query = 'UPDATE users SET activationToken = NULL WHERE activationToken = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ $data['token'] ]);
+		}
+
 	}
 ?>
