@@ -45,3 +45,6 @@ I will use for this project MVC design pattern (concept), it separates applicati
 ![Image of MVC structure 2](https://i.ibb.co/Cn3vzZP/MVC1.png)
 
 ## :camera: `Screen shots`</br>
+### :triangular_flag_on_post: `Home`</br>
+![Image of camagru home](https://i.ibb.co/mb93yHG/camagru-home.png)
+
