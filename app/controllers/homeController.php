@@ -130,7 +130,11 @@
 			} else if ( $data[0] === "token" && $data[1] ) {
 				switch ( $_SERVER['REQUEST_METHOD'] ) {
 					case "GET":
-						$this->call_view('home' . DIRECTORY_SEPARATOR .'new_password', [ 'data' => $data[1] ])->render();
+						if ( ( $error = $this->call_middleware('UserMiddleware')->validateRecoveryToken( $data[1] ) ) != null ) {
+							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', [ 'success' => "false", 'msg' => $error, 'data' => $data[1] ] )->render();
+						} else {
+							$this->call_view('home' . DIRECTORY_SEPARATOR .'new_password', [ 'data' => $data[1] ])->render();
+						}
 					break;
 					case "POST":
 						if ( isset( $_POST['btn-submit'] ) ) {
@@ -167,6 +171,42 @@
 			}
 		}
 		
+		public function account_confirmation ( $data )
+		{
+			session_start();
+			if ( isset( $_SESSION['userid'] ) ) {
+				header("Location: /camagru_git/home");
+			} else if ( !isset( $data[0] ) || !isset( $data[1] ) ) {
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', [ 'success' => "false", 'msg' => "No token found !" ] )->render();
+			} else if ( $data[0] === "token" && $data[1] ) {
+				if ( ( $error = $this->call_middleware('UserMiddleware')->validateActivationToken( $data[1] ) ) != null ) {
+					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', [ 'success' => "false", 'msg' => $error ])->render();
+				} else {
+					try {
+						if ( $this->call_model('UserModel')->activateAccount( array( 'token' => $data[1] ) ) ) {
+							$this->call_view(
+								'home' . DIRECTORY_SEPARATOR .'account_confirmation',
+								[ 'success' => "true", 'msg' => "Your account has been activated successfully !", 'data' => $data[1] ]
+							)->render();
+						} else {
+							$this->call_view(
+								'home' . DIRECTORY_SEPARATOR .'account_confirmation',
+								[ 'success' => "false", 'msg' => "Failed to activate your account !", 'data' => $data[1] ]
+							)->render();
+						}
+					} catch ( Exception $e ) {
+						echo $e;
+						$this->call_view(
+							'home' . DIRECTORY_SEPARATOR .'account_confirmation',
+							[ 'success' => "false", 'msg' => "Something goes wrong while activating your account !", 'data' => $data[1] ]
+						)->render();
+					}
+				}
+			} else {
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', [ 'success' => "false", 'msg' => "No token found !" ])->render();
+			}
+		}
+
 		public function		notfound()
 		{
 			echo "404";
