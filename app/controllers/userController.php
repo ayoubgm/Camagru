@@ -160,6 +160,22 @@
 			}
 		}
 
+		public function		editing ()
+		{
+			if ( isset( $_SESSION['userid'] ) ) {
+				switch( $_SERVER['REQUEST_METHOD'] ) {
+					case 'GET':
+						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'editing')->render();
+					break;
+					case 'POST':
+						
+					break;
+				}
+			} else {
+				header("Location: /camagru_git/signin");
+			}
+		}
+
 		public function     logout ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
