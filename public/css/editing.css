@@ -20,22 +20,36 @@ body {
 }
 
 #main #main-section {
+    width: 100%;
     height: 550px;
     margin: 0;
     padding: 0;
-    position: relative;
 }
 
 #main #main-section #video-area {
+    width: 100%;
     height: 550px;
     padding: 15px;
     background-color: rgb(228, 228, 228);
 }
 
 #main #main-section #stickers-area {
+    text-align: center;
+    width: 100%;
     height: 550px;
     padding: 15px;
     background-color: rgb(228, 228, 228);
+}
+
+#main #main-section #stickers-area select {
+    width: 150px;
+}
+
+#main #main-section #stickers-area select option{
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 #videoElement {
@@ -44,14 +58,12 @@ body {
 }
 
 #main #side-section {
-    position: relative;
-    padding: 15px;
-    height: 550px;
     width: 100%;
+    height: 550px;
+    padding: 15px;
+    color: white;
 }
 
 @media (max-width: 991.98px) {
-    #main #main-section {
-        height: 1050px;
-    }
+    #main #main-section { height: 1100px; }
 }

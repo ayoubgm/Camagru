@@ -20,12 +20,28 @@
 				<input class="btn btn-warning w-50 float-right" type="button" value="Upload"/>
 			</div>
 			<div id="stickers-area" class="col-lg-4">
-				<h4>predifine images </h4>
+				<h4>Predifined images </h4>
+				<hr/>
+				<select class=custom-select multiple>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker01.png);" value="01"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker02.png);" value="02"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker03.png);" value="03"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker04.png);" value="04"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker05.png);" value="05"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker06.png);" value="06"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker07.png);" value="07"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker08.png);" value="08"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker09.png);" value="09"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker10.png);" value="10"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker11.png);" value="11"></option>
+					<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker12.png);" value="12"></option>
+				</select>
 			</div>
 		</div>
 		<!-- Side section -->
-		<div id="side-section" class="col-lg-4 bg-success">
-			<h3>Edited images</h3>
+		<div id="side-section" class="col-lg-4 bg-dark">
+			<h4>Edited images</h4>
+			<hr/>
 		</div>
 	</div>
 	<!-- <?php //require_once(VIEWS . "_footer.php"); ?> -->
