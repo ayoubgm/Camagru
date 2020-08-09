@@ -13,8 +13,8 @@
 :white_check_mark: Confirmation password via a unique link.<br/>
 :white_check_mark: The user should be able to connect to the application using his username and password, he can also send</br>
 a password reinitialisation mail, if he forget his password.<br/>
-:white_check_mark: The user should be able to disconnect in one click at any time on any page
-:white_check_mark: The user should be able to modify his informations 
+:white_check_mark: The user should be able to disconnect in one click at any time on any page<br/>
+:white_check_mark: The user should be able to modify his informations <br/><br/>
 
 ## `Technologies used`<br/>
 :dizzy: Apache<br/>
