@@ -16,6 +16,10 @@ a password reinitialisation mail, if he forget his password.<br/>
 :white_check_mark: The user should be able to disconnect in one click at any time on any page<br/>
 :white_check_mark: The user should be able to modify his informations <br/><br/>
 
+### `:ballot_box_with_check:`<br/>
+:ballot_box_with_check: Display all images edited by all users must be public ordered by date of creation<br/>
+:ballot_box_with_check: Only a connected user can like or comment them<br/>
+
 ## `Technologies used`<br/>
 :dizzy: Apache<br/>
 :anger: MySQL<br/>
