@@ -168,7 +168,16 @@
 						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'editing')->render();
 					break;
 					case 'POST':
-						
+						if ( isset( $_POST['btn-save'] ) ) {
+							
+							$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+							$img = $_POST['dataimage'];
+							$img = str_replace('data:image/png;base64', '', $img);
+							$img = str_replace(' ', '+', $img);
+							$fileData = base64_decode( $img );
+							$pathFile = IMAGES.DIRECTORY_SEPARATOR.'editedPics'.DIRECTORY_SEPARATOR .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png';
+							file_put_contents($pathFile, $fileData);
+						}
 					break;
 				}
 			} else {
