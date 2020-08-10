@@ -12,8 +12,16 @@ body {
 	background-attachment: fixed;
 }
 
+form {
+    width: 100%;
+    height: 90vh;
+    background-color: whitesmoke;
+    position: relative;
+}
+
 #main {
     width: 100%;
+    height: 100%;
     position: relative;
     left: 15px;
     background-color: whitesmoke;
@@ -21,22 +29,22 @@ body {
 
 #main #main-section {
     width: 100%;
-    height: 550px;
+    height: 590px;
     margin: 0;
     padding: 0;
 }
 
 #main #main-section #video-area {
     width: 100%;
-    height: 550px;
     padding: 15px;
+    height: 590px;
     background-color: rgb(228, 228, 228);
 }
 
 #main #main-section #stickers-area {
     text-align: center;
     width: 100%;
-    height: 550px;
+    height: 590px;
     padding: 15px;
     background-color: rgb(228, 228, 228);
 }
@@ -59,11 +67,70 @@ body {
 
 #main #side-section {
     width: 100%;
-    height: 550px;
+    height: 590px;
     padding: 15px;
     color: white;
 }
 
+.model-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(141, 191, 255, 0.363);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+}
+
+.active-model {
+    visibility: visible;
+    opacity: 1;
+}
+
+.model {
+    width: 80%;
+    height: 100%;
+    background-color: white;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.model #canvas-area {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+.model #canvas-area #model-header {
+    padding: 10px 0px 0px 30px;
+}
+
+.model #canvas-area #model-header h4 {
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 18pt;
+    color: rgb(54, 54, 54);
+}
+.model #canvas-area #model-header #icon-cancel {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+#canvas {
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
 @media (max-width: 991.98px) {
-    #main #main-section { height: 1100px; }
+    #main #main-section { height: 1180px; }
 }

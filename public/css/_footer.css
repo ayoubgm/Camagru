@@ -5,8 +5,18 @@ footer p{
     background-color: #1c1c20;
     color: white;
     position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
     padding: 0;
     margin: 0;
-    bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+    footer {
+        position: relative;
+        top: auto;
+        left: auto;
+        height: auto;
+    }
 }
