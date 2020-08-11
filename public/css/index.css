@@ -10,20 +10,23 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
 }
 
-div.jumbotron{
+.jumbotron{
     background-color: rgba(158, 158, 158, 0.486);
     color: white;
+    height: 88vh;
 }
 
-div.jumbotron p{
+.jumbotron p{
     font-size: 28px;
     font-weight: bold;
 }
 
 @media screen and (max-width: 768px) {
-    div.jumbotron p{
+    .jumbotron p{
         font-size: 18px;
         font-weight: 500;
         transition: all 0.5s ease;
