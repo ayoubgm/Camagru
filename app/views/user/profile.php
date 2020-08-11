@@ -2,7 +2,8 @@
 	if ( !isset($_SESSION['userid']) ) {
 		header("Location: /camagru_git/home");
 	} else {
-		$userData = $this->view_data['data'];
+		$data = $this->view_data['data'];
+		$userData = $data['userData'];
 ?>
 <!DOCTYPE html>
 <html lang="en">

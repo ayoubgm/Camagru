@@ -2,6 +2,7 @@
 	if ( !isset($_SESSION['userid']) ) {
 		header("Location: /camagru_git/home");
 	} else {
+		
 ?>
 <!DOCTYPE html>
 <html lang="en">

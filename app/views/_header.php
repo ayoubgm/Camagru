@@ -1,3 +1,9 @@
+<?php
+	if ( isset( $this->view_data['data'] ) ) {
+		$data = $this->view_data['data'];
+	}
+
+?>
 <nav>
 	<div class="logo">
 		<img class="logo" src="<?php echo PUBLIC_FOLDER; ?>/images/logo.png" alt="logo-camagru"/>
@@ -5,9 +11,11 @@
 	<ul class="nav-links">
 		<li><a href="<?php echo SERVER . '/home'; ?>">Home</a></li>
 		<li><a href="<?php echo SERVER . '/user/editing'; ?>">Editing</a></li>
-		<?php if ( count( $this->view_data['data']['userGallery'] ) !== 0 ) { ?>
+		<?php if ( isset($data['userGallery']) ) {
+				if ( count( $data['userGallery'] ) !== 0 ) {
+		?>
 			<li><a href="<?php echo SERVER . '/user/gallery'; ?>">Gallery</a></li>
-		<?php } ?>
+		<?php } } ?>
 		<li><a href="<?php echo SERVER . '/help'; ?>">Help</a></li>
 		<li><a href="<?php echo SERVER . '/about-us'; ?>">About us</a></li>
 		<li><a href="<?php echo SERVER . '/signin'; ?>" id="btn-signin">Signin</a></li>

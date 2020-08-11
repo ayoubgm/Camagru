@@ -1,6 +1,7 @@
 <?php
 	if ( isset( $this->view_data['data'] ) ) {
 		$data = $this->view_data['data'];
+		$userData = $data['userData'];
 	}
 
 ?>

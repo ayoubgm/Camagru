@@ -11,6 +11,7 @@
 			if ( isset( $_SESSION['userid'] ) ) {
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
 				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
+
 				$this->call_view(
 					'user' . DIRECTORY_SEPARATOR .'profile',
 					['success' => "true", 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] ]
@@ -108,7 +109,13 @@
 				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
-						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'change_password', )->render();
+						$this->call_view(
+							'user' . DIRECTORY_SEPARATOR .'change_password',
+							[
+								'success' => "true",
+								'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+							]
+							)->render();
 					break;
 					case 'POST':
 						if ( isset($_POST['btn-submit']) ) {
@@ -177,7 +184,10 @@
 							case 'GET':
 								$this->call_view(
 									'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-									[ 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] ]
+									[
+										'success' => "true",
+										'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] 
+									]
 								)->render();
 							break;
 							case 'POST':
@@ -220,12 +230,18 @@
 					else {
 						$this->call_view(
 							'user' . DIRECTORY_SEPARATOR  . 'notifications_preferences',
-							[ 'data' => $userData ]
+							[
+								'success' => "true",
+								'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] 
+							]
 						)->render();
 					}
 				} else {
 					$this->call_view( 'user' . DIRECTORY_SEPARATOR . 'notifications_preferences',
-						[ 'data' => $userData ]
+						[
+							'success' => "true",
+							'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] 
+						]
 					)->render();
 				}
 			} else {
@@ -257,7 +273,7 @@
 					case 'GET':
 						$this->call_view(
 							'user' . DIRECTORY_SEPARATOR .'editing',
-							[ 'data' => [ 'userGallery' => $userGallery ] ]
+							[ 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]  ]
 						)->render();
 					break;
 					case 'POST':
@@ -280,7 +296,7 @@
 										[
 											'success' => "true",
 											'msg' => "Image has been saved successfully !",
-											'data' => [ 'userGallery' => $userGallery ]
+											'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] 
 										]
 									)->render();
 								} else {
@@ -289,7 +305,7 @@
 										[
 											'success' => "false",
 											'msg' => "Failed to edit snapchat !",
-											'data' => [ 'userGallery' => $userGallery ]
+											'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] 
 										]
 									)->render();
 								}
@@ -299,7 +315,7 @@
 									[
 										'success' => "false",
 										'msg' => "Something goes wrong, try later !",
-										'data' => [ 'userGallery' => $userGallery ]
+										'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] 
 									]
 								)->render();
 							}

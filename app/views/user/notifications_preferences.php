@@ -3,6 +3,7 @@
 		header("Location: /camagru_git/home");
 	} else {
 		$data = $this->view_data['data'];
+		$userData = $data['userData'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +35,7 @@
 								<input
 									type="submit"
 									class="offset-2 col-8 btn btn-outline-primary w-50 mt-5"
-									<?php if ( $data['notifEmail'] == "1" ) { ?>
+									<?php if ( $userData['notifEmail'] == "1" ) { ?>
 										value="I want to stop receiving emails notifications"
 									<?php } else { ?>
 										value="I want to receive emails notifications"
