@@ -14,9 +14,9 @@
 				$this->controller = strtolower( $url[0] ) . 'Controller';
 				unset($url[0]);
 				$this->controller = new $this->controller();
-				if ( isset($url[1]) && method_exists($this->controller, strtolower($url[1])) ){
+				if ( isset($url[1]) && method_exists($this->controller, strtolower($url[1])) ) {
 					$this->method = strtolower($url[1]); unset($url[1]);
-				} else if ( !$this->controller instanceof homeController ) {
+				} else if ( !method_exists($this->controller, $this->method) ) {
 					$this->controller = new homeController();
 					$this->method = 'notfound';
 				}

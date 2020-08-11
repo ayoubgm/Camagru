@@ -2,6 +2,8 @@
 	if ( isset( $this->view_data['data'] ) ) {
 		$data = $this->view_data['data'];
 		$userData = $data['userData'];
+		$gallery = $data['gallery'];
+		$userGallery = $data['userGallery'];
 	}
 
 ?>
@@ -75,10 +77,10 @@
 				<textarea type="text" id="textarea" name="dataimage" readonly hidden></textarea>
 				<div class="area-images">
 					<?php 
-						if ( count( $data['userGallery'] ) === 0 ) {
+						if ( count( $userGallery ) === 0 ) {
 							echo "No edited images yet !";
 						} else {
-							foreach ( $data['userGallery'] as $image ) {
+							foreach ( $userGallery as $image ) {
 								?>
 									<img style="width: 400px; height: 300px; margin-bottom: 10px" src="<?php echo $image['src'] ?>"/>
 								<?php

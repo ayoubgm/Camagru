@@ -11,10 +11,10 @@
 	<ul class="nav-links">
 		<li><a href="<?php echo SERVER . '/home'; ?>">Home</a></li>
 		<li><a href="<?php echo SERVER . '/user/editing'; ?>">Editing</a></li>
-		<?php if ( isset($data['userGallery']) ) {
-				if ( count( $data['userGallery'] ) !== 0 ) {
+		<?php if ( isset($data['gallery']) ) {
+				if ( count( $data['gallery'] ) !== 0 ) {
 		?>
-			<li><a href="<?php echo SERVER . '/user/gallery'; ?>">Gallery</a></li>
+			<li><a href="<?php echo SERVER . '/gallery'; ?>">Gallery</a></li>
 		<?php } } ?>
 		<li><a href="<?php echo SERVER . '/help'; ?>">Help</a></li>
 		<li><a href="<?php echo SERVER . '/about-us'; ?>">About us</a></li>

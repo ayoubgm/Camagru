@@ -17,22 +17,16 @@
 		public function		index ()
 		{
 			session_start();
+			$data = array();
+			$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
+			$data['gallery'] = $gallery;
+
 			if ( isset( $_SESSION['userid'] ) ) {
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
-	
-				$this->call_view(
-					'home' . DIRECTORY_SEPARATOR . 'index',
-					[
-						'success' => "true",
-						'data' => [
-							'userData' => $userData,	
-							'userGallery' => $userGallery	
-						]
-					]
-				)->render();
+				$data['userData'] = $userData;
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR . 'index', [ 'success' => "true", 'data' => $data ] )->render();
 			} else {
-				$this->call_view('home' . DIRECTORY_SEPARATOR .'index')->render();
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', [ 'success' => "true", 'data' => $data ] )->render();
 			}
 		}
 		
