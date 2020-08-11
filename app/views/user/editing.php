@@ -1,3 +1,9 @@
+<?php
+	if ( isset( $this->view_data['data'] ) ) {
+		$data = $this->view_data['data'];
+	}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,12 +25,22 @@
 						<video autoplay="true" id="videoElement"></video>
 						<input class="btn btn-danger w-50 float-left" type="button" value="Capture" name="btn-capture" id="btn-capture" disabled/>
 						<input class="btn btn-warning w-50 float-right" type="button" value="Upload"/>
+						<div class="text-center mt-5 pt-2" id="area-msg" style="font-weight: bold;">
+							<span id="msg" class="p-5
+									<?php 
+										if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
+										else { echo "text-danger"; }
+									?>
+								">
+								<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
+							</span>
+						</div>
 					</div>
 					<div id="stickers-area" class="col-lg-4 form-group" name="option">
 						<h4>Predifined images </h4>
 						<hr/>
 						<div class="row">
-							<select id="stickers-select" class="col-6 form-control" multiple onchange="viewOption(this)">
+							<select id="stickers-select" class="col-6 form-control" name="sticker" multiple onchange="viewOption(this)">
 								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker01.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker01.png"></option>
 								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker02.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker02.png"></option>
 								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker03.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker03.png"></option>
@@ -56,6 +72,19 @@
 				<h4>Edited images</h4>
 				<hr/>
 				<textarea type="text" id="textarea" name="dataimage" readonly hidden></textarea>
+				<div class="area-images">
+					<?php 
+						if ( !isset( $data['userGallery'] ) ) {
+							echo "No edited images yet !";
+						} else {
+							foreach ( $data['userGallery'] as $image ) {
+								?>
+									<img style="width: 400px; height: 300px; margin-bottom: 10px" src="<?php echo $image['src'] ?>"/>
+								<?php
+							}
+						}
+					?>
+				</div>
 			</div>
 		</div>
 		<div class="model-bg">
@@ -68,9 +97,10 @@
 					<hr/>
 					<div id="row" class="p-2">
 						<canvas id="canvas" width="640" height="480" name="image"></canvas>	
+						<canvas id="canvas-webcam" width="640" height="480" name="image" hidden></canvas>	
 					</div>
 					<div class="row d-flex justify-content-between px-5 py-1">
-						<input type="submit" name="btn-save" id="btn-save" class="btn btn-dark w-25" value="Save" disabled />
+						<input type="submit" name="btn-save" id="btn-save" class="btn btn-dark w-25" value="Save" />
 						<input type="button" name="btn-cancel" id="btn-cancel" class="btn btn-warning w-25" value="Cancel" />
 					</div>
 				</div>
@@ -83,6 +113,7 @@
 		const menu = document.querySelector("nav .btn-auth .dropdown");
 		const video = document.querySelector("#videoElement");
 		const canvas = document.getElementById('canvas');
+		const canvasWebcam = document.getElementById('canvas-webcam');
 		const option = document.getElementById('stickers-select');
 		const x = document.getElementById('x-axis');
 		const y = document.getElementById('y-axis');
@@ -94,6 +125,7 @@
 		const modelClose = document.querySelector('#icon-cancel');
 		const textarea = document.getElementById('textarea');
 		let context = canvas.getContext('2d');
+		let contextWebcam = canvasWebcam.getContext('2d');
 		let base_image = new Image();
 
 		const showMenu = () => {
@@ -117,6 +149,7 @@
 		}
 
 		btn_capture.addEventListener('click', () => {
+			contextWebcam.drawImage(video, 0, 0, 640, 480);
 			context.drawImage(video, 0, 0, 640, 480);
 			context.drawImage(base_image, x.value, y.value, 150, 120);
 			modelBG.classList.add('active-model');
@@ -126,7 +159,7 @@
 		btn_cancel.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
 
 		form.addEventListener('submit', () => {
-			let dataUrl = canvas.toDataURL();
+			let dataUrl = canvasWebcam.toDataURL();
 
 			textarea.value = dataUrl;
 			return true;

@@ -163,20 +163,63 @@
 		public function		editing ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
+				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
-						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'editing')->render();
+						$this->call_view(
+							'user' . DIRECTORY_SEPARATOR .'editing',
+							[ 'data' => [ 'userGallery' => $userGallery ] ]
+						)->render();
 					break;
 					case 'POST':
 						if ( isset( $_POST['btn-save'] ) ) {
-							
-							$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-							$img = $_POST['dataimage'];
-							$img = str_replace('data:image/png;base64', '', $img);
-							$img = str_replace(' ', '+', $img);
-							$fileData = base64_decode( $img );
-							$pathFile = IMAGES.DIRECTORY_SEPARATOR.'editedPics'.DIRECTORY_SEPARATOR .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png';
+							$_POST['id'] = $userData['id'];
+							$width = 640;
+							$height = 480;
+							$x = intval($_POST);
+							$y = 480;
+							$imgWebcam = $_POST['dataimage'];
+							$imgWebcam = str_replace('data:image/png;base64', '', $imgWebcam);
+							$imgWebcam = str_replace(' ', '+', $imgWebcam);
+							$fileData = base64_decode( $imgWebcam );
+							$pathFile = EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png';
 							file_put_contents($pathFile, $fileData);
+							$srcPath = $_POST['sticker'];
+							$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
+							$dest = imagecreatefrompng( $destPath ); 
+							$src = imagecreatefrompng( $srcPath);
+							// Get new sizes
+							list($width, $height) = getimagesize($srcPath);
+							// Copy and merge 
+							imagecopyresized($dest, $src, intval($_POST['x']), intval($_POST['y']), 0, 0, 150, 150, $width, $height);
+							// Output and free from memory 
+							imagejpeg($dest, EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png'); 							  
+							imagedestroy($dest);
+							imagedestroy($src);
+							try {
+								if ( $this->call_model('GalleryModel')->addImage([ 'id' => $_SESSION['userid'], 'src' => $destPath ]) ) {
+									$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
+									$this->call_view(
+										'user' . DIRECTORY_SEPARATOR .'editing',
+										[
+											'success' => "true",
+											'msg' => "Image has been saved successfully !",
+											'data' => [ 'userGallery' => $userGallery ]
+										]
+									)->render();
+								} else {
+									$this->call_view(
+										'user' . DIRECTORY_SEPARATOR .'editing',
+										[ 'success' => "false", 'msg' => "Failed to edit snapchat !", 'data' => [ 'userGallery' => $userGallery ] ]
+									)->render();
+								}
+							} catch ( Exception $e ) {
+								$this->call_view(
+									'user' . DIRECTORY_SEPARATOR .'editing',
+									[ 'success' => "false", 'msg' => "Something goes wrong, try later !", 'data' => [ 'userGallery' => $userGallery ] ]
+								)->render();
+							}
 						}
 					break;
 				}
