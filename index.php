@@ -11,6 +11,8 @@
 	define("CSS", PUBLIC_DIR . 'css' . DIRECTORY_SEPARATOR);
 	define("JS", PUBLIC_DIR . 'js' . DIRECTORY_SEPARATOR);
 	define("IMAGES", PUBLIC_DIR . 'images' . DIRECTORY_SEPARATOR);
+	define("EDITEDPICS", IMAGES . 'editedPics' . DIRECTORY_SEPARATOR);
+	define("STICKERS", IMAGES . 'stickers' . DIRECTORY_SEPARATOR);
 	define("SERVER",
 		'http://'. $_SERVER['HTTP_HOST'].
 		str_replace(
