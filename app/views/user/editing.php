@@ -74,7 +74,7 @@
 				<textarea type="text" id="textarea" name="dataimage" readonly hidden></textarea>
 				<div class="area-images">
 					<?php 
-						if ( !isset( $data['userGallery'] ) ) {
+						if ( count( $data['userGallery'] ) === 0 ) {
 							echo "No edited images yet !";
 						} else {
 							foreach ( $data['userGallery'] as $image ) {

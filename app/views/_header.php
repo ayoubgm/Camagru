@@ -5,6 +5,9 @@
 	<ul class="nav-links">
 		<li><a href="<?php echo SERVER . '/home'; ?>">Home</a></li>
 		<li><a href="<?php echo SERVER . '/user/editing'; ?>">Editing</a></li>
+		<?php if ( count( $this->view_data['data']['userGallery'] ) !== 0 ) { ?>
+			<li><a href="<?php echo SERVER . '/user/gallery'; ?>">Gallery</a></li>
+		<?php } ?>
 		<li><a href="<?php echo SERVER . '/help'; ?>">Help</a></li>
 		<li><a href="<?php echo SERVER . '/about-us'; ?>">About us</a></li>
 		<li><a href="<?php echo SERVER . '/signin'; ?>" id="btn-signin">Signin</a></li>

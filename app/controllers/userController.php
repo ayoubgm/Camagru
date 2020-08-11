@@ -10,7 +10,11 @@
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', ['data' => $userData ])->render();
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
+				$this->call_view(
+					'user' . DIRECTORY_SEPARATOR .'profile',
+					['success' => "true", 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] ]
+				)->render();
 			} else {
 				header("Location: /camagru_git/home");
 			}
@@ -20,9 +24,13 @@
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
-						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'edit_infos', ['data' => $userData ])->render();
+						$this->call_view(
+							'user' . DIRECTORY_SEPARATOR .'edit_infos',
+							['success' => "true", 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] ]
+						)->render();
 					break;
 					case 'POST':
 						if ( isset($_POST['btn-edit']) ) {
@@ -30,7 +38,14 @@
 							unset( $_POST['btn-edit'] ); unset( $userData['id'] ); unset( $userData['createdat'] );
 							$editedData = array_replace_recursive( $userData, $_POST );
 							if ( ($error = $this->call_middleware('UserMiddleware')->edit( $userID, $editedData )) != null){
-								$this->call_view('user' . DIRECTORY_SEPARATOR .'edit_infos', [ 'success' => "false", 'msg' => $error, 'data' => $editedData ])->render();
+								$this->call_view(
+									'user' . DIRECTORY_SEPARATOR .'edit_infos',
+									[
+										'success' => "false",
+										'msg' => $error,
+										'data' => [ 'userData' => $editedData, 'userGallery' => $userGallery ]
+									]
+								)->render();
 							} else {
 								try {
 									if ( $this->call_model('UserModel')->edit( $userID, $editedData ) ) {
@@ -40,7 +55,7 @@
 											[
 												'success' => "true",
 												'msg' => "Your informations has been edited successfully !",
-												'data' => $newData
+												'data' => [ 'userData' => $newData, 'userGallery' => $userGallery ]
 											]
 										)->render();
 									} else {
@@ -49,7 +64,7 @@
 											[
 												'success' => "false",
 												'msg' => "Failed to update your informations !",
-												'data' => $userData
+												'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
 											]
 										)->render();
 									}
@@ -59,7 +74,7 @@
 										[
 											'success' => "false",
 											'msg' => "Something goes wrong while edit informations, try later !",
-											'data' => $userData
+											'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
 										]
 									)->render();
 								}
@@ -75,7 +90,12 @@
 		public function		settings ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'settings', )->render();
+				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
+				$this->call_view(
+					'user' . DIRECTORY_SEPARATOR .'settings',
+					['success' => "true", 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] ]
+				)->render();
 			} else {
 				header("Location: /camagru_git/home");
 			}
@@ -84,6 +104,8 @@
 		public function		change_password ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
+				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
 						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'change_password', )->render();
@@ -92,16 +114,44 @@
 						if ( isset($_POST['btn-submit']) ) {
 							unset( $_POST['btn-submit'] );
 							if ( ( $error = $this->call_middleware('UserMiddleware')->change_password( $_SESSION['userid'], $_POST ) ) != null ) {
-								$this->call_view( 'user' . DIRECTORY_SEPARATOR .'change_password', [ 'success' => "false", 'msg' => $error ] )->render();
+								$this->call_view(
+									'user' . DIRECTORY_SEPARATOR .'change_password',
+									[
+										'success' => "false",
+										'msg' => $error,
+										'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+									]
+								)->render();
 							} else {
 								try {
 									if ( $this->call_model('UserModel')->change_password( $_SESSION['userid'], password_hash($_POST['newpassword'], PASSWORD_ARGON2I) ) ) {
-										$this->call_view('user' . DIRECTORY_SEPARATOR .'change_password', [ 'success' => "true", 'msg' => "Your password has been changed successfully" ] )->render();
+										$this->call_view(
+											'user' . DIRECTORY_SEPARATOR .'change_password',
+											[
+												'success' => "true",
+												'msg' => "Your password has been changed successfully",
+												'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+											]
+										)->render();
 									} else {
-										$this->call_view('user' . DIRECTORY_SEPARATOR .'change_password', [ 'success' => "false", 'msg' => "Failed to change your password !" ])->render();
+										$this->call_view(
+											'user' . DIRECTORY_SEPARATOR .'change_password',
+											[
+												'success' => "false",
+												'msg' => "Failed to change your password !",
+												'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+											]
+										)->render();
 									}
 								} catch ( Exception $e ) {
-									$this->call_view('user' . DIRECTORY_SEPARATOR .'change_password', [ 'success' => "false", 'msg' => "Something goes wrong while changing your password !" ])->render();
+									$this->call_view(
+										'user' . DIRECTORY_SEPARATOR .'change_password',
+										[
+											'success' => "false",
+											'msg' => "Something goes wrong while changing your password !",
+											'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+										]
+									)->render();
 								}
 							}
 						}
@@ -116,6 +166,7 @@
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
 				
 				if ( isset( $data[0] ) && isset( $data[1] ) ) {
 					if (
@@ -124,7 +175,10 @@
 					) {
 						switch( $_SERVER['REQUEST_METHOD'] ) {
 							case 'GET':
-								$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+								$this->call_view(
+									'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+									[ 'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ] ]
+								)->render();
 							break;
 							case 'POST':
 								if ( isset( $_POST['btn-change-preference'] ) ) {
@@ -132,17 +186,31 @@
 									try {
 										if ( $this->call_model('UserModel')->change_preference_email_notifs( $_SESSION['userid'], $data[1] ) ) {
 											$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-											$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+											$this->call_view(
+												'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+												[
+													'success' => "false",
+													'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+												]
+											)->render();
 										} else {
 											$this->call_view(
 												'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-												[ 'success' => "false", 'msg' => "Failed to change your notifications preference !", 'data' => $userData ]
+												[
+													'success' => "false",
+													'msg' => "Failed to change your notifications preference !",
+													'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+												]
 											)->render();
 										}
 									} catch ( Exception $e ) {
 										$this->call_view(
 											'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-											[ 'success' => "false", 'msg' => "Something is wrong, try later !", 'data' => $userData ]
+											[
+												'success' => "false",
+												'msg' => "Something is wrong, try later !",
+												'data' => [ 'userData' => $userData, 'userGallery' => $userGallery ]
+											]
 										)->render();
 									}
 								}
@@ -150,14 +218,34 @@
 						}
 					}
 					else {
-						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+						$this->call_view(
+							'user' . DIRECTORY_SEPARATOR  . 'notifications_preferences',
+							[ 'data' => $userData ]
+						)->render();
 					}
 				} else {
-					$this->call_view( 'user' . DIRECTORY_SEPARATOR .'notifications_preferences', [ 'data' => $userData ])->render();
+					$this->call_view( 'user' . DIRECTORY_SEPARATOR . 'notifications_preferences',
+						[ 'data' => $userData ]
+					)->render();
 				}
 			} else {
 				header("Location: /camagru_git/home");
 			}
+		}
+
+		private function makeMixedImage( $userData, $destPath, $srcPath, $xdest, $udest )
+		{
+			$dest = imagecreatefrompng( $destPath ); 
+			$src = imagecreatefrompng( $srcPath);
+
+			// Get new sizes
+			list($width, $height) = getimagesize($srcPath);
+			// Copy and merge 
+			imagecopyresized($dest, $src, $xdest, $udest, 0, 0, 150, 150, $width, $height);
+			// Output and free from memory 
+			imagejpeg($dest, EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png'); 							  
+			imagedestroy($dest);
+			imagedestroy($src);
 		}
 
 		public function		editing ()
@@ -175,10 +263,6 @@
 					case 'POST':
 						if ( isset( $_POST['btn-save'] ) ) {
 							$_POST['id'] = $userData['id'];
-							$width = 640;
-							$height = 480;
-							$x = intval($_POST);
-							$y = 480;
 							$imgWebcam = $_POST['dataimage'];
 							$imgWebcam = str_replace('data:image/png;base64', '', $imgWebcam);
 							$imgWebcam = str_replace(' ', '+', $imgWebcam);
@@ -187,16 +271,7 @@
 							file_put_contents($pathFile, $fileData);
 							$srcPath = $_POST['sticker'];
 							$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
-							$dest = imagecreatefrompng( $destPath ); 
-							$src = imagecreatefrompng( $srcPath);
-							// Get new sizes
-							list($width, $height) = getimagesize($srcPath);
-							// Copy and merge 
-							imagecopyresized($dest, $src, intval($_POST['x']), intval($_POST['y']), 0, 0, 150, 150, $width, $height);
-							// Output and free from memory 
-							imagejpeg($dest, EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png'); 							  
-							imagedestroy($dest);
-							imagedestroy($src);
+							$this->makeMixedImage( $userData, $destPath, $srcPath, intval($_POST['x']), intval($_POST['y']) );
 							try {
 								if ( $this->call_model('GalleryModel')->addImage([ 'id' => $_SESSION['userid'], 'src' => $destPath ]) ) {
 									$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
@@ -211,13 +286,21 @@
 								} else {
 									$this->call_view(
 										'user' . DIRECTORY_SEPARATOR .'editing',
-										[ 'success' => "false", 'msg' => "Failed to edit snapchat !", 'data' => [ 'userGallery' => $userGallery ] ]
+										[
+											'success' => "false",
+											'msg' => "Failed to edit snapchat !",
+											'data' => [ 'userGallery' => $userGallery ]
+										]
 									)->render();
 								}
 							} catch ( Exception $e ) {
 								$this->call_view(
 									'user' . DIRECTORY_SEPARATOR .'editing',
-									[ 'success' => "false", 'msg' => "Something goes wrong, try later !", 'data' => [ 'userGallery' => $userGallery ] ]
+									[
+										'success' => "false",
+										'msg' => "Something goes wrong, try later !",
+										'data' => [ 'userGallery' => $userGallery ]
+									]
 								)->render();
 							}
 						}

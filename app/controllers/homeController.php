@@ -17,7 +17,23 @@
 		public function		index ()
 		{
 			session_start();
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'index')->render();
+			if ( isset( $_SESSION['userid'] ) ) {
+				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+				$userGallery = $this->call_model('GalleryModel')->userGallery( $userData['id'] );
+	
+				$this->call_view(
+					'home' . DIRECTORY_SEPARATOR . 'index',
+					[
+						'success' => "true",
+						'data' => [
+							'userData' => $userData,	
+							'userGallery' => $userGallery	
+						]
+					]
+				)->render();
+			} else {
+				$this->call_view('home' . DIRECTORY_SEPARATOR .'index')->render();
+			}
 		}
 		
 		public function		signup()
