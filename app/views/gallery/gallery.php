@@ -24,7 +24,7 @@
 </head>
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
-	<div class="row offset-lg-1 col-lg-10" id="gallery">
+	<div class="row col-lg-12" id="gallery">
 		<?php if ( count( $data['gallery'] ) === 0 ) { ?>
 			<p> <?php echo "No Edited images !"; ?> </p>
 		<?php } else {
@@ -39,9 +39,6 @@
 				<img src="<?php print( $image['src'] ); ?>" class="card-img" alt="...">
 				<div class="card-footer w-100">
 					<?php
-						// $currDate = date_create();
-						// $createdat = date_create($image['createdat']);
-						// $diff = $createdat->diff( $currDate, true );
 						$createdat = new DateTime( $image['createdat'] );
 						$hours = $createdat->format('H');
 						$minutes = $createdat->format('i');

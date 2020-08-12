@@ -15,14 +15,17 @@ body {
 }
 
 #gallery {
-    margin-top: 20px;
+    margin-top: 5px;
+    margin-left: 5px;
 }
 
 .card {
-    margin: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     padding: 2px;
     box-shadow: 5px 10px 20px rgb(87, 87, 87);
-    width: 30%;
+    width: 32.5%;
 }
 
 .card .card-title {
