@@ -12,10 +12,8 @@
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
 				$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
 
-				$this->call_view(
-					'user' . DIRECTORY_SEPARATOR .'profile',
-					['success' => "true", 'data' => [ 'userData' => $userData, 'gallery' => $gallery ] ]
-				)->render();
+				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', ['success' => "true", 'data' => [ 'userData' => $userData, 'gallery' => $gallery ] ] );
+				$this->view->render();
 			} else {
 				header("Location: /camagru_git/home");
 			}
@@ -24,14 +22,16 @@
 		public function		edit ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
-				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-				$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
+				$userModel = $this->call_model('UserModel');
+				$galleryModel = $this->call_model('GalleryModel');
+				$userData = $userModel->findUserById( $_SESSION['userid'] );
+				$gallery = $galleryModel->getAllEditedImages();
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
 						$this->call_view(
 							'user' . DIRECTORY_SEPARATOR .'edit_infos',
 							['success' => "true", 'data' => [ 'userData' => $userData, 'gallery' => $gallery ] ]
-						)->render();
+						);
 					break;
 					case 'POST':
 						if ( isset($_POST['btn-edit']) ) {
@@ -46,11 +46,11 @@
 										'msg' => $error,
 										'data' => [ 'userData' => $editedData, 'gallery' => $gallery ]
 									]
-								)->render();
+								);
 							} else {
 								try {
-									if ( $this->call_model('UserModel')->edit( $userID, $editedData ) ) {
-										$newData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+									if ( $userModel->edit( $userID, $editedData ) ) {
+										$newData = $userModel->findUserById( $_SESSION['userid'] );
 										$this->call_view(
 											'user' . DIRECTORY_SEPARATOR .'edit_infos',
 											[
@@ -58,7 +58,7 @@
 												'msg' => "Your informations has been edited successfully !",
 												'data' => [ 'userData' => $newData, 'gallery' => $gallery ]
 											]
-										)->render();
+										);
 									} else {
 										$this->call_view(
 											'user' . DIRECTORY_SEPARATOR .'edit_infos',
@@ -67,7 +67,7 @@
 												'msg' => "Failed to update your informations !",
 												'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
 											]
-										)->render();
+										);
 									}
 								} catch( Exception $e ) {
 									$this->call_view(
@@ -77,7 +77,7 @@
 											'msg' => "Something goes wrong while edit informations, try later !",
 											'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
 										]
-									)->render();
+									);
 								}
 							}
 						}
@@ -86,6 +86,7 @@
 			} else {
 				header("Location: /camagru_git/home");
 			}
+			$this->view->render();
 		}
 
 		public function		settings ()
@@ -93,10 +94,9 @@
 			if ( isset( $_SESSION['userid'] ) ) {
 				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
 				$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
-				$this->call_view(
-					'user' . DIRECTORY_SEPARATOR .'settings',
-					['success' => "true", 'data' => [ 'userData' => $userData, 'gallery' => $gallery ] ]
-				)->render();
+
+				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'settings', ['success' => "true", 'data' => [ 'userData' => $userData, 'gallery' => $gallery ] ] );
+				$this->view->render();
 			} else {
 				header("Location: /camagru_git/home");
 			}
@@ -105,17 +105,16 @@
 		public function		change_password ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
-				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-				$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
+				$userModel = $this->call_model('UserModel');
+				$galleryModel = $this->call_model('GalleryModel');
+				$userData = $userModel->findUserById( $_SESSION['userid'] );
+				$gallery = $galleryModel->getAllEditedImages();
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
 						$this->call_view(
 							'user' . DIRECTORY_SEPARATOR .'change_password',
-							[
-								'success' => "true",
-								'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
-							]
-							)->render();
+							[ 'success' => "true", 'data' => [ 'userData' => $userData, 'gallery' => $gallery ] ]
+							);
 					break;
 					case 'POST':
 						if ( isset($_POST['btn-submit']) ) {
@@ -128,10 +127,10 @@
 										'msg' => $error,
 										'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
 									]
-								)->render();
+								);
 							} else {
 								try {
-									if ( $this->call_model('UserModel')->change_password( $_SESSION['userid'], password_hash($_POST['newpassword'], PASSWORD_ARGON2I) ) ) {
+									if ( $userModel->change_password( $_SESSION['userid'], password_hash($_POST['newpassword'], PASSWORD_ARGON2I) ) ) {
 										$this->call_view(
 											'user' . DIRECTORY_SEPARATOR .'change_password',
 											[
@@ -139,7 +138,7 @@
 												'msg' => "Your password has been changed successfully",
 												'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
 											]
-										)->render();
+										);
 									} else {
 										$this->call_view(
 											'user' . DIRECTORY_SEPARATOR .'change_password',
@@ -148,7 +147,7 @@
 												'msg' => "Failed to change your password !",
 												'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
 											]
-										)->render();
+										);
 									}
 								} catch ( Exception $e ) {
 									$this->call_view(
@@ -158,7 +157,7 @@
 											'msg' => "Something goes wrong while changing your password !",
 											'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
 										]
-									)->render();
+									);
 								}
 							}
 						}
@@ -167,176 +166,177 @@
 			} else {
 				header("Location: /camagru_git/home");
 			}
+			$this->view->render();
 		}
 
-		public function		notifications_preferences ( $data )
-		{
-			if ( isset( $_SESSION['userid'] ) ) {
-				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-				$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
+		// public function		notifications_preferences ( $data )
+		// {
+		// 	if ( isset( $_SESSION['userid'] ) ) {
+		// 		$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+		// 		$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
 				
-				if ( isset( $data[0] ) && isset( $data[1] ) ) {
-					if (
-						( isset( $data[0] ) && $data[0] === "notificationsemail" ) &&
-						( isset( $data[1] ) && ( $data[1] !== "1" || $data[1] !== "0" ) )
-					) {
-						switch( $_SERVER['REQUEST_METHOD'] ) {
-							case 'GET':
-								$this->call_view(
-									'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-									[
-										'success' => "true",
-										'data' => [ 'userData' => $userData, 'gallery' => $gallery ] 
-									]
-								)->render();
-							break;
-							case 'POST':
-								if ( isset( $_POST['btn-change-preference'] ) ) {
-									unset( $_POST['btn-change-preference'] );
-									try {
-										if ( $this->call_model('UserModel')->change_preference_email_notifs( $_SESSION['userid'], $data[1] ) ) {
-											$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-											$this->call_view(
-												'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-												[
-													'success' => "false",
-													'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
-												]
-											)->render();
-										} else {
-											$this->call_view(
-												'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-												[
-													'success' => "false",
-													'msg' => "Failed to change your notifications preference !",
-													'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
-												]
-											)->render();
-										}
-									} catch ( Exception $e ) {
-										$this->call_view(
-											'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
-											[
-												'success' => "false",
-												'msg' => "Something is wrong, try later !",
-												'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
-											]
-										)->render();
-									}
-								}
-							break;
-						}
-					}
-					else {
-						$this->call_view(
-							'user' . DIRECTORY_SEPARATOR  . 'notifications_preferences',
-							[
-								'success' => "true",
-								'data' => [ 'userData' => $userData, 'gallery' => $gallery ] 
-							]
-						)->render();
-					}
-				} else {
-					$this->call_view( 'user' . DIRECTORY_SEPARATOR . 'notifications_preferences',
-						[
-							'success' => "true",
-							'data' => [ 'userData' => $userData, 'gallery' => $gallery ] 
-						]
-					)->render();
-				}
-			} else {
-				header("Location: /camagru_git/home");
-			}
-		}
+		// 		if ( isset( $data[0] ) && isset( $data[1] ) ) {
+		// 			if (
+		// 				( isset( $data[0] ) && $data[0] === "notificationsemail" ) &&
+		// 				( isset( $data[1] ) && ( $data[1] !== "1" || $data[1] !== "0" ) )
+		// 			) {
+		// 				switch( $_SERVER['REQUEST_METHOD'] ) {
+		// 					case 'GET':
+		// 						$this->call_view(
+		// 							'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+		// 							[
+		// 								'success' => "true",
+		// 								'data' => [ 'userData' => $userData, 'gallery' => $gallery ] 
+		// 							]
+		// 						)->render();
+		// 					break;
+		// 					case 'POST':
+		// 						if ( isset( $_POST['btn-change-preference'] ) ) {
+		// 							unset( $_POST['btn-change-preference'] );
+		// 							try {
+		// 								if ( $this->call_model('UserModel')->change_preference_email_notifs( $_SESSION['userid'], $data[1] ) ) {
+		// 									$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+		// 									$this->call_view(
+		// 										'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+		// 										[
+		// 											'success' => "false",
+		// 											'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
+		// 										]
+		// 									)->render();
+		// 								} else {
+		// 									$this->call_view(
+		// 										'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+		// 										[
+		// 											'success' => "false",
+		// 											'msg' => "Failed to change your notifications preference !",
+		// 											'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
+		// 										]
+		// 									)->render();
+		// 								}
+		// 							} catch ( Exception $e ) {
+		// 								$this->call_view(
+		// 									'user' . DIRECTORY_SEPARATOR .'notifications_preferences',
+		// 									[
+		// 										'success' => "false",
+		// 										'msg' => "Something is wrong, try later !",
+		// 										'data' => [ 'userData' => $userData, 'gallery' => $gallery ]
+		// 									]
+		// 								)->render();
+		// 							}
+		// 						}
+		// 					break;
+		// 				}
+		// 			}
+		// 			else {
+		// 				$this->call_view(
+		// 					'user' . DIRECTORY_SEPARATOR  . 'notifications_preferences',
+		// 					[
+		// 						'success' => "true",
+		// 						'data' => [ 'userData' => $userData, 'gallery' => $gallery ] 
+		// 					]
+		// 				)->render();
+		// 			}
+		// 		} else {
+		// 			$this->call_view( 'user' . DIRECTORY_SEPARATOR . 'notifications_preferences',
+		// 				[
+		// 					'success' => "true",
+		// 					'data' => [ 'userData' => $userData, 'gallery' => $gallery ] 
+		// 				]
+		// 			)->render();
+		// 		}
+		// 	} else {
+		// 		header("Location: /camagru_git/home");
+		// 	}
+		// }
 
-		private function makeMixedImage( $userData, $destPath, $srcPath, $xdest, $udest )
-		{
-			$dest = imagecreatefrompng( $destPath ); 
-			$src = imagecreatefrompng( $srcPath);
+		// private function makeMixedImage( $userData, $destPath, $srcPath, $xdest, $udest )
+		// {
+		// 	$dest = imagecreatefrompng( $destPath ); 
+		// 	$src = imagecreatefrompng( $srcPath);
 
-			// Get new sizes
-			list($width, $height) = getimagesize($srcPath);
-			// Copy and merge 
-			imagecopyresized($dest, $src, $xdest, $udest, 0, 0, 150, 150, $width, $height);
-			// Output and free from memory 
-			imagejpeg($dest, EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png'); 							  
-			imagedestroy($dest);
-			imagedestroy($src);
-		}
+		// 	// Get new sizes
+		// 	list($width, $height) = getimagesize($srcPath);
+		// 	// Copy and merge 
+		// 	imagecopyresized($dest, $src, $xdest, $udest, 0, 0, 150, 150, $width, $height);
+		// 	// Output and free from memory 
+		// 	imagejpeg($dest, EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png'); 							  
+		// 	imagedestroy($dest);
+		// 	imagedestroy($src);
+		// }
 
-		public function		editing ()
-		{
-			if ( isset( $_SESSION['userid'] ) ) {
-				$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
-				$userGallery = $this->call_model('GalleryModel')->userGallery( $_SESSION['userid'] );
-				$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
-				switch( $_SERVER['REQUEST_METHOD'] ) {
-					case 'GET':
-						$this->call_view(
-							'user' . DIRECTORY_SEPARATOR .'editing',
-							[ 'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ]  ]
-						)->render();
-					break;
-					case 'POST':
-						if ( isset( $_POST['btn-save'] ) ) {
-							$_POST['id'] = $userData['id'];
-							$imgWebcam = $_POST['dataimage'];
-							$imgWebcam = str_replace('data:image/png;base64', '', $imgWebcam);
-							$imgWebcam = str_replace(' ', '+', $imgWebcam);
-							$fileData = base64_decode( $imgWebcam );
-							$pathFile = EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png';
-							file_put_contents($pathFile, $fileData);
-							$srcPath = $_POST['sticker'];
-							$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
-							$this->makeMixedImage( $userData, $destPath, $srcPath, intval($_POST['x']), intval($_POST['y']) );
-							try {
-								if ( $this->call_model('GalleryModel')->addImage([ 'id' => $_SESSION['userid'], 'src' => $destPath ]) ) {
-									$userGallery = $this->call_model('GalleryModel')->userGallery( $_SESSION['userid'] );
-									$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
-									$this->call_view(
-										'user' . DIRECTORY_SEPARATOR .'editing',
-										[
-											'success' => "true",
-											'msg' => "Image has been saved successfully !",
-											'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ] 
-										]
-									)->render();
-								} else {
-									$this->call_view(
-										'user' . DIRECTORY_SEPARATOR .'editing',
-										[
-											'success' => "false",
-											'msg' => "Failed to edit snapchat !",
-											'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ] 
-										]
-									)->render();
-								}
-							} catch ( Exception $e ) {
-								$this->call_view(
-									'user' . DIRECTORY_SEPARATOR .'editing',
-									[
-										'success' => "false",
-										'msg' => "Something goes wrong, try later !",
-										'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ] 
-									]
-								)->render();
-							}
-						}
-					break;
-				}
-			} else {
-				header("Location: /camagru_git/signin");
-			}
-		}
+		// public function		editing ()
+		// {
+		// 	if ( isset( $_SESSION['userid'] ) ) {
+		// 		$userData = $this->call_model('UserModel')->findUserById( $_SESSION['userid'] );
+		// 		$userGallery = $this->call_model('GalleryModel')->userGallery( $_SESSION['userid'] );
+		// 		$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
+		// 		switch( $_SERVER['REQUEST_METHOD'] ) {
+		// 			case 'GET':
+		// 				$this->call_view(
+		// 					'user' . DIRECTORY_SEPARATOR .'editing',
+		// 					[ 'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ]  ]
+		// 				)->render();
+		// 			break;
+		// 			case 'POST':
+		// 				if ( isset( $_POST['btn-save'] ) ) {
+		// 					$_POST['id'] = $userData['id'];
+		// 					$imgWebcam = $_POST['dataimage'];
+		// 					$imgWebcam = str_replace('data:image/png;base64', '', $imgWebcam);
+		// 					$imgWebcam = str_replace(' ', '+', $imgWebcam);
+		// 					$fileData = base64_decode( $imgWebcam );
+		// 					$pathFile = EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'_'.time().'.png';
+		// 					file_put_contents($pathFile, $fileData);
+		// 					$srcPath = $_POST['sticker'];
+		// 					$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
+		// 					$this->makeMixedImage( $userData, $destPath, $srcPath, intval($_POST['x']), intval($_POST['y']) );
+		// 					try {
+		// 						if ( $this->call_model('GalleryModel')->addImage([ 'id' => $_SESSION['userid'], 'src' => $destPath ]) ) {
+		// 							$userGallery = $this->call_model('GalleryModel')->userGallery( $_SESSION['userid'] );
+		// 							$gallery = $this->call_model('GalleryModel')->getAllEditedImages();
+		// 							$this->call_view(
+		// 								'user' . DIRECTORY_SEPARATOR .'editing',
+		// 								[
+		// 									'success' => "true",
+		// 									'msg' => "Image has been saved successfully !",
+		// 									'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ] 
+		// 								]
+		// 							)->render();
+		// 						} else {
+		// 							$this->call_view(
+		// 								'user' . DIRECTORY_SEPARATOR .'editing',
+		// 								[
+		// 									'success' => "false",
+		// 									'msg' => "Failed to edit snapchat !",
+		// 									'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ] 
+		// 								]
+		// 							)->render();
+		// 						}
+		// 					} catch ( Exception $e ) {
+		// 						$this->call_view(
+		// 							'user' . DIRECTORY_SEPARATOR .'editing',
+		// 							[
+		// 								'success' => "false",
+		// 								'msg' => "Something goes wrong, try later !",
+		// 								'data' => [ 'userData' => $userData, 'gallery' => $gallery, 'userGallery' => $userGallery ] 
+		// 							]
+		// 						)->render();
+		// 					}
+		// 				}
+		// 			break;
+		// 		}
+		// 	} else {
+		// 		header("Location: /camagru_git/signin");
+		// 	}
+		// }
 
-		public function     logout ()
-		{
-			if ( isset( $_SESSION['userid'] ) ) {
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
-			} else {
-				header("Location: /camagru_git/home");
-			}
-		}
+		// public function     logout ()
+		// {
+		// 	if ( isset( $_SESSION['userid'] ) ) {
+		// 		$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
+		// 	} else {
+		// 		header("Location: /camagru_git/home");
+		// 	}
+		// }
 
 	}
 ?>
