@@ -1,23 +1,20 @@
 <?php
 	class Controller {
 		
-		protected $view;
-		protected $model;
-
-		public function     call_model ( $model )
+		static protected function				call_model ( $model )
 		{
 			if ( file_exists( MODELS . $model . '.php') ) { return new $model; }
 		}
 
-		public function 	call_view ( $view_name, $view_data = [] )
+		static protected function 		call_view ( $view_name, $view_data = [] )
 		{
-			$this->view = new View($view_name, $view_data);
+			if ( file_exists(VIEWS . $view_name . '.php') ) {  return new View( $view_name, $view_data ); }
 		}
 
-		public function		call_middleware ( $middleware )
+		static protected function		call_middleware ( $middleware )
 		{
 			if ( file_exists( MIDDLEWARES . $middleware . '.php') ) { return new $middleware; }
 		}
-
+		
 	}
 ?>

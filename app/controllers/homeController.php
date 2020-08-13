@@ -7,10 +7,10 @@
 
 		public function				__construct()
 		{
-			$this->userMiddleware = $this->call_middleware('UserMiddleware');
-			$this->userModel = $this->call_model('UserModel');
-			$this->galleryModel = $this->call_model('GalleryModel');
-		}
+			$this->userMiddleware = self::call_middleware('UserMiddleware');
+			$this->userModel = self::call_model('UserModel');
+			$this->galleryModel = self::call_model('GalleryModel');
+		} 
 		// private function 	sendMail ( $subject, $to )
 		// {
 		// 	switch ( $subject ) {
@@ -27,12 +27,15 @@
 		public function				index ()
 		{
 			session_start();
-			$data = array();
-			$data['gallery'] = $this->galleryModel->getAllEditedImages();
+			$homeObj = new homeController();
+			$viewData = array();
+			$viewData['gallery'] = $homeObj->galleryModel->getAllEditedImages();
 
-			if ( isset( $_SESSION['userid'] ) ) { $data['userData'] = $this->userModel->findUserById( $_SESSION['userid'] ); }
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', [ 'success' => "true", 'data' => $data ] );
-			$this->view->render();
+			if ( isset( $_SESSION['userid'] ) ) {
+				$viewData['userData'] = $homeObj->userModel->findUserById( $_SESSION['userid'] );
+			}
+			$viewData = [ 'success' => "true", 'data' => $viewData ];
+			$homeObj->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
 		}
 		
 		public function				signup()
@@ -64,17 +67,17 @@
 					}
 				break;
 			}
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', $viewData);
-			$this->view->render();
+			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', $viewData)->render();
 		}
 		
 		public function		signin()
 		{
+			$viewName = "";
 			$viewData = [];
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
 				case "GET":
+					$viewName = 'home' . DIRECTORY_SEPARATOR .'signin';
 					$viewData = [ 'success' => "true" ];
-					$this->call_view('home' . DIRECTORY_SEPARATOR .'signin', $viewData);
 				break;
 				case "POST":
 					if ( isset( $_POST['btn-signin'] ) ) {
@@ -86,14 +89,14 @@
 							$userData = $this->userModel->findUserByUsername($_POST['username']);
 							$_SESSION['userid'] = $userData['id'];
 							$_SESSION['username'] = $userData['username'];
+							$viewName = 'home';
 							$viewData = [ 'success' => "true", 'msg' => "You have been logged successfully !" ];
-							$this->call_view( 'home',  $viewData);
 							header("Location: /camagru_git/home");
 						}
 					}
 				break;
 			}
-			$this->view->render();
+			$this->call_view( $viewName,  $viewData)->render();
 		}
 
 		public function		reset_password ( )
@@ -127,8 +130,7 @@
 					break;
 				}
 			}
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData);
-			$this->view->render();
+			$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData)->render();
 		}
 
 		private function		validateToken ( $data )
@@ -171,8 +173,7 @@
 					break;
 				}
 			}
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData);
-			$this->view->render();
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData)->render();
 		}
 		
 		public function account_confirmation ( $data )
@@ -199,13 +200,12 @@
 					}
 				}
 			}
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', $viewData);
-			$this->view->render();
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', $viewData)->render();
 		}
 
 		public function		notfound()
 		{
-			echo "404";
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'notfound')->render();
 		}
 
 	}
