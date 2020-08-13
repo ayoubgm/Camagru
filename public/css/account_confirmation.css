@@ -13,7 +13,8 @@ body {
 }
 
 .card {
-	margin-top: 20px;
+	position: relative;
+	top: 100px;
 }
 
 .card-body .card-title{
