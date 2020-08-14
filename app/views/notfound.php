@@ -10,7 +10,8 @@
     <title>Not found</title>
 </head>
 <body>
-    <div class="container offset-1 col-lg-10">
+    <div class="container offset-lg-2 col-lg-8">
+        <p>404</p>
         <img src="https://media.giphy.com/media/d2Z4NRCUxsxZBvag/giphy.gif"/>
     </div>
 </body>
