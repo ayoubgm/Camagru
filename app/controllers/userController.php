@@ -329,14 +329,14 @@
 		// 	}
 		// }
 
-		// public function     logout ()
-		// {
-		// 	if ( isset( $_SESSION['userid'] ) ) {
-		// 		$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
-		// 	} else {
-		// 		header("Location: /camagru_git/home");
-		// 	}
-		// }
+		public function     logout ()
+		{
+			if ( isset( $_SESSION['userid'] ) ) {
+				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
+			} else {
+				header("Location: /camagru_git/home");
+			}
+		}
 
 	}
 ?>

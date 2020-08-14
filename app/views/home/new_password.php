@@ -1,6 +1,7 @@
 <?php
 	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
-		$token = $this->view_data['data'];
+		$data = $this->view_data['data'];
+		$token = ( isset( $data['token'] ) ) ? $data['token'] : null;
 	}
 ?>
 <!DOCTYPE html>
@@ -82,6 +83,7 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 <script>
 	const msg = document.getElementById("msg");
 	const menu = document.querySelector("nav .btn-auth .dropdown");

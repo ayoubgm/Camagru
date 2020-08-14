@@ -102,7 +102,7 @@
 			else {
 				switch ( $_SERVER['REQUEST_METHOD'] ) {
 					case "GET":
-						$viewData = [];
+						$viewData = [ 'success' => "false" ];
 					break;
 					case "POST":
 						if ( isset( $_POST['btn-reset'] ) ) {
@@ -138,30 +138,50 @@
 		{
 			session_start();
 			$viewData = [];
+			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
+			
 			if ( isset( $_SESSION['userid'] ) ) {
 				header("Location: /camagru_git/home");
 			} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
-				$viewData = [ 'success' => "false", 'msg' => $error ];
+				$viewData[ 'success' ] = "false";
+				$viewData[ 'msg' ] = $error;
 			} else {
 				switch ( $_SERVER['REQUEST_METHOD'] ) {
 					case "GET":
-						if ( ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) != null ) { $viewData = [ 'success' => "false", 'msg' => $error, 'data' => $data[1] ]; }
-						else { $viewData = [ 'success' => "true", 'data' => $data[1] ]; }
+						if ( ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) != null ) {
+							$viewData[ 'success' ] = "false";
+							$viewData[ 'msg' ] = $error;
+							$viewData[ 'data' ] = [ 'token' => $data[1] ];
+						}
+						else {
+							$viewData[ 'success'] = "true";
+							$viewData[ 'data' ] = [ 'token' => $data[1] ];
+						}
 					break;
 					case "POST":
 						if ( isset( $_POST['btn-submit'] ) ) {
 							unset( $_POST['btn-submit'] );
 							$_POST['token'] = $data[1];
 							if ( ( $error = $this->userMiddleware->new_password( $_POST ) ) != null ) {
-								$viewData = [ 'success' => "false", 'msg' => $error, 'data' => $data[1] ];
+								$viewData[ 'success' ] = "false";
+								$viewData[ 'msg' ] = $error;
+								$viewData[ 'data' ] = [ 'token' => $data[1] ];
 							} else {
 								try {
 									if ( $this->userModel->newpassword( array( 'newpassword' =>  password_hash($_POST['newpassword'], PASSWORD_ARGON2I), 'token' => $data[1] ) ) ) {
-										$viewData = [ 'success' => "true", 'msg' => "Your password has been changed successfully !", 'data' => $data[1] ];
+										$viewData[ 'success' ] = "true";
+										$viewData[ 'msg' ] = "Your password has been changed successfully !";
+										$viewData[ 'data' ] = [ 'token' => $data[1] ];
 									}
-									else { $viewData = [ 'success' => "false", 'msg' => "Failed to change your password !", 'data' => $data[1] ]; }
+									else {
+										$viewData[ 'success' ] = "false";
+										$viewData[ 'msg' ] = "Failed to change your password !";
+										$viewData[ 'data' ] = [ 'token' => $data[1] ];
+									}
 								} catch ( Exception $e ) {
-									$viewData = [ 'success' => "false", 'msg' => "Something goes wrong while changing your password !", 'data' => $data[1] ];
+									$viewData[ 'success' ] = "false";
+									$viewData[ 'msg' ] = "Something goes wrong while changing your password !";
+									$viewData[ 'data' ] = [ 'token' => $data[1] ];
 								}
 							}
 						}
@@ -174,24 +194,33 @@
 		public function account_confirmation ( $data )
 		{
 			$viewData = [];
+			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
 
 			session_start();
 			if ( isset( $_SESSION['userid'] ) ) {
 				header("Location: /camagru_git/home");
 			} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
-				$viewData = [ 'success' => "false", 'msg' => $error ];
+				$viewData [ 'success' ] = "false";
+				$viewData [ 'msg' ] = $error;
 			} else {
 				if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
-					$viewData = [ 'success' => "false", 'msg' => $error ];
+					$viewData [ 'success' ] = "false";
+					$viewData [ 'msg' ] = $error;
 				} else {
 					try {
 						if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
-							$viewData = [ 'success' => "true", 'msg' => "Your account has been activated successfully !", 'data' => $data[1] ];
+							$viewData [ 'success' ]  = "true";
+							$viewData [ 'msg' ] = "Your account has been activated successfully !";
+							$viewData [ 'data' ] = $data[1];
 						} else {
-							$viewData = [ 'success' => "false", 'msg' => "Failed to activate your account !", 'data' => $data[1] ];
+							$viewData [ 'success' ] = "false";
+							$viewData [ 'msg' ] = "Failed to activate your account !";
+							$viewData [ 'data' ] = $data[1];
 						}
 					} catch ( Exception $e ) {
-						$viewData = [ 'success' => "false", 'msg' => "Something goes wrong while activating your account !", 'data' => $data[1] ];
+						$viewData [ 'success' ] = "false";
+						$viewData [ 'msg' ] = "Something goes wrong while activating your account !";
+						$viewData [ 'data' ] = $data[1];
 					}
 				}
 			}
