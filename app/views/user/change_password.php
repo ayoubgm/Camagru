@@ -2,7 +2,8 @@
 	if ( !isset($_SESSION['userid']) ) {
 		header("Location: /camagru_git/home");
 	} else {
-		
+		$data = $this->view_data['data'];
+		$userData = $data['userData'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -97,6 +98,7 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 <script>
 	const buttonSubmit = document.querySelector('#btn-submit');
 	const msg = document.getElementById("msg");

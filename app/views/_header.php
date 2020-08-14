@@ -21,33 +21,42 @@
 			<a href="<?php echo SERVER; ?>/signup" id="btn-signup">Signup</a>
 		<?php } else { ?>
 			<img src="<?php echo PUBLIC_FOLDER; ?>/images/notification.png"? id="notif-img">
-			<?php if ( $userData['gender'] ==="female" ) { ?>
+			<?php if ( $userData['gender'] === "female" ) { ?>
 				<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="profile-img" onclick="showMenu()">
 			<?php } else { ?>
 				<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="profile-img" onclick="showMenu()">
 			<?php } ?>
 			<div class="dropdown">
 				<ul>
-					<li><a href="<?php echo SERVER; ?>/user/mygallery">
-						<img src="<?php echo PUBLIC_FOLDER; ?>/images/gallery-icone.png" id="gallery"/>
-						My gallery
-					</a></li>
-					<li><a href="<?php echo SERVER; ?>/user/profile">
-						<?php if ( $userData['gender'] ==="female" ) { ?>
-							<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-female.png" id="profile"/>
-						<?php } else { ?>
-							<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-male.png" id="profile"/>
-						<?php } ?>
-						Profile
-					</a></li>
-					<li><a href="<?php echo SERVER; ?>/user/settings">
-						<img src="<?php echo PUBLIC_FOLDER; ?>/images/settings.png" id="settings"/>
-						Settings
-					</a></li>
-					<li><a href="<?php echo SERVER; ?>/user/logout">
-						<img src="<?php echo PUBLIC_FOLDER; ?>/images/logout.png" id="logout"/>
-						Logout
-					</a></li>
+					<?php if ( isset( $data['userGallery'] ) && !empty( $data['userGallery'] ) ) { ?>
+						<li>
+							<a href="<?php echo SERVER; ?>/user/mygallery">
+								<img src="<?php echo PUBLIC_FOLDER; ?>/images/gallery-icone.png" id="gallery"/> My gallery
+							</a>
+						</li>
+					<?php } ?>
+					<li>
+						<a href="<?php echo SERVER; ?>/user/profile">
+							<?php if ( $userData['gender'] ==="female" ) { ?>
+								<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-female.png" id="profile"/>
+							<?php } else { ?>
+								<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-male.png" id="profile"/>
+							<?php } ?>
+							Profile
+						</a>
+					</li>
+					<li>
+						<a href="<?php echo SERVER; ?>/user/settings">
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/settings.png" id="settings"/>
+							Settings
+						</a>
+					</li>
+					<li>
+						<a href="<?php echo SERVER; ?>/user/logout">
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/logout.png" id="logout"/>
+							Logout
+						</a>
+					</li>
 				</ul>
 			</div>
 		<?php } ?>

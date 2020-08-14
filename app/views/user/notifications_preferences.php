@@ -29,7 +29,7 @@
 				</div>
 				<hr/>
 				<div class="p-4">
-					<form method="POST" action="<?php echo SERVER; ?>/user/notifications_preferences/notificationsemail/<?php echo ( $data['notifEmail'] == '1' ) ? '0' : '1';?>">
+					<form method="POST" action="<?php echo SERVER; ?>/user/notifications_preferences/notificationsemail/<?php echo ( $userData['notifEmail'] == '1' ) ? '0' : '1';?>">
 						<div class="text-center">
 							<div class="form-row edit">
 								<input
@@ -51,6 +51,7 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 <script>
 	const msg = document.getElementById("msg");
 	const menu = document.querySelector("nav .btn-auth .dropdown");

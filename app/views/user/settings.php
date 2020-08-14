@@ -2,6 +2,8 @@
 	if ( !isset($_SESSION['userid']) ) {
 		header("Location: /camagru_git/home");
 	} else {
+		$data = $this->view_data['data'];
+		$userData = $data['userData'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,16 +38,16 @@
         </div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
-	<script>
-		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
-		const menu = document.querySelector("nav .btn-auth .dropdown");
-
-		const showMenu = () => {
-			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-			else { menu.style.display = "none"; }
-		};
-		
-	</script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script>
+	const btn_profile = document.querySelector("nav .btn-auth #profile-img")
+	const menu = document.querySelector("nav .btn-auth .dropdown");
+	const showMenu = () => {
+		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
+		else { menu.style.display = "none"; }
+	};
+	
+</script>
 </body>
 </html>
 <?php

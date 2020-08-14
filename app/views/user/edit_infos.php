@@ -148,75 +148,72 @@
 		</div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
-	<script>
-		const menu = document.querySelector("nav .btn-auth .dropdown");
-		const msg = document.getElementById("msg");
-		const firstname = document.getElementById('inputFirstName');
-		const lastname = document.getElementById('inputLastName');
-		const username = document.getElementById('inputUsername');
-		const email = document.getElementById('inputEmail');
-		const address = document.getElementById('inputAddress');
-
-		const showMenu = () => {
-			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-			else { menu.style.display = "none"; }
-		};
-
-		const 			setError = ( target, msgerror ) => {
-			target.style.border = "1px solid red";
-			msg.classList.add("text-danger");
-			msg.classList.remove("text-success");
-			msg.innerHTML = msgerror;
-		}
-
-		const 			setSuccess = ( target ) => {
-			msg.innerHTML = "";
-			msg.classList.remove("text-danger");
-			msg.classList.add("text-success");
-			target.style.border = "1px solid green";
-		}
-
-		// Validate firstname by run some regex
-		const 			validateFirstName = ( firstname ) => {
-			if ( !/^[a-zA-Z]{3,30}$/.test( firstname.value ) ) { setError(firstname, "The firstname must contains letters only ( between 3 and 30 ) !"); return false; }
-			else { setSuccess(firstname); return true;}
-		}
-		// Validate lastname by run some regex
-		const 			validateLastName = ( lastname ) => {
-			if ( !/^[a-zA-Z]{3,30}$/.test( lastname.value ) ) { setError(lastname, "The lastname must contains letters only ( between 3 and 30 ) !"); return false; }
-			else { setSuccess(lastname); return true; }
-		}
-		// Validate lastname by run some regex
-		const 			validateUsername = ( username ) => {
-			if ( !/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-zA-Z0-9._-]+(?<![-_.])$/.test( username.value ) ) {
-				setError(username, "The username should contain between 3 and 20 letters or numbers ( -, _ or . ) !"); return false;
-			} else { setSuccess(username); return true; }
-		}
-		// Validate email by run some regex
-		const			validateEmail = ( email ) => {
-			if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) { setError(email, "Invalid email address !"); return false; }
-			else { setSuccess(email); return true; }
-		}
-		// Validate address by run adress
-		const 			validateAddress = ( address ) => {
-			if ( !/^[a-zA-Z0-9\s,'-]*$/.test( address.value ) ) {
-				setError(address, "The address should be contains letters or numbers ( ',', ' or - ) !");
-				return false;
-			} else { setSuccess(address); return true; }
-		}
-		
-		const validateEditData = () => {
-			if ( firstname.value === "" || lastname.value === "" || username.email === "" || email.value === "" ) { setError(firstname, "Invalid data provided"); return false; }
-			else if ( !validateFirstName( firstname ) ) { return false; }
-			else if ( !validateLastName( lastname ) ) { return false; }
-			else if ( !validateUsername( username ) ) { return false; }
-			else if ( !validateEmail( email ) ) { return false; }
-			else if ( !validateAddress( address ) ) { return false; }
-			else if ( !validatePassword( password ) ) { return false; }
-			else if ( !validateConfPass( confirmationPassword ) ) { return false; }
-			else { return true; }
-		}
-	</script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script>
+	const menu = document.querySelector("nav .btn-auth .dropdown");
+	const msg = document.getElementById("msg");
+	const firstname = document.getElementById('inputFirstName');
+	const lastname = document.getElementById('inputLastName');
+	const username = document.getElementById('inputUsername');
+	const email = document.getElementById('inputEmail');
+	const address = document.getElementById('inputAddress');
+	const showMenu = () => {
+		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
+		else { menu.style.display = "none"; }
+	};
+	const 			setError = ( target, msgerror ) => {
+		target.style.border = "1px solid red";
+		msg.classList.add("text-danger");
+		msg.classList.remove("text-success");
+		msg.innerHTML = msgerror;
+	}
+	const 			setSuccess = ( target ) => {
+		msg.innerHTML = "";
+		msg.classList.remove("text-danger");
+		msg.classList.add("text-success");
+		target.style.border = "1px solid green";
+	}
+	// Validate firstname by run some regex
+	const 			validateFirstName = ( firstname ) => {
+		if ( !/^[a-zA-Z]{3,30}$/.test( firstname.value ) ) { setError(firstname, "The firstname must contains letters only ( between 3 and 30 ) !"); return false; }
+		else { setSuccess(firstname); return true;}
+	}
+	// Validate lastname by run some regex
+	const 			validateLastName = ( lastname ) => {
+		if ( !/^[a-zA-Z]{3,30}$/.test( lastname.value ) ) { setError(lastname, "The lastname must contains letters only ( between 3 and 30 ) !"); return false; }
+		else { setSuccess(lastname); return true; }
+	}
+	// Validate lastname by run some regex
+	const 			validateUsername = ( username ) => {
+		if ( !/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-zA-Z0-9._-]+(?<![-_.])$/.test( username.value ) ) {
+			setError(username, "The username should contain between 3 and 20 letters or numbers ( -, _ or . ) !"); return false;
+		} else { setSuccess(username); return true; }
+	}
+	// Validate email by run some regex
+	const			validateEmail = ( email ) => {
+		if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) { setError(email, "Invalid email address !"); return false; }
+		else { setSuccess(email); return true; }
+	}
+	// Validate address by run adress
+	const 			validateAddress = ( address ) => {
+		if ( !/^[a-zA-Z0-9\s,'-]*$/.test( address.value ) ) {
+			setError(address, "The address should be contains letters or numbers ( ',', ' or - ) !");
+			return false;
+		} else { setSuccess(address); return true; }
+	}
+	
+	const validateEditData = () => {
+		if ( firstname.value === "" || lastname.value === "" || username.email === "" || email.value === "" ) { setError(firstname, "Invalid data provided"); return false; }
+		else if ( !validateFirstName( firstname ) ) { return false; }
+		else if ( !validateLastName( lastname ) ) { return false; }
+		else if ( !validateUsername( username ) ) { return false; }
+		else if ( !validateEmail( email ) ) { return false; }
+		else if ( !validateAddress( address ) ) { return false; }
+		else if ( !validatePassword( password ) ) { return false; }
+		else if ( !validateConfPass( confirmationPassword ) ) { return false; }
+		else { return true; }
+	}
+</script>
 </body>
 </html>
 <?php

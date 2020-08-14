@@ -3,7 +3,6 @@
 		$data = $this->view_data['data'];
 		$userData = $data['userData'];
 		$gallery = $data['gallery'];
-		$userGallery = $data['userGallery'];
 	}
 
 ?>
@@ -77,10 +76,10 @@
 				<textarea type="text" id="textarea" name="dataimage" readonly hidden></textarea>
 				<div class="area-images">
 					<?php 
-						if ( count( $userGallery ) === 0 ) {
+						if ( count( $data['userGallery'] ) === 0 ) {
 							echo "No edited images yet !";
 						} else {
-							foreach ( $userGallery as $image ) {
+							foreach ( $data['userGallery'] as $image ) {
 								?>
 									<img style="width: 400px; height: 300px; margin-bottom: 10px" src="<?php echo $image['src'] ?>"/>
 								<?php
@@ -110,64 +109,57 @@
 			</div>
 		</div>
 	</form>
-
 	<?php require_once(VIEWS . "_footer.php"); ?>
-	<script>
-		const menu = document.querySelector("nav .btn-auth .dropdown");
-		const video = document.querySelector("#videoElement");
-		const canvas = document.getElementById('canvas');
-		const canvasWebcam = document.getElementById('canvas-webcam');
-		const option = document.getElementById('stickers-select');
-		const x = document.getElementById('x-axis');
-		const y = document.getElementById('y-axis');
-		const btn_capture = document.getElementById('btn-capture');
-		const btn_save = document.getElementById('btn-save');
-		const btn_cancel = document.getElementById('btn-cancel');
-		const form = document.getElementById('form-save');
-		const modelBG = document.querySelector('.model-bg');
-		const modelClose = document.querySelector('#icon-cancel');
-		const textarea = document.getElementById('textarea');
-		let context = canvas.getContext('2d');
-		let contextWebcam = canvasWebcam.getContext('2d');
-		let base_image = new Image();
-
-		const showMenu = () => {
-			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-			else { menu.style.display = "none"; }
-		};
-
-		if ( navigator.mediaDevices.getUserMedia ) {
-			navigator.mediaDevices.getUserMedia({ 'video': true })
-			.then(( stream ) => { video.srcObject = stream; })
-			.catch(( error ) => { console.log("Something went wrong!"); });
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script>
+	const menu = document.querySelector("nav .btn-auth .dropdown");
+	const video = document.querySelector("#videoElement");
+	const canvas = document.getElementById('canvas');
+	const canvasWebcam = document.getElementById('canvas-webcam');
+	const option = document.getElementById('stickers-select');
+	const x = document.getElementById('x-axis');
+	const y = document.getElementById('y-axis');
+	const btn_capture = document.getElementById('btn-capture');
+	const btn_save = document.getElementById('btn-save');
+	const btn_cancel = document.getElementById('btn-cancel');
+	const form = document.getElementById('form-save');
+	const modelBG = document.querySelector('.model-bg');
+	const modelClose = document.querySelector('#icon-cancel');
+	const textarea = document.getElementById('textarea');
+	let context = canvas.getContext('2d');
+	let contextWebcam = canvasWebcam.getContext('2d');
+	let base_image = new Image();
+	const showMenu = () => {
+		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
+		else { menu.style.display = "none"; }
+	};
+	if ( navigator.mediaDevices.getUserMedia ) {
+		navigator.mediaDevices.getUserMedia({ 'video': true })
+		.then(( stream ) => { video.srcObject = stream; })
+		.catch(( error ) => { console.log("Something went wrong!"); });
+	}
+	const viewOption = ( option ) => {
+		if ( option.value != "" ) {
+			btn_capture.removeAttribute('disabled');
+			base_image.src = option.value;
+		} else {
+			btn_capture.setAttribute('disabled', 'on');
 		}
-
-		const viewOption = ( option ) => {
-			if ( option.value != "" ) {
-				btn_capture.removeAttribute('disabled');
-				base_image.src = option.value;
-			} else {
-				btn_capture.setAttribute('disabled', 'on');
-			}
-		}
-
-		btn_capture.addEventListener('click', () => {
-			contextWebcam.drawImage(video, 0, 0, 640, 480);
-			context.drawImage(video, 0, 0, 640, 480);
-			context.drawImage(base_image, x.value, y.value, 150, 120);
-			modelBG.classList.add('active-model');
-		});
-
-		modelClose.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
-		btn_cancel.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
-
-		form.addEventListener('submit', () => {
-			let dataUrl = canvasWebcam.toDataURL();
-
-			textarea.value = dataUrl;
-			return true;
-		});
-		
-	</script>
+	}
+	btn_capture.addEventListener('click', () => {
+		contextWebcam.drawImage(video, 0, 0, 640, 480);
+		context.drawImage(video, 0, 0, 640, 480);
+		context.drawImage(base_image, x.value, y.value, 150, 120);
+		modelBG.classList.add('active-model');
+	});
+	modelClose.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
+	btn_cancel.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
+	form.addEventListener('submit', () => {
+		let dataUrl = canvasWebcam.toDataURL();
+		textarea.value = dataUrl;
+		return true;
+	});
+	
+</script>
 </body>
 </html>

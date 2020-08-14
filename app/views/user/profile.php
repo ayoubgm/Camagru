@@ -34,9 +34,9 @@
 				<hr/>
 				<div class="user-infos">
 					<span id="field">Full name : </span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?></br>
-					<span id="field">Username : </span><?php print($userData['username']) ?></br>
-					<span id="field">Email : </span><?php print($userData['email']) ?></br>
-					<span id="field">Gender : </span>male</br>
+					<span id="field">Username : </span><?php print($userData['username']); ?></br>
+					<span id="field">Email : </span><?php print($userData['email']); ?></br>
+					<span id="field">Gender : </span><?php print($userData['gender']); ?></br>
 					<?php if ( $userData['address'] ) { ?>
 						<span id="field">Address : </span><?php print($userData['address']); ?></br>
 					<?php } ?>
@@ -46,16 +46,16 @@
 		</div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
-	<script>
-		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
-		const menu = document.querySelector("nav .btn-auth .dropdown");
-
-		const showMenu = () => {
-			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-			else { menu.style.display = "none"; }
-		};
-		
-	</script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script>
+	const btn_profile = document.querySelector("nav .btn-auth #profile-img")
+	const menu = document.querySelector("nav .btn-auth .dropdown");
+	const showMenu = () => {
+		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
+		else { menu.style.display = "none"; }
+	};
+	
+</script>
 </body>
 </html>
 <?php
