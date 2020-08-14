@@ -72,31 +72,26 @@
 		
 		public function		signin()
 		{
-			$viewName = "";
 			$viewData = [];
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
 				case "GET":
-					$viewName = 'home' . DIRECTORY_SEPARATOR .'signin';
-					$viewData = [ 'success' => "true" ];
+					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin' )->render();
 				break;
 				case "POST":
 					if ( isset( $_POST['btn-signin'] ) ) {
 						unset( $_POST['btn-signin'] );
 						if ( ($error = $this->userMiddleware->signin($_POST)) != null){
-							$viewData = [ 'success' => "false", 'msg' => $error ];
+							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', [ 'success' => "false", 'msg' => $error ] )->render();
 						} else {
 							session_start();
 							$userData = $this->userModel->findUserByUsername($_POST['username']);
 							$_SESSION['userid'] = $userData['id'];
 							$_SESSION['username'] = $userData['username'];
-							$viewName = 'home';
-							$viewData = [ 'success' => "true", 'msg' => "You have been logged successfully !" ];
 							header("Location: /camagru_git/home");
 						}
 					}
 				break;
 			}
-			$this->call_view( $viewName,  $viewData)->render();
 		}
 
 		public function		reset_password ( )
@@ -205,7 +200,7 @@
 
 		public function		notfound()
 		{
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'notfound')->render();
+			$this->call_view( 'notfound')->render();
 		}
 
 	}
