@@ -16,11 +16,17 @@ body {
 
 .container {
     width: 100%;
-    height: 90vh;
+    height: 70vh;
     margin-top: 30px;
+    text-align: center;
+}
+
+.container p {
+    color: white;
+    font-size: 60pt;
 }
 
 .container img {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
 }

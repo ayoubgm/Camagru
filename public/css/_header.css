@@ -8,7 +8,7 @@ nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 9vh;
+    height: 8vh;
     background-color: #1c1c20;
 }
 
@@ -32,7 +32,7 @@ nav {
     padding: 8px 12px;
 }
 .nav-links li a:hover{
-    background-color: rgba(0, 136, 169, 1);
+    background-color: #0088a9;
     border-radius: 50px;
     color: #edf0f1;
 }
@@ -61,7 +61,7 @@ nav .btn-auth img#notif-img {
 }
 
 nav .btn-auth .dropdown {
-    height: 105px;
+    height: 125px;
     position: absolute;
     top: 60px;
     right: 80px;
@@ -82,7 +82,7 @@ nav .btn-auth .dropdown ul li a {
     font-size: 11pt;
 }
 
-nav .btn-auth .dropdown #profile, nav .btn-auth .dropdown #settings, nav .btn-auth .dropdown #logout {
+.dropdown #gallery, .dropdown #profile,  .dropdown #settings,  .dropdown #logout {
     width: 25px;
 }
 
