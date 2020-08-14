@@ -28,7 +28,7 @@
 			<?php } ?>
 			<div class="dropdown">
 				<ul>
-					<?php if ( isset( $data['userGallery'] ) && !empty( $data['userGallery'] ) ) { ?>
+					<?php if ( isset( $userGallery ) && !empty( $userGallery ) ) { ?>
 						<li>
 							<a href="<?php echo SERVER; ?>/user/mygallery">
 								<img src="<?php echo PUBLIC_FOLDER; ?>/images/gallery-icone.png" id="gallery"/> My gallery
