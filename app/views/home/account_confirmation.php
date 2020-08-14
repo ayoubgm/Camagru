@@ -1,5 +1,5 @@
 <?php
-	if ( isset( $this->view_data['data'] ) ) {
+	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
 		$token = $this->view_data['data'];
 	}
 ?>

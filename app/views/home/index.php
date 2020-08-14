@@ -1,3 +1,9 @@
+<?php
+	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
+		$data = $this->view_data['data'];
+		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +28,7 @@
 		</div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
+	<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 	<script>
 		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
 		const menu = document.querySelector("nav .btn-auth .dropdown");

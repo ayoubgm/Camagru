@@ -1,9 +1,3 @@
-<?php
-	if ( isset( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-	}
-
-?>
 <nav>
 	<div class="logo">
 		<img class="logo" src="<?php echo PUBLIC_FOLDER; ?>/images/logo.png" alt="logo-camagru"/>
@@ -27,11 +21,23 @@
 			<a href="<?php echo SERVER; ?>/signup" id="btn-signup">Signup</a>
 		<?php } else { ?>
 			<img src="<?php echo PUBLIC_FOLDER; ?>/images/notification.png"? id="notif-img">
-			<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="profile-img" onclick="showMenu()">
+			<?php if ( $userData['gender'] ==="female" ) { ?>
+				<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="profile-img" onclick="showMenu()">
+			<?php } else { ?>
+				<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="profile-img" onclick="showMenu()">
+			<?php } ?>
 			<div class="dropdown">
 				<ul>
+					<li><a href="<?php echo SERVER; ?>/user/mygallery">
+						<img src="<?php echo PUBLIC_FOLDER; ?>/images/gallery-icone.png" id="gallery"/>
+						My gallery
+					</a></li>
 					<li><a href="<?php echo SERVER; ?>/user/profile">
-						<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-male.png" id="profile"/>
+						<?php if ( $userData['gender'] ==="female" ) { ?>
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-female.png" id="profile"/>
+						<?php } else { ?>
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/profile-male.png" id="profile"/>
+						<?php } ?>
 						Profile
 					</a></li>
 					<li><a href="<?php echo SERVER; ?>/user/settings">
