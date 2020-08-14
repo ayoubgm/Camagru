@@ -3,7 +3,7 @@
 		
 		static protected function				call_model ( $model )
 		{
-			if ( file_exists( MODELS . $model . '.php') ) { return new $model; }
+			if ( file_exists( MODELS . $model . '.php') ) { return new $model(0); }
 		}
 
 		static protected function 		call_view ( $view_name, $view_data = [] )
@@ -13,7 +13,7 @@
 
 		static protected function		call_middleware ( $middleware )
 		{
-			if ( file_exists( MIDDLEWARES . $middleware . '.php') ) { return new $middleware; }
+			if ( file_exists( MIDDLEWARES . $middleware . '.php') ) { return new $middleware(); }
 		}
 		
 	}

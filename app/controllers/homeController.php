@@ -29,12 +29,15 @@
 			session_start();
 			$homeObj = new homeController();
 			$viewData = array();
-			$viewData['gallery'] = $homeObj->galleryModel->getAllEditedImages();
+			$viewData ['data'] = [
+				'gallery' => $homeObj->galleryModel->getAllEditedImages(),
+				'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] )
+			];
 
 			if ( isset( $_SESSION['userid'] ) ) {
-				$viewData['userData'] = $homeObj->userModel->findUserById( $_SESSION['userid'] );
+				$viewData['data']['userData'] = $homeObj->userModel->findUserById( $_SESSION['userid'] );
 			}
-			$viewData = [ 'success' => "true", 'data' => $viewData ];
+			$viewData['success'] = "true";
 			$homeObj->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
 		}
 		
@@ -97,7 +100,8 @@
 		public function		reset_password ( )
 		{
 			session_start();
-			$viewData = [];
+			$viewData = array();
+
 			if ( isset( $_SESSION['userid'] ) ) { header("Location: /camagru_git/home"); }
 			else {
 				switch ( $_SERVER['REQUEST_METHOD'] ) {
@@ -124,8 +128,8 @@
 						}
 					break;
 				}
+				$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData)->render();
 			}
-			$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData)->render();
 		}
 
 		private function		validateToken ( $data )
@@ -187,8 +191,8 @@
 						}
 					break;
 				}
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData)->render();
 			}
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData)->render();
 		}
 		
 		public function account_confirmation ( $data )
