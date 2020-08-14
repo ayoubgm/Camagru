@@ -3,6 +3,7 @@
 		$data = $this->view_data['data'];
 		$userData = $data['userData'];
 		$gallery = $data['gallery'];
+		$userGallery = $data['userGallery'];
 	}
 
 ?>
@@ -86,7 +87,7 @@
 							}
 						}
 					?>
-				</div>
+				</div>`
 			</div>
 		</div>
 		<div class="model-bg">

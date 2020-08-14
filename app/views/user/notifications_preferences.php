@@ -4,6 +4,7 @@
 	} else {
 		$data = $this->view_data['data'];
 		$userData = $data['userData'];
+		$userGallery = $data['userGallery'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
