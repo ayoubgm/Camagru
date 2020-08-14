@@ -6,6 +6,7 @@
 		$currentPage = $data['page'];
 		$totalPages = ceil( $totalImages / $imagePerPage );
 		$userData = $data['userData'];
+		$userGallery = $data['userGallery'];
 	}
 ?>
 
@@ -53,18 +54,16 @@
 		<?php }
 		} ?>
 	</div>
-	<div id="pagination">
-		<?php
-			for ( $i = 0; $i <= $totalPages; $i++ ) {
-				if ( $i == $currentPage ) { echo " "; }
-				else if ( $i == $totalPages + 1 ) {
-					echo '<a href="'.SERVER.'/gallery/page='.$i.'" class="suivant">'.$i.'</a>';
-				} else {
-					echo '<a href="'.SERVER.'/gallery/page='.$i.'">'.$i.'</a>';
-				}
-			}
-		?>
-	</div>
-	<!-- <?php //require_once(VIEWS . "_footer.php");?> -->
+	<?php require_once(VIEWS . "_footer.php");?>
 </body>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script>
+	const btn_profile = document.querySelector("nav .btn-auth #profile-img")
+	const menu = document.querySelector("nav .btn-auth .dropdown");
+	const showMenu = () => {
+		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
+		else { menu.style.display = "none"; }
+	};
+	
+</script>
 </html>
