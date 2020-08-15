@@ -2,19 +2,12 @@
 	class UserModel extends DB
 	{
 
-		public function			findUserByUsername ( $username )
-		{
-			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
-			$stt->execute([ $username ]);
-			return( $stt->fetch(PDO::FETCH_ASSOC) );
-		}
-
 		public function			findUserById ( $userid )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE id = ?");
 			$stt->execute([ $userid ]);
-			$data =  $stt->fetch(PDO::FETCH_ASSOC);
-			return array(
+			return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
+			? array(
 				'id' => $data['id'],
 				'firstname' => $data['firstname'],
 				'lastname' => $data['lastname'],
@@ -24,7 +17,27 @@
 				'address' => $data['address'],
 				'notifEmail' => $data['notifEmail'],
 				'createdat' => $data['createdat']
-			);
+			)
+			: null;
+		}
+
+		public function			findUserByUsername ( $username )
+		{
+			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
+			$stt->execute([ $username ]);
+			return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
+			? array(
+				'id' => $data['id'],
+				'firstname' => $data['firstname'],
+				'lastname' => $data['lastname'],
+				'username' => $data['username'],
+				'email' => $data['email'],
+				'gender' => $data['gender'],
+				'address' => $data['address'],
+				'notifEmail' => $data['notifEmail'],
+				'createdat' => $data['createdat']
+			)
+			: null;
 		}
 
 		public function			save ( $data )
