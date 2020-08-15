@@ -2,6 +2,7 @@
 	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
 		$data = $this->view_data['data'];
 		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
+		$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;
 	}
 ?>
 <!DOCTYPE html>

@@ -1,9 +1,9 @@
 <?php
 	if ( isset( $this->view_data['data'] ) ) {
 		$data = $this->view_data['data'];
-		$userData = $data['userData'];
 		$gallery = $data['gallery'];
-		$userGallery = $data['userGallery'];
+		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;;
+		$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;;
 	}
 
 ?>

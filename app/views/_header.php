@@ -8,7 +8,7 @@
 		<?php if ( isset($data['gallery']) ) {
 				if ( count( $data['gallery'] ) !== 0 ) {
 		?>
-			<li><a href="<?php echo SERVER . '/gallery'; ?>">Gallery</a></li>
+			<li><a href="<?php echo SERVER . '/gallery/index'; ?>">Gallery</a></li>
 		<?php } } ?>
 		<li><a href="<?php echo SERVER . '/help'; ?>">Help</a></li>
 		<li><a href="<?php echo SERVER . '/about-us'; ?>">About us</a></li>
@@ -30,7 +30,7 @@
 				<ul>
 					<?php if ( isset( $userGallery ) && !empty( $userGallery ) ) { ?>
 						<li>
-							<a href="<?php echo SERVER; ?>/user/mygallery">
+							<a href="<?php echo SERVER; ?>/gallery/user/username/<?php echo $userData['username'] ?>">
 								<img src="<?php echo PUBLIC_FOLDER; ?>/images/gallery-icone.png" id="gallery"/> My gallery
 							</a>
 						</li>
