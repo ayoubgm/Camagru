@@ -29,12 +29,21 @@ body {
 }
 
 .card .card-title {
-    padding: 10px 0px 5px 10px;
     margin: 0;
-    letter-spacing: 2px;
     font-weight: bold;
-    font-size: 12pt;
-    color: rgb(12, 11, 11);
+    font-size: 11pt;
+    color: white;
+}
+
+.card .card-title img#user-img {
+    border-radius: 100%;
+    width: 55px;
+    cursor: pointer;
+}
+
+.card .card-title a#user-link {
+    text-decoration: none;
+    color: white;
 }
 
 .card .card-body {
@@ -48,7 +57,7 @@ body {
 }
 
 .card .card-footer {
-    padding: 10px 0px 5px 10px;
+    padding: 10px 0px 10px 0px;
     margin: 0;
     font-size: 10pt;
     background-color: rgb(27, 27, 27);
@@ -59,11 +68,12 @@ body {
     padding: 0px 20px;
 }
 
-.card .card-footer div img#icone-like { float: left; }
+.card .card-footer div div#likes { float: left; }
 
-.card .card-footer div img#icone-comment { float: right; }
+.card .card-footer div div#comments { float: right; }
 
-.card .card-footer div img#icone-like, .card .card-footer div img#icone-comment {
+.card .card-footer div div#likes img#icone-like,
+.card .card-footer div div#comments img#icone-comment {
     cursor: pointer;
     width: 30px;
     height: 30px;

@@ -5,8 +5,9 @@
 		$imagePerPage = 5;
 		$currentPage = $data['page'];
 		$totalPages = ceil( $totalImages / $imagePerPage );
-		$userData = $data['userData'];
-		$userGallery = $data['userGallery'];
+		$gallery = $data['gallery'];
+		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
+		$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
 	}
 ?>
 
@@ -26,28 +27,31 @@
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
 	<div class="row col-lg-12" id="gallery">
-		<?php if ( count( $data['gallery'] ) === 0 ) { ?>
+		<?php if ( count($gallery ) === 0 ) { ?>
 			<p> <?php echo "No Edited images !"; ?> </p>
 		<?php } else {
-			foreach ( $data['gallery'] as $image ) {
+			foreach ( $gallery as $image ) {
 		?>
 			<div class="card" id="image">
 				<div class="card-body">
-					<div class="card-title">
-						By <?php print( $image['username'] ); ?>
+					<div class="card-title bg-dark">
+						<?php if ( $image['gender'] === "female" ) { ?>
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="user-img" onclick="showMenu()">
+						<?php } else { ?>
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="user-img" onclick="showMenu()">
+						<?php } ?>
+						<a id="user-link" href="<?php echo SERVER."/gallery/user/username/".$image['username']; ?>">By <?php print( $image['username'] ); ?></a>
 					</div>
 				</div>
-				<img src="<?php print( $image['src'] ); ?>" class="card-img" alt="...">
+				<img src="<?php print( $image['src'] ); ?>" class="card-img">
 				<div class="card-footer w-100">
-					<?php
-						$createdat = new DateTime( $image['createdat'] );
-						$hours = $createdat->format('H');
-						$minutes = $createdat->format('i');
-						echo $createdat->format('Y-m-d').' '.$hours.'h '.$minutes;
-					?>
 					<div class="w-100">
-						<img id="icone-like" src="<?php echo PUBLIC_FOLDER; ?>/images/like-icone.png"/>
-						<img id="icone-comment" src="<?php echo PUBLIC_FOLDER; ?>/images/comment-icone.png"/>
+						<div id="likes">
+							<img id="icone-like" src="<?php echo PUBLIC_FOLDER; ?>/images/like-icone.png"/>
+						</div>
+						<div id="comments">
+							<img id="icone-comment" src="<?php echo PUBLIC_FOLDER; ?>/images/comment-icone.png"/>
+						</div>
 					</div>
 				</div>
 			</div>
