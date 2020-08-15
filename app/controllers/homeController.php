@@ -30,12 +30,12 @@
 			$homeObj = new homeController();
 			$viewData = array();
 			$viewData ['data'] = [
-				'gallery' => $homeObj->galleryModel->getAllEditedImages(),
-				'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] )
+				'gallery' => $homeObj->galleryModel->getAllEditedImages()
 			];
-
+			
 			if ( isset( $_SESSION['userid'] ) ) {
 				$viewData['data']['userData'] = $homeObj->userModel->findUserById( $_SESSION['userid'] );
+				$viewData['data']['userGallery'] = $homeObj->galleryModel->userGallery( $_SESSION['userid'] );
 			}
 			$viewData['success'] = "true";
 			$homeObj->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
