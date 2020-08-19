@@ -11,7 +11,7 @@
 			<li><a href="<?php echo SERVER . '/gallery/index'; ?>">Gallery</a></li>
 		<?php } } ?>
 		<li><a href="<?php echo SERVER . '/help'; ?>">Help</a></li>
-		<li><a href="<?php echo SERVER . '/about-us'; ?>">About us</a></li>
+		<li><a href="<?php echo SERVER . '/aboutus'; ?>">About us</a></li>
 		<li><a href="<?php echo SERVER . '/signin'; ?>" id="btn-signin">Signin</a></li>
 		<li><a href="<?php echo SERVER . '/signup'; ?>" id="btn-signup">Signup</a></li>
 	</ul>
