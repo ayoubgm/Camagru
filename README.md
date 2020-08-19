@@ -57,3 +57,9 @@ I will use for this project MVC design pattern (concept), it separates applicati
 ### :triangular_flag_on_post: `Sign in`</br>
 ![Image of camagru sign in](https://i.ibb.co/DVLK2SG/camagru-signin.png)</br>
 <br/>
+### :triangular_flag_on_post: `Reset password`</br>
+![Image of camagru reset password](https://i.ibb.co/jZkwRL5/4-resetpassword.png)</br>
+<br/>
+### :triangular_flag_on_post: `Account confirmation`</br>
+![Image of camagru account confirmation](https://i.ibb.co/YLPdgty/5-account-confirmation.png)</br>
+<br/>
