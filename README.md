@@ -63,3 +63,15 @@ I will use for this project MVC design pattern (concept), it separates applicati
 ### :triangular_flag_on_post: `Account confirmation`</br>
 ![Image of camagru account confirmation](https://i.ibb.co/YLPdgty/5-account-confirmation.png)</br>
 <br/>
+### :triangular_flag_on_post: `Profile`</br>
+![Image of camagru profile](https://i.ibb.co/cCD5zmV/6-profile.png)</br>
+<br/>
+### :triangular_flag_on_post: `Settings`</br>
+![Image of camagru settings](https://i.ibb.co/PZc6Hrv/7-settings.png)</br>
+<br/>
+### :triangular_flag_on_post: `Change password`</br>
+![Image of camagru change password](https://i.ibb.co/zrWCS0f/8-change-password.png)</br>
+<br/>
+### :triangular_flag_on_post: `Notification preference`</br>
+![Image of camagru Notification preference](https://i.ibb.co/sqxBDSq/9-notif-preference.png)</br>
+<br/>
