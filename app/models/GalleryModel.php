@@ -35,5 +35,12 @@
             return $stt->fetchAll(PDO::FETCH_ASSOC);
 
         }
+
+        public function         deleteImage ( $imgid, $userid )
+        {
+            $query = "DELETE FROM `gallery` WHERE id = ? AND userid = ?";
+            $stt = $this->connect()->prepare($query);
+            return $stt->execute([ $imgid, $userid ]);
+        }
     }
 ?>
