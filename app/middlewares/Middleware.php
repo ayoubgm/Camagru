@@ -138,5 +138,13 @@
 			return ( $data ) ? array( 'id' => $data['id'] ) : null;
 		}
 
+		protected function			isImageOwnerExists ( $userid, $imgid )
+		{
+			$stt = $this->connect()->prepare("SELECT * FROM `gallery` WHERE id = ? AND userid = ?");
+			$stt->execute([ $imgid, $userid ]);
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
+			return ( $data ) ? $data : null;
+		}
+
 	}
 ?>
