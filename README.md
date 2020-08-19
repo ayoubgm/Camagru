@@ -1,6 +1,6 @@
 # `Camagru` :camera:<br/>
-Web application allow to the user make a basic photo or video taken by webcam and mixed by some predefined images.<br/>
-![Image of camagru](https://i.ibb.co/DrXcWct/2020-08-09-9.png)</br><br/>
+Web application allow to the user make a basic photo or video taken by webcam and mixed by some predefined images.<br/><br/>
+![Image of camagru](https://i.ibb.co/sQ9tZp5/6-editing.png)</br><br/>
 
 ## :heavy_dollar_sign: `New notions to discover`<br/>
 :dart: Responsice design<br/>
@@ -62,6 +62,9 @@ I will use for this project MVC design pattern (concept), it separates applicati
 <br/>
 ### :triangular_flag_on_post: `Account confirmation`</br>
 ![Image of camagru account confirmation](https://i.ibb.co/YLPdgty/5-account-confirmation.png)</br>
+<br/>
+### :triangular_flag_on_post: `Editing`</br>
+![Image of camagru editing](https://i.ibb.co/sQ9tZp5/6-editing.png)</br>
 <br/>
 ### :triangular_flag_on_post: `Profile`</br>
 ![Image of camagru profile](https://i.ibb.co/cCD5zmV/6-profile.png)</br>
