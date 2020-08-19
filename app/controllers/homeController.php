@@ -29,9 +29,7 @@
 			session_start();
 			$homeObj = new homeController();
 			$viewData = array();
-			$viewData ['data'] = [
-				'gallery' => $homeObj->galleryModel->getAllEditedImages()
-			];
+			$viewData ['data'] = [ 'gallery' => $homeObj->galleryModel->getAllEditedImages() ];
 			
 			if ( isset( $_SESSION['userid'] ) ) {
 				$viewData['data']['userData'] = $homeObj->userModel->findUserById( $_SESSION['userid'] );

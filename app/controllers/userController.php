@@ -13,18 +13,25 @@
 			$this->galleryModel = self::call_model('GalleryModel');
 		}
 
-		public function		profile ()
+		public function		profile ( $data )
 		{
 			$viewData = array();
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
-
-			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+			
+			if ( !isset( $_SESSION['userid'] ) && empty( $_SESSION['userid'] ) ) {
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin')->render();
+				header("Location: /camagru_git/home/signin");
+			} else if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
 				$viewData['success'] = "true";
+				$viewData['data']['userData'] = $this->userModel->findUserByUsername( strtolower( $data[1] ) );
+				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+				$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
 			} else {
-				header("Location: /camagru_git/home");
+				$viewData['success'] = "true";
+				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
+				$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
+				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
 			}
 		}
 		
@@ -79,12 +86,12 @@
 		public function		settings ()
 		{
 			$viewData = array();
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
 			
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
 				$viewData['data'] = [
 					'userData' => $this->userModel->findUserById( $_SESSION['userid'] ),
-					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] )
+					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ),
+					'gallery' => $this->galleryModel->getAllEditedImages()
 				];
 				$viewData['success'] = "true";
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'settings', $viewData )->render();
@@ -194,7 +201,7 @@
 			// Copy and merge 
 			imagecopyresized($dest, $src, $xdest, $udest, 0, 0, 150, 150, $width, $height);
 			// Output and free from memory 
-			imagejpeg($dest, EDITEDPICS .'IMG'.'_'.$userData['id'].'_'.$userData['username'].'.png'); 							  
+			imagejpeg($dest, EDITEDPICS .'IMG'.'_'.time().'_'.$userData['id'].'_'.$userData['username'].'.png'); 							  
 			imagedestroy($dest);
 			imagedestroy($src);
 		}
@@ -219,7 +226,7 @@
 							$imgWebcam = str_replace('data:image/png;base64', '', $imgWebcam);
 							$imgWebcam = str_replace(' ', '+', $imgWebcam);
 							$fileData = base64_decode( $imgWebcam );
-							$pathFile = EDITEDPICS .'IMG'.'_'.$viewData['data']['userData']['id'].'_'.$viewData['data']['userData']['username'].'.png';
+							$pathFile = EDITEDPICS .'IMG'.'_'.time().'_'.$viewData['data']['userData']['id'].'_'.$viewData['data']['userData']['username'].'.png';
 							file_put_contents($pathFile, $fileData);
 							$srcPath = $_POST['sticker'];
 							$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
