@@ -40,7 +40,7 @@
 						<?php } else { ?>
 							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="user-img" onclick="showMenu()">
 						<?php } ?>
-						<a id="user-link" href="<?php echo SERVER."/gallery/user/username/".$image['username']; ?>">By <?php print( $image['username'] ); ?></a>
+						<a id="user-link" href="<?php echo SERVER."/user/profile/username/".$image['username']; ?>">By <?php print( $image['username'] ); ?></a>
 					</div>
 				</div>
 				<img src="<?php print( $image['src'] ); ?>" class="card-img">
@@ -58,7 +58,7 @@
 		<?php }
 		} ?>
 	</div>
-	<?php require_once(VIEWS . "_footer.php");?>
+	<!-- <?php require_once(VIEWS . "_footer.php");?> -->
 </body>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 <script>

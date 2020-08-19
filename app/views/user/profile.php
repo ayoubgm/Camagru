@@ -32,6 +32,10 @@
 					<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-profile.png"/></br>
 					</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
 				</div>
+				<a href="<?php echo SERVER."/gallery/user/username/".$userData['username']; ?>" id="link-gallery" class="btn btn-dark">
+					<img src="<?php echo PUBLIC_FOLDER ?>/images/gallery.png">
+					Link to gallery
+				</a>
 				<hr/>
 				<div class="user-infos">
 					<span id="field">Full name : </span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?></br>

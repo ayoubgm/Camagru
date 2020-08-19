@@ -26,8 +26,8 @@
 			<div id="main-section" class="col-lg-8 row d-flex justify-content-start">
 					<div id="video-area" class="col-lg-8">
 						<video autoplay="true" id="videoElement"></video>
-						<input class="btn btn-danger w-50 float-left" type="button" value="Capture" name="btn-capture" id="btn-capture" disabled/>
-						<input class="btn btn-warning w-50 float-right" type="button" value="Upload"/>
+						<input class="btn btn-danger w-100 float-left" type="button" value="Capture" name="btn-capture" id="btn-capture" disabled/>
+						<input class="btn btn-warning w-100 float-right text-white" type="file" value="Upload"/>
 						<div class="text-center mt-5 pt-2" id="area-msg" style="font-weight: bold;">
 							<span id="msg" class="p-5
 									<?php 
