@@ -30,6 +30,12 @@ body {
 	margin-right: 20px;
 }
 
+
+.card-body #link-gallery img {
+	width: 35px;
+	height: 35px;
+}
+
 .card-body .full-name{
 	font-weight: bold;
 	font-size: 18pt;
