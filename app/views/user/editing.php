@@ -40,7 +40,7 @@
 						</div>
 					</div>
 					<div id="stickers-area" class="col-lg-4 form-group" name="option">
-						<h4>Predifined images </h4>
+						<h4>Stickers</h4>
 						<hr/>
 						<div class="row">
 							<select id="stickers-select" class="col-6 form-control" name="sticker" multiple onchange="viewOption(this)">

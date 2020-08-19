@@ -12,7 +12,12 @@ body {
 	background-attachment: fixed;
 }
 
+.container {
+    display: flex;
+}
+
 .container .card {
+    width: 100%;
     padding: 30px;
 }
 

@@ -15,8 +15,6 @@ body {
 form {
     width: 100%;
     height: 90vh;
-    background-color: whitesmoke;
-    position: relative;
 }
 
 #main {
@@ -24,7 +22,7 @@ form {
     height: 100%;
     position: relative;
     left: 15px;
-    background-color: whitesmoke;
+    background-color: rgb(228, 228, 228);
 }
 
 #main #main-section {

@@ -13,7 +13,8 @@ body {
 }
 
 .card {
-	margin-top: 20px;
+	margin-top: 40px;
+	height: 80vh;
 }
 
 .card-body .card-title{
@@ -46,6 +47,10 @@ body {
 .card-body .user-infos {
 	text-align: left;
 	padding: 50px 50px;
+}
+
+.card-body .user-infos {
+	padding-top: 80px; 
 }
 
 .card-body .user-infos span#field{
