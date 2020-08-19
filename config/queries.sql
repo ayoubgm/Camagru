@@ -26,5 +26,26 @@ CREATE TABLE IF NOT EXISTS `gallery` (
 	`userid`			INT NOT NULL,
 	`src`				VARCHAR(255) NOT NULL,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
+	`countlikes`		INT DEFAULT 0,
+	`countcomments`		INT DEFAULT 0,
 	CONSTRAINT fk_userid FOREIGN KEY ( userid ) REFERENCES users( id )
-)
+);
+
+CREATE TABLE IF NOT EXISTS `likes` (
+	`id`				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`userid`			INT NOT NULL,
+	`imgid`				INT NOT NULL,
+	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT fk_userid FOREIGN KEY ( userid ) REFERENCES users( id )
+	CONSTRAINT fk_imgid FOREIGN KEY ( imgid ) REFERENCES gallery( id )
+);
+
+CREATE TABLE IF NOT EXISTS `comments` (
+	`id`				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`userid`			INT NOT NULL,
+	`imgid`				INT NOT NULL,
+	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
+	`modifyat`			DATETIME DEFAULT NULL,
+	CONSTRAINT fk_userid FOREIGN KEY ( userid ) REFERENCES users( id )
+	CONSTRAINT fk_imgid FOREIGN KEY ( imgid ) REFERENCES gallery( id )
+);
