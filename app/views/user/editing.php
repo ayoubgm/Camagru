@@ -27,7 +27,7 @@
 					<div id="video-area" class="col-lg-8">
 						<video autoplay="true" id="videoElement"></video>
 						<input class="btn btn-danger w-100 float-left" type="button" value="Capture" name="btn-capture" id="btn-capture" disabled/>
-						<input class="btn btn-warning w-100 float-right text-white" type="file" value="Upload"/>
+						<input id="fileInput" accept="image/png,image/jpg,image/jpeg" class="btn btn-warning w-100 float-right text-white" type="file" value="Upload" disabled/>
 						<div class="text-center mt-5 pt-2" id="area-msg" style="font-weight: bold;">
 							<span id="msg" class="p-5
 									<?php 
@@ -100,7 +100,7 @@
 					<hr/>
 					<div id="row" class="p-2">
 						<canvas id="canvas" width="640" height="480" name="image"></canvas>	
-						<canvas id="canvas-webcam" width="640" height="480" name="image" hidden></canvas>	
+						<canvas id="canvas-webcam" width="640" height="480" name="image" hidden></canvas>
 					</div>
 					<div class="row d-flex justify-content-between px-5 py-1">
 						<input type="submit" name="btn-save" id="btn-save" class="btn btn-dark w-25" value="Save" />
@@ -115,6 +115,7 @@
 <script>
 	const menu = document.querySelector("nav .btn-auth .dropdown");
 	const video = document.querySelector("#videoElement");
+	const fileInput = document.getElementById('fileInput');
 	const canvas = document.getElementById('canvas');
 	const canvasWebcam = document.getElementById('canvas-webcam');
 	const option = document.getElementById('stickers-select');
@@ -130,31 +131,93 @@
 	let context = canvas.getContext('2d');
 	let contextWebcam = canvasWebcam.getContext('2d');
 	let base_image = new Image();
+	
+	// display user menu
 	const showMenu = () => {
 		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
 		else { menu.style.display = "none"; }
 	};
+	
+	// Web cam
 	if ( navigator.mediaDevices.getUserMedia ) {
 		navigator.mediaDevices.getUserMedia({ 'video': true })
-		.then(( stream ) => { video.srcObject = stream; })
-		.catch(( error ) => { console.log("Something went wrong!"); });
+		.then(( stream ) => {
+			video.srcObject = stream;
+			btn_capture.removeAttribute('disabled');
+		})
+		.catch(( error ) => {
+			console.log("If your camera doesn't work you can upload an image !");
+			btn_capture.setAttribute('disabled', 'on');
+		});
 	}
+
 	const viewOption = ( option ) => {
 		if ( option.value != "" ) {
-			btn_capture.removeAttribute('disabled');
+			navigator.mediaDevices.getUserMedia({ 'video': true })
+			.then(( stream ) => {
+				video.srcObject = stream;
+				fileInput.removeAttribute('disabled');
+				btn_capture.removeAttribute('disabled');
+			})
+			.catch(( error ) => {
+				console.log("If your camera doesn't work you can upload an image !");
+				fileInput.removeAttribute('disabled');
+			});
 			base_image.src = option.value;
 		} else {
 			btn_capture.setAttribute('disabled', 'on');
 		}
 	}
+	// click on btn capture will mix two images and display final image with options save or cancel
 	btn_capture.addEventListener('click', () => {
 		contextWebcam.drawImage(video, 0, 0, 640, 480);
 		context.drawImage(video, 0, 0, 640, 480);
 		context.drawImage(base_image, x.value, y.value, 150, 120);
 		modelBG.classList.add('active-model');
 	});
-	modelClose.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
-	btn_cancel.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
+	// click on X and btn cancel with hide model
+	modelClose.addEventListener('click', () => {
+		modelBG.classList.remove('active-model');
+		fileInput.value = "";
+	});
+	btn_cancel.addEventListener('click', () => {
+		fileInput.files = "";
+		modelBG.classList.remove('active-model');
+	});
+
+	// Event listener for image upload 
+	fileInput.addEventListener('change', (e) => {
+		if( e.target.files ) {
+			let file = e.target.files[0];
+			const fsize = e.target.files[0].size; 
+			const sizefile = Math.round((fsize / 1024)); 
+			
+			// The size of the file. 
+			if ( sizefile >= 4096 ) { 
+				alert("File too Big, please select a file less than 4mb"); 
+			} else {
+				var reader  = new FileReader();
+				reader.readAsDataURL( file );
+
+				reader.onloadend = (e) => {
+					var myImage = new Image(); // Creates image object
+					myImage.src = e.target.result; // Assigns converted image to image object
+
+					myImage.onload = (ev) => {
+						if ( ev.width > 640 || ev.height > 480 ) {
+							alert("Image must have 640X480"); 
+						} else {
+							contextWebcam.drawImage(myImage, 0, 0, 640, 480);
+							context.drawImage(myImage, 0, 0, 640, 480);
+							context.drawImage(base_image, x.value, y.value, 150, 120);
+							modelBG.classList.add('active-model');
+						}
+					}
+				}
+			}
+		}
+	});
+
 	form.addEventListener('submit', () => {
 		let dataUrl = canvasWebcam.toDataURL();
 		textarea.value = dataUrl;

@@ -48,9 +48,11 @@
 					<div class="w-100">
 						<div id="likes">
 							<img id="icone-like" src="<?php echo PUBLIC_FOLDER; ?>/images/like-icone.png"/>
+							<?php echo ( $image['countlikes'] == 0 ) ? "No Likes" : $image['countlikes'] ?>
 						</div>
 						<div id="comments">
 							<img id="icone-comment" src="<?php echo PUBLIC_FOLDER; ?>/images/comment-icone.png"/>
+							<?php echo $image['countcomments'] ?>
 						</div>
 					</div>
 				</div>
