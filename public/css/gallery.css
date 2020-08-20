@@ -66,6 +66,8 @@ body {
 
 .card .card-footer div {
     padding: 0px 20px;
+    color: white;
+    font-size: 9pt;
 }
 
 .card .card-footer div div#likes { float: left; }
