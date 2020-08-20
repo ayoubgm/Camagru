@@ -29,7 +29,7 @@
 
         public function         getAllEditedImages ( $depart = 0, $imagePerPage = 5 )
         {
-            $query = 'SELECT g.id, g.src, g.userid, u.username, u.gender, g.createdat FROM `gallery` g INNER JOIN `users` u ON g.userid = u.id ORDER BY createdat DESC LIMIT '.$depart.','.$imagePerPage;
+            $query = 'SELECT g.*, u.username, u.gender, g.createdat FROM `gallery` g INNER JOIN `users` u ON g.userid = u.id ORDER BY createdat DESC LIMIT '.$depart.','.$imagePerPage;
             $stt = $this->connect()->prepare($query);
             $stt->execute();
             return $stt->fetchAll(PDO::FETCH_ASSOC);
