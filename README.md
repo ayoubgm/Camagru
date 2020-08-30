@@ -22,12 +22,17 @@ a password reinitialisation mail, if he forget his password.<br/>
 :white_check_mark: The user should be able to disconnect in one click at any time on any page<br/>
 :white_check_mark: The user should be able to modify his informations <br/><br/>
 
+### :camera: `Editing features`<br/>
+:heavy_check_mark: Editing page is only to users that are connected
+:heavy_check_mark: The button allowing to take a picture will be inactive as long as no superposable image has been selected
+:heavy_check_mark: Because not everyone has a webcam, you should allow the upload of a user image instead of capturing it with webcam
+
 ### :framed_picture: `Gallery features`<br/>
 :ballot_box_with_check: Display all images edited by all users must be public ordered by date of creation<br/>
 :ballot_box_with_check: Only a connected user can like or comment them<br/>
 :ballot_box_with_check: The list of images must be paginated with at least 5 element per page<br/>
-:ballot_box_with_check: When an image receivesa new comment, the author of image should be notified by email. This preference </br>
-must be set as true by default bu it can be desactivated.<br/><br/>
+:ballot_box_with_check: When an image receives a new comment, the author of image should be notified by email. This preference </br>
+must be set as true by default but it can be desactivated in user preferences.<br/><br/>
 
 ## :100: `Technologies used`<br/>
 :dizzy: Apache<br/>
