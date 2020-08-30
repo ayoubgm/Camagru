@@ -17,8 +17,7 @@ Web application allow to the user make a basic photo or video taken by webcam an
 ### :family: `User features`<br/>
 :white_check_mark: The application allow a user to register by asking at least a valid email, username and a password.<br/>
 :white_check_mark: The user can activate his account via a unique link sent to his email.<br/>
-:white_check_mark: The user will be able then to connect to the application using his username and password, he can also send</br>
-a password reinitialisation mail, if he forget his password.<br/>
+:white_check_mark: The user will be able then to connect to the application using his username and password, he can also send a password reinitialisation mail, if he forget his password.<br/>
 :white_check_mark: The user can modify his informations. <br/><br/>
 
 ### :camera: `Editing features`<br/>
