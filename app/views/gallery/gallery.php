@@ -142,19 +142,19 @@
 		<div class="model">
 			<div class="row" id="model-header" >
 				<div class="col-8" id="title">
-					<h6>Comments</h6>
+					<h5>Comments</h5>
 				</div>
 				<div class="col-4" id="close">
 					<img id="icon-cancel" src="<?php echo PUBLIC_FOLDER."/images/cancel.png"; ?>"/>
 				</div>
 			</div>
-			<div class="row p-5">
+			<div class="area-comments mt-4 p-3">
 				<div class="comments">
-
+					Hola
 				</div>
 				<div class="area-write-coment">
 					<div>
-						
+
 					</div>
 				</div>
 			</div>
@@ -162,7 +162,7 @@
 	</div>
 	<!-- <?php require_once(VIEWS . "_footer.php");?> -->
 	<script>
-		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
+		const btn_profile = document.querySelector("nav .btn-auth #profile-img");
 		const btn_like = document.getElementById('btn-like');
 		const alert = document.getElementById('alert-msg');
 		const menu = document.querySelector("nav .btn-auth .dropdown");
