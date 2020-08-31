@@ -3,7 +3,7 @@
 		<img class="logo" src="<?php echo PUBLIC_FOLDER; ?>/images/logo.png" alt="logo-camagru"/>
 	</div>
 	<ul class="nav-links">
-		<li><a href="<?php echo SERVER . '/home'; ?>">Home</a></li>
+		<li><a class="active-link" href="<?php echo SERVER . '/home'; ?>">Home</a></li>
 		<li><a href="<?php echo SERVER . '/user/editing'; ?>">Editing</a></li>
 		<?php if ( isset($data['gallery']) ) {
 				if ( count( $data['gallery'] ) !== 0 ) {
