@@ -128,7 +128,7 @@
 							?>
 						</div>
 						<div class="comment">
-							<button type="button" id="btn-comment">
+							<button type="button" id="btn-comment" onclick="activeModel()">
 								<img id="icone-comment" src="<?php echo PUBLIC_FOLDER."/images/comment-icone.png"; ?>"/>
 							</button>
 						</div>
@@ -138,16 +138,49 @@
 		<?php }
 		} ?>
 	</div>
+	<div class="model-bg" >
+		<div class="model">
+			<div class="row" id="model-header" >
+				<div class="col-8" id="title">
+					<h6>Comments</h6>
+				</div>
+				<div class="col-4" id="close">
+					<img id="icon-cancel" src="<?php echo PUBLIC_FOLDER."/images/cancel.png"; ?>"/>
+				</div>
+			</div>
+			<div class="row p-5">
+				<div class="comments">
+
+				</div>
+				<div class="area-write-coment">
+					<div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- <?php require_once(VIEWS . "_footer.php");?> -->
 	<script>
 		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
 		const btn_like = document.getElementById('btn-like');
 		const alert = document.getElementById('alert-msg');
 		const menu = document.querySelector("nav .btn-auth .dropdown");
+		const modelBG = document.querySelector('.model-bg');
+		const btnDelete = document.getElementById("btn-delete");
+		const btnCancel = document.getElementById("btn-cancel");
+		const modelClose = document.querySelector('#icon-cancel');
 		const showMenu = () => {
 			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
 			else { menu.style.display = "none"; }
 		};
+
+		const activeModel = () => {
+			modelBG.classList.add('active-model');
+		};
+
+		modelClose.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
+		btnCancel.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
 
 		setTimeout(() => {
 			alert.style.display = 'none';

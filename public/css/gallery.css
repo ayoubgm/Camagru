@@ -126,6 +126,65 @@ body {
     cursor: pointer;
 }
 
+/* comments model */
+.model-bg, .model-msg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(141, 191, 255, 0.363);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+}
+
+.active-model {
+    visibility: visible;
+    opacity: 1;
+}
+
+.model {
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.model #model-header {
+    padding: 10px 0px 0px 10px;
+}
+.model #model-header div#title {
+    font-size: 14pt;
+    text-align: left;
+}
+
+.model #model-header div#close img {
+    margin-right: 20px;
+}
+
+.model #model-header div h6 {
+    letter-spacing: 3px;
+    font-size: 11pt;
+    font-weight: bold;
+    color: rgb(54, 54, 54);
+}
+.model #model-header div #icon-cancel {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+
+
 @media (max-width: 750.98px) {
     .card {
         width: 100%;
