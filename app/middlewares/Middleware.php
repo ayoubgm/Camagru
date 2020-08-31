@@ -146,5 +146,13 @@
 			return ( $data ) ? $data : null;
 		}
 
+		protected function			isImageExists ( $imgid )
+		{
+			$stt = $this->connect()->prepare("SELECT * FROM `gallery` WHERE id = ?");
+			$stt->execute([ $imgid ]);
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
+			return ( $data ) ? $data : null;
+		}
+
 	}
 ?>

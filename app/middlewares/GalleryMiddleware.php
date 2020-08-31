@@ -7,5 +7,10 @@
 			return ( $data = $this->isImageOwnerExists( $userid, $imgid ) ) ? $data : false;
 		}
 
+		public function		isImageExist( $imgid )
+		{
+			return ( $data = $this->isImageExists( $imgid ) ) ? $data : false;
+		}
+
 	}
 ?>
