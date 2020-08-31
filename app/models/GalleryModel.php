@@ -68,6 +68,16 @@
 			return $stt->execute([ $userid, $imgid, $imgid ]);
 		}
 
+		public function          unlikeImage ( $imgid, $userid )
+		{
+			$query = '
+			    DELETE FROM likes WHERE imgid = ? AND userid = ?;
+			    UPDATE `gallery` SET countlikes = countlikes - 1 WHERE id = ?;
+			';
+			$stt = $this->connect()->prepare($query);
+			return $stt->execute([ $imgid, $userid, $imgid ]);
+		}
+
 		public function         deleteImage ( $imgid, $userid )
 		{
 			$query = "DELETE FROM `gallery` WHERE id = ? AND userid = ?";

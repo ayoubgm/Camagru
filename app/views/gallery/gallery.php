@@ -92,26 +92,40 @@
 					</div>
 					<div class="footer2">
 						<div class="like">
-							<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
-								<button type="submit" id="btn-like">
-									<?php
-										$users = $usersLikedImgs[ $image['id'] ];
+							<?php
+								$users = $usersLikedImgs[ $image['id'] ];
 
-										foreach ($users as $user) {
-											if ( $user['id'] !== $_SESSION['userid'] ) {
-									?>
-												<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-inactive.png"; ?>"/>
-									<?php
-												break;
-											} else { ?>
-												<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-active.png"; ?>"/>
-									<?php
-												break;
-											}
+								if ( empty( $users ) ) { ?>
+									<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
+										<button type="submit" id="btn-like">
+											<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-inactive.png"; ?>"/>
+										</button>
+									</form>
+							<?php
+								} else {
+									foreach ($users as $user) {
+										if ( $user['id'] !== $_SESSION['userid'] ) {
+										?>
+											<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
+												<button type="submit" id="btn-like">
+													<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-inactive.png"; ?>"/>
+												</button>
+											</form>
+										<?php
+											break;
+										} else {
+										?>
+											<form method="POST" action="<?php echo SERVER."/gallery/unlike/id/".$image['id']; ?>">
+												<button type="submit" id="btn-like">
+													<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-active.png"; ?>"/>
+												</button>
+											</form>
+										<?php
+											break;
 										}
-									?>
-								</button>
-							<form>
+									}
+								}
+							?>
 						</div>
 						<div class="comment">
 							<button type="button" id="btn-comment">
