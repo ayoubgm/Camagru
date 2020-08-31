@@ -12,6 +12,7 @@
 			{
 				$pdo = new PDO("mysql:host=".self::$HOST.";dbname=".self::$DB_NAME.";charset=utf8", self::$USER, self::$PASSWORD);
 				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
 				return $pdo;
 			}
 			catch( PDOException $e ) {
