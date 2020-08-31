@@ -29,6 +29,9 @@
 			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) { $page = intval($data[1]); }
 			$depart = ( $page - 1 ) * $imagePerPage;
 			$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
+			foreach ($viewData['data']['gallery'] as $value) {
+				$viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] );
+			}
 			$viewData['data']['totalImages'] = $this->galleryModel->getCountImages();
 			$viewData['data']['page'] = $page ;
 
@@ -69,6 +72,53 @@
 			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'user', $viewData)->render();
 		}
 
+		/* Like an image ( if the user already like the picture will be unliked ) */
+		public function 		like ( $data ) {
+			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
+				$viewData = array();
+				$page = 1;
+				$imagePerPage = 5;
+				if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) { $page = intval($data[1]); }
+				$depart = ( $page - 1 ) * $imagePerPage;
+				$viewData['data'] = [
+					'userData' => $this->userModel->findUserById( $_SESSION['userid'] ),
+					'gallery' => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ),
+					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ),
+					'totalImages' => $this->galleryModel->getCountImages(),
+					'page' => $page
+				];
+				foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] ); }
+
+				if ( isset( $data[0] ) && $data[0] === "id" && !empty( $data[1] ) ) {
+					if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
+						$viewData['success'] = "false";
+						$viewData['msg'] = "The image is not found !";
+					} else {
+						try {
+							if ( !$this->galleryModel->likeImage( $data[1], $_SESSION['userid'] ) ) {
+								$viewData['success'] = "false";
+								$viewData['msg'] = "Failed to submit your like !";
+							} else {
+								foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] ); }
+								$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
+								$viewData['success'] = "true";
+							}
+						} catch ( Exception $e ) {
+							$viewData['success'] = "false";
+							$viewData['msg'] = "Something goes wrong while like an image !";
+						}
+					}
+				} else {
+					$viewData['success'] = "false";
+					$viewData['msg'] = "No id found !";
+				}
+				$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData)->render();
+			} else {
+				header("Location: /camagru_git/signin");
+			}
+		}
+
+		/* Delete an image by author of image */
 		public function		delete ( $data )
 		{
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
