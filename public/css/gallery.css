@@ -14,6 +14,12 @@ body {
     flex-direction: column;
 }
 
+#alert-msg {
+    width: 100%;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
 #gallery {
     margin-top: 5px;
     margin-left: 5px;
@@ -60,25 +66,64 @@ body {
     padding: 10px 0px 10px 0px;
     margin: 0;
     font-size: 10pt;
-    background-color: rgb(27, 27, 27);
-    color: rgb(163, 163, 163);
+    color: white;
+}
+.card .card-footer .footer1 {
+    margin-bottom: 30px;
+    padding: 0px 10px;
+}
+.card .card-footer .footer2 {
+    padding: 0px 35px;
+}
+.card .card-footer .footer1,
+.card .card-footer .footer2 {
+    width: 100%;
 }
 
-.card .card-footer div {
-    padding: 0px 20px;
-    color: white;
+.card .card-footer .footer1 .footer-side1 {
+    font-size: 8pt;
+    float: left;
+}
+
+.card .card-footer .footer1 .footer-side2 {
+    float: right;
+}
+
+.card .card-footer .footer1 .footer-side2 span {
     font-size: 9pt;
 }
 
-.card .card-footer div div#likes { float: left; }
+.card .card-footer .footer1 .footer-side1 div#likes,
+.card .card-footer .footer1 .footer-side1 div#comments
+{ padding: 0px 5px; float: left; }
 
-.card .card-footer div div#comments { float: right; }
-
-.card .card-footer div div#likes img#icone-like,
-.card .card-footer div div#comments img#icone-comment {
+.card .card-footer .footer1 .footer-side1 div#likes img#icone-like,
+.card .card-footer .footer1 .footer-side1 div#comments img#icone-comment {
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 15px;
+    height: 15px;
+    margin-bottom: 4px;
+}
+
+.card .card-footer .footer2 .like {
+    float: left;
+}
+
+.card .card-footer .footer2 .comment {
+    float: right;
+}
+
+.card .card-footer .footer2 .like #btn-like,
+.card .card-footer .footer2 .comment #btn-comment {
+    border: 0;
+    background-color: transparent; 
+}
+
+.card .card-footer .footer2 .like #btn-like img,
+.card .card-footer .footer2 .comment #btn-comment img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
 }
 
 @media (max-width: 750.98px) {

@@ -8,6 +8,7 @@
 		$gallery = $data['gallery'];
 		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 		$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
+		$usersLikedImgs = ( isset( $data['usersLikedImgs'] ) ) ? $data['usersLikedImgs'] : null;
 	}
 ?>
 
@@ -26,6 +27,11 @@
 </head>
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
+	<?php if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == 'false') { ?>
+		<div class="alert <?php echo "alert-danger"; ?>" id="alert-msg">
+			<?php if ( isset($this->view_data['msg']) ) { echo $this->view_data['msg']; } ?>
+		</div>
+	<?php } ?>
 	<div class="row col-lg-12" id="gallery">
 		<?php if ( count($gallery ) === 0 ) { ?>
 			<p> <?php echo "No Edited images !"; ?> </p>
@@ -44,15 +50,73 @@
 					</div>
 				</div>
 				<img src="<?php print( $image['src'] ); ?>" class="card-img">
-				<div class="card-footer w-100">
-					<div class="w-100">
-						<div id="likes">
-							<img id="icone-like" src="<?php echo PUBLIC_FOLDER; ?>/images/like-icone.png"/>
-							<?php echo ( $image['countlikes'] == 0 ) ? "No Likes" : $image['countlikes'] ?>
+				<div class="card-footer w-100 bg-dark">
+					<div class="footer1">
+						<div class="footer-side1">
+							<div id="likes">
+								<img id="icone-like" src="<?php echo PUBLIC_FOLDER; ?>/images/like-icone.png"/>
+								<?php echo ( $image['countlikes'] == 0 ) ? "No Likes" : $image['countlikes'] ?>
+							</div>
+							<div id="comments">
+								<img id="icone-comment" src="<?php echo PUBLIC_FOLDER; ?>/images/comment-icone.png"/>
+								<?php echo $image['countcomments'] ?>
+							</div>
 						</div>
-						<div id="comments">
-							<img id="icone-comment" src="<?php echo PUBLIC_FOLDER; ?>/images/comment-icone.png"/>
-							<?php echo $image['countcomments'] ?>
+						<div class="footer-side2">
+							<span>
+								<?php
+									$gmtTimezone = new DateTimeZone('GMT+1');
+									$creatDate = new DateTime( $image['createdat'], $gmtTimezone );
+									$currDate = new DateTime("now", $gmtTimezone);
+									$interval = date_diff( $currDate, $creatDate );
+									$string = "";
+
+									if ( $interval->format('%Y') > 0 ) {
+										// ex: 2018, 22 august at 22:20
+										$string = $interval->format('%Y').", ".$interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
+									} else if ( $interval->format('%m') > 0 && $interval->format('%m') > 7 ) {
+										$string = $interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
+									} else if ( $interval->format('%d') >= 1 ) {
+										$string = $interval->format('%d')." d";
+									} else if ( $interval->format('%H') >= 1 && $interval->format('%H') <= 24 ) {
+										$string = $interval->format('%h')." h";
+									} else if ( $interval->format('%i') >= 1 && $interval->format('%i') <= 60 ) {
+										$string = $interval->format('%i')." min";
+									} else if ( $interval->format('%s') >= 1 && $interval->format('%s') <= 60 ) {
+										$string = $interval->format('%s')." sec";
+									}
+									echo $string;
+								?>
+							</span>
+						</div>
+					</div>
+					<div class="footer2">
+						<div class="like">
+							<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
+								<button type="submit" id="btn-like">
+									<?php
+										$users = $usersLikedImgs[ $image['id'] ];
+
+										foreach ($users as $user) {
+											if ( $user['id'] !== $_SESSION['userid'] ) {
+									?>
+												<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-inactive.png"; ?>"/>
+									<?php
+												break;
+											} else { ?>
+												<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-active.png"; ?>"/>
+									<?php
+												break;
+											}
+										}
+									?>
+								</button>
+							<form>
+						</div>
+						<div class="comment">
+							<button type="button" id="btn-comment">
+								<img id="icone-comment" src="<?php echo PUBLIC_FOLDER."/images/comment-icone.png"; ?>"/>
+							</button>
 						</div>
 					</div>
 				</div>
@@ -61,15 +125,21 @@
 		} ?>
 	</div>
 	<!-- <?php require_once(VIEWS . "_footer.php");?> -->
+	<script>
+		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
+		const btn_like = document.getElementById('btn-like');
+		const alert = document.getElementById('alert-msg');
+		const menu = document.querySelector("nav .btn-auth .dropdown");
+		const showMenu = () => {
+			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
+			else { menu.style.display = "none"; }
+		};
+
+		setTimeout(() => {
+			alert.style.display = 'none';
+		}, 4000);
+
+	</script>
 </body>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script>
-	const btn_profile = document.querySelector("nav .btn-auth #profile-img")
-	const menu = document.querySelector("nav .btn-auth .dropdown");
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	};
-	
-</script>
 </html>
