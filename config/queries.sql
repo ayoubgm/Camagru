@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `gallery` (
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`countlikes`		INT DEFAULT 0,
 	`countcomments`		INT DEFAULT 0,
-	CONSTRAINT fk_userid FOREIGN KEY ( userid ) REFERENCES users( id )
+	CONSTRAINT fk_userid_img FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `likes` (
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `likes` (
 	`userid`			INT NOT NULL,
 	`imgid`				INT NOT NULL,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT fk_userid FOREIGN KEY ( userid ) REFERENCES users( id )
-	CONSTRAINT fk_imgid FOREIGN KEY ( imgid ) REFERENCES gallery( id )
+	CONSTRAINT fk_userid_like FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_imgid_like FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `comments` (
@@ -46,6 +46,6 @@ CREATE TABLE IF NOT EXISTS `comments` (
 	`imgid`				INT NOT NULL,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`modifyat`			DATETIME DEFAULT NULL,
-	CONSTRAINT fk_userid FOREIGN KEY ( userid ) REFERENCES users( id )
-	CONSTRAINT fk_imgid FOREIGN KEY ( imgid ) REFERENCES gallery( id )
+	CONSTRAINT fk_userid_comment FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_imgid_comment FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
