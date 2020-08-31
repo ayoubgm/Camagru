@@ -110,7 +110,6 @@
 	};
 
 	const activeModel = () => {
-		console.log("He");
 		modelBG.classList.add('active-model');
 		btnDelete.href = btnDeleteImg.name;
 	};
