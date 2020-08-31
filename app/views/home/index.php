@@ -33,11 +33,12 @@
 	<script>
 		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
 		const menu = document.querySelector("nav .btn-auth .dropdown");
-
+		
 		const showMenu = () => {
 			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
 			else { menu.style.display = "none"; }
 		};
+
 		
 	</script>
 </body>
