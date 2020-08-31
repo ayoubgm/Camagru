@@ -24,9 +24,11 @@
 			<div class="card-body">
 				<p class="card-title">
 					<span>Profile</span>
-					<a href="<?php echo SERVER; ?>/user/edit" class="btn btn-dark w-25" id="btn-edit">
-						<img id="icon-edit" src="<?php echo PUBLIC_FOLDER; ?>/images/icone-edit.png"/>Edit
-					</a>
+					<?php if ( $_SESSION['userid'] == $userData['id'] ) { ?>
+						<a href="<?php echo SERVER; ?>/user/edit" class="btn btn-dark w-25" id="btn-edit">
+							<img id="icon-edit" src="<?php echo PUBLIC_FOLDER; ?>/images/icone-edit.png"/>Edit
+						</a>
+					<?php } ?>
 				</p>
 				<div class="full-name text-center mt-5">
 					<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-profile.png"/></br>
