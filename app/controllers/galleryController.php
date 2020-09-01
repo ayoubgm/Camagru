@@ -23,19 +23,22 @@
 		{
 			$viewData = array();
 			$viewData['data'] = [];
+			$page = 1;
+			$imagePerPage = 5;
 
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
 				$viewData['data'][ 'userData'] = $this->usersModel->findUserById( $_SESSION['userid'] );
 				$viewData['data'][ 'userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
 			}
-			$page = 1;
-			$imagePerPage = 5;
-			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) { $page = intval($data[1]); }
+			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
+				$page = intval($data[1]);
+			}
 			$depart = ( $page - 1 ) * $imagePerPage;
 			$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
 			foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
+			foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['comments'][$value['id']] = $this->commentsModel->getCommentOfImg( $value['id'] ); }
 			$viewData['data']['totalImages'] = $this->galleryModel->getCountImages();
-			$viewData['data']['page'] = $page ;
+			$viewData['data']['page'] = $page;
 
 			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData )->render();
 		}
