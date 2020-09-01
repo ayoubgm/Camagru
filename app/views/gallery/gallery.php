@@ -152,7 +152,7 @@
 				<div class="comments w-100 mt-4 p-3">
 					<?php if( empty( $data['comments'][$image['id']] ) ) { echo "No comments yet"; } ?>
 				</div>
-				<form action="POST" method="<?php echo SERVER."/gallery/comment/id/".$image['id']; ?>">
+				<form method="POST" action="<?php echo SERVER."/gallery/comment/id/".$image['id']; ?>">
 					<div class="row area-write-coment w-100 mx-0 my-2 p-1" style="height: 20%; border-radius: 8px;">
 						<div class="col-1">
 							<?php if ( !isset( $userData['gender'] ) || $userData['gender'] === "male" ) { ?>
