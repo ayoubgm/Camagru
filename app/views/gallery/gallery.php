@@ -150,23 +150,25 @@
 			</div>
 			<div class="area-comments">
 				<div class="comments w-100 mt-4 p-3">
-					Hola
+					<?php if( empty( $data['comments'][$image['id']] ) ) { echo "No comments yet"; } ?>
 				</div>
-				<div class="row area-write-coment w-100 mx-0 my-2 p-1" style="height: 20%; border-radius: 8px; border: 1px solid black;">
-					<div class="col-1">
-						<?php if ( !isset( $userData['gender'] ) || $userData['gender'] === "male" ) { ?>
-							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="user-img" onclick="showMenu()">
-						<?php } else { ?>
-							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="user-img" onclick="showMenu()">
-						<?php } ?>
+				<form action="POST" method="<?php echo SERVER."/gallery/comment/id/".$image['id']; ?>">
+					<div class="row area-write-coment w-100 mx-0 my-2 p-1" style="height: 20%; border-radius: 8px;">
+						<div class="col-1">
+							<?php if ( !isset( $userData['gender'] ) || $userData['gender'] === "male" ) { ?>
+								<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="user-img" onclick="showMenu()">
+							<?php } else { ?>
+								<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="user-img" onclick="showMenu()">
+							<?php } ?>
+						</div>
+						<div class="col-10">
+							<textarea id="commentInput" name="comment" class="w-100 form-control" placeholder="Write a comment..."></textarea>
+						</div>
+						<div class="col-1">
+							<input id="btn-send" class="btn btn-primary" type="submit" name="btn-comment" value="Send">
+						</div>
 					</div>
-					<div class="col-10">
-						<textarea id="commentInput" name="comment" class="w-100 form-control" placeholder="Write a comment..."></textarea>
-					</div>
-					<div class="col-1">
-						<input id="btn-send" class="btn btn-primary" type="submit" name="btn-send" value="Send">
-					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>
