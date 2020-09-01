@@ -3,14 +3,18 @@
 	class galleryController extends Controller {
 
 		private $galleryMiddleware;
-		private $userModel;
+		private $usersModel;
 		private $galleryModel;
+		private $likesModel;
+		private $commentsModel;
 
 		public function         __construct()
 		{
 			session_start();
-			$this->userModel = self::call_model('UserModel');
+			$this->usersModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
+			$this->likesModel = self::call_model('LikesModel');
+			$this->commentsModel = self::call_model('CommentsModel');
 			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
 		}
 		
@@ -21,7 +25,7 @@
 			$viewData['data'] = [];
 
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data'][ 'userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
+				$viewData['data'][ 'userData'] = $this->usersModel->findUserById( $_SESSION['userid'] );
 				$viewData['data'][ 'userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
 			}
 			$page = 1;
@@ -29,9 +33,7 @@
 			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) { $page = intval($data[1]); }
 			$depart = ( $page - 1 ) * $imagePerPage;
 			$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
-			foreach ($viewData['data']['gallery'] as $value) {
-				$viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] );
-			}
+			foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
 			$viewData['data']['totalImages'] = $this->galleryModel->getCountImages();
 			$viewData['data']['page'] = $page ;
 
@@ -46,11 +48,11 @@
 
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
 				$viewData['success'] = "true";
-				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
+				$viewData['data']['userData'] = $this->usersModel->findUserById( $_SESSION['userid'] );
 			}
 			if ( isset( $data[0] ) && $data[0] === "username" && !empty( $data[1] ) ) {
 				try {
-					$dataUser = $this->userModel->findUserByUsername( strtolower( $data[1] ) );
+					$dataUser = $this->usersModel->findUserByUsername( strtolower( $data[1] ) );
 
 					if ( !isset( $dataUser ) || empty( $dataUser ) ) {
 						$viewData['success'] = "false";
@@ -81,13 +83,13 @@
 				if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) { $page = intval($data[1]); }
 				$depart = ( $page - 1 ) * $imagePerPage;
 				$viewData['data'] = [
-					'userData' => $this->userModel->findUserById( $_SESSION['userid'] ),
+					'userData' => $this->usersModel->findUserById( $_SESSION['userid'] ),
 					'gallery' => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ),
 					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ),
 					'totalImages' => $this->galleryModel->getCountImages(),
 					'page' => $page
 				];
-				foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] ); }
+				foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
 
 				if ( isset( $data[0] ) && $data[0] === "id" && !empty( $data[1] ) ) {
 					if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
@@ -95,11 +97,11 @@
 						$viewData['msg'] = "The image is not found !";
 					} else {
 						try {
-							if ( !$this->galleryModel->likeImage( $data[1], $_SESSION['userid'] ) ) {
+							if ( !$this->likesModel->likeImage( $data[1], $_SESSION['userid'] ) ) {
 								$viewData['success'] = "false";
 								$viewData['msg'] = "Failed to submit your like !";
 							} else {
-								foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] ); }
+								foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
 								$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
 								$viewData['success'] = "true";
 							}
@@ -127,13 +129,13 @@
 				if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) { $page = intval($data[1]); }
 				$depart = ( $page - 1 ) * $imagePerPage;
 				$viewData['data'] = [
-					'userData' => $this->userModel->findUserById( $_SESSION['userid'] ),
+					'userData' => $this->usersModel->findUserById( $_SESSION['userid'] ),
 					'gallery' => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ),
 					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ),
 					'totalImages' => $this->galleryModel->getCountImages(),
 					'page' => $page
 				];
-				foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] ); }
+				foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
 
 				if ( isset( $data[0] ) && $data[0] === "id" && !empty( $data[1] ) ) {
 					if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
@@ -141,11 +143,11 @@
 						$viewData['msg'] = "The image is not found !";
 					} else {
 						try {
-							if ( !$this->galleryModel->unlikeImage( $data[1], $_SESSION['userid'] ) ) {
+							if ( !$this->likesModel->unlikeImage( $data[1], $_SESSION['userid'] ) ) {
 								$viewData['success'] = "false";
 								$viewData['msg'] = "Failed to submit your unlike !";
 							} else {
-								foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->galleryModel->getUsersLikeImage( $value['id'] ); }
+								foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
 								$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
 								$viewData['success'] = "true";
 							}
@@ -170,7 +172,7 @@
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
 				$viewData = array();
 				$viewData['data'] = [
-					'userData' => $this->userModel->findUserById( $_SESSION['userid'] ),
+					'userData' => $this->usersModel->findUserById( $_SESSION['userid'] ),
 					'gallery' => $this->galleryModel->getAllEditedImages(),
 					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] )
 				];
