@@ -1,5 +1,5 @@
 <?php
-	class UserModel extends DB
+	class 		UsersModel extends DB
 	{
 
 		public function			findUserById ( $userid )
