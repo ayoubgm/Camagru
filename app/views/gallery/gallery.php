@@ -104,7 +104,7 @@
 							<?php
 								} else {
 									foreach ($users as $user) {
-										if ( $user['id'] !== $_SESSION['userid'] ) {
+										if ( !isset($_SESSION['userid']) || $user['id'] !== $_SESSION['userid'] ) {
 										?>
 											<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
 												<button type="submit" id="btn-like">
@@ -148,13 +148,23 @@
 					<img id="icon-cancel" src="<?php echo PUBLIC_FOLDER."/images/cancel.png"; ?>"/>
 				</div>
 			</div>
-			<div class="area-comments mt-4 p-3">
-				<div class="comments">
+			<div class="area-comments">
+				<div class="comments w-100 mt-4 p-3">
 					Hola
 				</div>
-				<div class="area-write-coment">
-					<div>
-
+				<div class="row area-write-coment w-100 mx-0 my-2 p-1" style="height: 20%; border-radius: 8px; border: 1px solid black;">
+					<div class="col-1">
+						<?php if ( !isset( $userData['gender'] ) || $userData['gender'] === "male" ) { ?>
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-male.png"? id="user-img" onclick="showMenu()">
+						<?php } else { ?>
+							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="user-img" onclick="showMenu()">
+						<?php } ?>
+					</div>
+					<div class="col-10">
+						<textarea id="commentInput" name="comment" class="w-100 form-control" placeholder="Write a comment..."></textarea>
+					</div>
+					<div class="col-1">
+						<input id="btn-send" class="btn btn-primary" type="submit" name="btn-send" value="Send">
 					</div>
 				</div>
 			</div>

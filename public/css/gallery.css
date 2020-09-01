@@ -127,12 +127,12 @@ body {
 }
 
 /* comments model */
-.model-bg, .model-msg {
+.model-bg {
+    width: 100%;
+    height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100vh;
     background-color: rgba(141, 191, 255, 0.363);
     display: flex;
     justify-content: center;
@@ -187,18 +187,22 @@ body {
 .model .area-comments {
     width: 100%;
     height: 80%;
-    background-color: #1C1C1C;
-    border-radius: 8px;
 }
 
 .model .area-comments .comments {
-    width: 100%;
     height: 80%;
+    background-color: #d1d1d1;
+    border-radius: 8px;
 }
-.model .area-comments .area-write-comment {
+
+.area-write-coment div #user-img {
+    width: 55px;
+    height: 55px;
+}
+
+.area-write-coment div input#commentInput {
     width: 100%;
-    height: 20%;
-    background-color: #1C1C1b;
+    height: 100%;
 }
 
 @media (max-width: 750.98px) {
