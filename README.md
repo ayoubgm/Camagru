@@ -1,7 +1,6 @@
 # `Camagru` :camera:<br/>
 Web application allow to the user make a basic photo or video taken by webcam and mixed by some predefined images.<br/><br/><br/>
 ![Image of editing pictures](https://i.ibb.co/sQ9tZp5/6-editing.png)</br><br/>
-![Image of gallery](https://i.ibb.co/YtQDdbd/7-gallery.png)</br><br/>
 
 ## :heavy_dollar_sign: `New notions to discover`<br/>
 :dart: Responsice design<br/>
@@ -67,6 +66,9 @@ I will use for this project MVC design pattern (concept), it separates applicati
 <br/>
 ### :triangular_flag_on_post: `Editing`</br>
 ![Image of camagru editing](https://i.ibb.co/sQ9tZp5/6-editing.png)</br>
+<br/>
+### :triangular_flag_on_post: `Gallery`</br>
+![Image of gallery](https://i.ibb.co/YtQDdbd/7-gallery.png)</br><br/>
 <br/>
 ### :triangular_flag_on_post: `Profile`</br>
 ![Image of camagru profile](https://i.ibb.co/cCD5zmV/6-profile.png)</br>
