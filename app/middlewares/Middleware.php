@@ -1,4 +1,8 @@
 <?php
+
+	/**
+	 *  middleware class
+	 */
 	class Middleware extends DB {
 
 		protected function		validateFirstname ( $firstname )

@@ -1,4 +1,8 @@
 <?php
+
+	/**
+	 * 	user middlewares class
+	 */
 	class UserMiddleware extends Middleware
 	{
 
