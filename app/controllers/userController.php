@@ -9,7 +9,7 @@
 		{
 			session_start();
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
-			$this->userModel = self::call_model('UserModel');
+			$this->userModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
 		}
 
