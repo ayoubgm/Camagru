@@ -1,10 +1,13 @@
 <?php
-   	if ( isset( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-		$gallery = $data['gallery'];
-		$userData = $data['userData'];
-		$userGallery = $data['userGallery'];
-	}
+	if ( !isset($_SESSION['userid']) ) {
+		header("Location: /camagru_git/home");
+	} else {
+	   	if ( isset( $this->view_data['data'] ) ) {
+			$data = $this->view_data['data'];
+			$gallery = $data['gallery'];
+			$userData = $data['userData'];
+			$userGallery = $data['userGallery'];
+		}
 ?>
 
 <!DOCTYPE html>
@@ -63,3 +66,7 @@
 
 </script>
 </html>
+
+<?php
+	}
+?>

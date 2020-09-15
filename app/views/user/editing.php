@@ -1,11 +1,13 @@
 <?php
-	if ( isset( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-		$gallery = $data['gallery'];
-		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;;
-		$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;;
-	}
-
+	if ( !isset($_SESSION['userid']) ) {
+		header("Location: /camagru_git/home");
+	} else {
+		if ( isset( $this->view_data['data'] ) ) {
+			$data = $this->view_data['data'];
+			$gallery = $data['gallery'];
+			$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;;
+			$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;;
+		}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -227,3 +229,7 @@
 </script>
 </body>
 </html>
+
+<?php
+	}
+?>
