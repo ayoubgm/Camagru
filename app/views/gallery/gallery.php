@@ -40,7 +40,7 @@
 		?>
 			<div class="card" id="image">
 				<div class="card-body">
-					<div class="card-title bg-dark">
+					<div class="card-title">
 						<?php if ( $image['gender'] === "female" ) { ?>
 							<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-female.png"? id="user-img" onclick="showMenu()">
 						<?php } else { ?>
@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				<img src="<?php print( $image['src'] ); ?>" class="card-img">
-				<div class="card-footer w-100 bg-dark">
+				<div class="card-footer w-100">
 					<div class="footer1">
 						<div class="footer-side1">
 							<div id="likes">

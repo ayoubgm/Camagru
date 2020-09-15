@@ -49,7 +49,7 @@ body {
 
 .card .card-title a#user-link {
     text-decoration: none;
-    color: white;
+    color: rgb(46, 46, 46);
 }
 
 .card .card-body {
@@ -66,7 +66,7 @@ body {
     padding: 10px 0px 10px 0px;
     margin: 0;
     font-size: 10pt;
-    color: white;
+    color: rgb(46, 46, 46);
 }
 .card .card-footer .footer1 {
     margin-bottom: 30px;
@@ -95,7 +95,7 @@ body {
 
 .card .card-footer .footer1 .footer-side1 div#likes,
 .card .card-footer .footer1 .footer-side1 div#comments
-{ padding: 0px 5px; float: left; }
+{ padding: 0px 5px; float: left; font-size: 9pt; font-weight: 500; }
 
 .card .card-footer .footer1 .footer-side1 div#likes img#icone-like,
 .card .card-footer .footer1 .footer-side1 div#comments img#icone-comment {
