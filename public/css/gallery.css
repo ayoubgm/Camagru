@@ -200,9 +200,9 @@ body {
     height: 55px;
 }
 
-.area-write-coment div input#commentInput {
-    width: 100%;
-    height: 100%;
+.area-write-coment div textarea#commentInput {
+    height: 90px;
+    resize: none;
 }
 
 @media (max-width: 750.98px) {

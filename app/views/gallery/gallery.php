@@ -96,7 +96,7 @@
 								$users = $usersLikedImgs[ $image['id'] ];
 
 								if ( empty( $users ) ) { ?>
-									<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
+									<form method="POST" action="<?php echo SERVER."/like/add/id/".$image['id']; ?>">
 										<button type="submit" id="btn-like">
 											<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-inactive.png"; ?>"/>
 										</button>
@@ -106,7 +106,7 @@
 									foreach ($users as $user) {
 										if ( !isset($_SESSION['userid']) || $user['id'] !== $_SESSION['userid'] ) {
 										?>
-											<form method="POST" action="<?php echo SERVER."/gallery/like/id/".$image['id']; ?>">
+											<form method="POST" action="<?php echo SERVER."/like/add/id/".$image['id']; ?>">
 												<button type="submit" id="btn-like">
 													<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-inactive.png"; ?>"/>
 												</button>
@@ -115,7 +115,7 @@
 											break;
 										} else {
 										?>
-											<form method="POST" action="<?php echo SERVER."/gallery/unlike/id/".$image['id']; ?>">
+											<form method="POST" action="<?php echo SERVER."/like/remove/id/".$image['id']; ?>">
 												<button type="submit" id="btn-like">
 													<img id="icone-like" src="<?php echo PUBLIC_FOLDER."/images/icone-like-active.png"; ?>"/>
 												</button>
@@ -182,21 +182,15 @@
 		const btnDelete = document.getElementById("btn-delete");
 		const btnCancel = document.getElementById("btn-cancel");
 		const modelClose = document.querySelector('#icon-cancel');
+
 		const showMenu = () => {
 			if ( menu.style.display == "none" ) { menu.style.display = "block"; }
 			else { menu.style.display = "none"; }
 		};
-
-		const activeModel = () => {
-			modelBG.classList.add('active-model');
-		};
-
+		const activeModel = () => { modelBG.classList.add('active-model'); };
 		modelClose.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
 		btnCancel.addEventListener('click', () => { modelBG.classList.remove('active-model'); });
-
-		setTimeout(() => {
-			alert.style.display = 'none';
-		}, 4000);
+		setTimeout(() => { alert.style.display = 'none'; }, 4000);
 
 	</script>
 </body>
