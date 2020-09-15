@@ -21,26 +21,43 @@
 			return $stt->fetchAll(PDO::FETCH_ASSOC);
 		}
 
+		/* is like exists of an image by a user */
+		public function 		isLikeExists ( $imgid, $userid )
+		{
+			$query0 = 'SELECT count(*) AS `count` FROM `likes` WHERE imgid = ? AND userid = ?';
+			$stt0 = $this->connect()->prepare( $query0 );
+			$stt0->execute([ $imgid, $userid ]);
+			$data = $stt0->fetch(PDO::FETCH_ASSOC);
+			
+			return ( $data['count'] == 0 ) ? false : true;
+		}
+
 		/* Like an image by a user */
 		public function          likeImage ( $imgid, $userid )
 		{
-			$query = '
-			    INSERT INTO `likes` (userid, imgid) values (?, ?);
-			    UPDATE `gallery` SET countlikes = countlikes + 1 WHERE id = ?;
-			';
-			$stt = $this->connect()->prepare($query);
-			return $stt->execute([ $userid, $imgid, $imgid ]);
+			if ( !self::isLikeExists( $imgid, $userid ) ) {
+				$query1 = '
+				    INSERT INTO `likes` (userid, imgid) values (?, ?);
+				    UPDATE `gallery` SET countlikes = countlikes + 1 WHERE id = ?;
+				';
+				$stt1 = $this->connect()->prepare( $query1 );
+				return $stt1->execute([ $userid, $imgid, $imgid ]);
+			}
+			return true;
 		}
 
 		/* unlike an image by a user */
 		public function          unlikeImage ( $imgid, $userid )
 		{
-			$query = '
-			    DELETE FROM likes WHERE imgid = ? AND userid = ?;
-			    UPDATE `gallery` SET countlikes = countlikes - 1 WHERE id = ?;
-			';
-			$stt = $this->connect()->prepare($query);
-			return $stt->execute([ $imgid, $userid, $imgid ]);
+			if ( self::isLikeExists( $imgid, $userid ) ) {
+				$query = '
+				    DELETE FROM likes WHERE imgid = ? AND userid = ?;
+				    UPDATE `gallery` SET countlikes = countlikes - 1 WHERE id = ?;
+				';
+				$stt = $this->connect()->prepare($query);
+				return $stt->execute([ $imgid, $userid, $imgid ]);
+			}
+			return true;
 		}
 
 	}
