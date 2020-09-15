@@ -1,7 +1,7 @@
 # `Camagru` :camera:<br/>
 Web application allow to the user make a basic photo or video taken by webcam and mixed by some predefined images.<br/><br/><br/>
 ![Image of editing pictures](https://i.ibb.co/sQ9tZp5/6-editing.png)</br><br/>
-![Image of gallery](https://ibb.co/xMLmg3g)</br><br/>
+![Image of gallery](https://i.ibb.co/xMLmg3g/7-gallery.png)</br><br/>
 
 ## :heavy_dollar_sign: `New notions to discover`<br/>
 :dart: Responsice design<br/>
