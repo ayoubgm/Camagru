@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 *  Like model
+	 *  likes model class
 	 */
 	class 		LikesModel extends DB
 	{

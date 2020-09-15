@@ -1,4 +1,8 @@
 <?php
+
+	/**
+	 *	users model class
+	 */
 	class 		UsersModel extends DB
 	{
 

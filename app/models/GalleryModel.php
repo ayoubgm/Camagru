@@ -1,7 +1,7 @@
 <?php
 	
 	/**
-	 *  Gallery model
+	 *  gallery model class
 	 */
 	class       GalleryModel extends DB
 	{

@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * Comments model
+	 *	comments model class
 	 */
 	class 		CommentsModel extends DB
 	{
