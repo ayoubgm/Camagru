@@ -1,4 +1,8 @@
-<?php
+ 				<?php
+
+	/**
+	 * 	like controller class
+	 */
 	class likeController extends Controller {
 		
 		private $galleryMiddleware;
@@ -7,7 +11,7 @@
 		private $likesModel;
 		private $commentsModel;
 
-		public function         		__construct()
+		public function 				__construct()
 		{
 			session_start();
 			$this->usersModel = self::call_model('UsersModel');
@@ -106,7 +110,7 @@
 			}
 		}
 		
-		public function					notfound()
+		public function 				notfound()
 		{
 			$this->call_view( 'notfound')->render();
 		}

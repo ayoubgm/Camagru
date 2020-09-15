@@ -1,11 +1,15 @@
 <?php
+
+	/**
+	 * 	user controller class
+	 */
 	class userController extends Controller {
 
 		private $userMiddleware;
 		private $userModel;
 		private $galleryModel;
 
-		public function		__construct ()
+		public function 				__construct ()
 		{
 			session_start();
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
@@ -13,7 +17,7 @@
 			$this->galleryModel = self::call_model('GalleryModel');
 		}
 
-		public function		profile ( $data )
+		public function 				profile ( $data )
 		{
 			$viewData = array();
 			
@@ -35,7 +39,7 @@
 			}
 		}
 		
-		public function		edit ()
+		public function 				edit ()
 		{
 			$viewData = array();
 			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
@@ -83,7 +87,7 @@
 			}
 		}
 
-		public function		settings ()
+		public function 				settings ()
 		{
 			$viewData = array();
 			
@@ -100,7 +104,7 @@
 			}
 		}
 
-		public function		change_password ()
+		public function 				change_password ()
 		{
 			$viewData = array();
 			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
@@ -142,7 +146,7 @@
 			}
 		}
 
-		public function		notifications_preferences ( $data )
+		public function 				notifications_preferences ( $data )
 		{
 			$viewData = array();
 			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
@@ -191,7 +195,7 @@
 			}
 		}
 
-		private function makeMixedImage( $userData, $destPath, $srcPath, $xdest, $udest )
+		private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $udest )
 		{
 			$dest = imagecreatefrompng( $destPath ); 
 			$src = imagecreatefrompng( $srcPath);
@@ -206,7 +210,7 @@
 			imagedestroy($src);
 		}
 
-		public function		editing ()
+		public function 				editing ()
 		{
 			$viewData = array();
 			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
@@ -258,7 +262,7 @@
 			}
 		}
 
-		public function     logout ()
+		public function 				logout ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
@@ -267,7 +271,7 @@
 			}
 		}
 
-		public function		notfound()
+		public function 				notfound()
 		{
 			$this->call_view( 'notfound')->render();
 		}

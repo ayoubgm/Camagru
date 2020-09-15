@@ -1,11 +1,15 @@
 <?php
+
+	/**
+	 * 	home controller class
+	 */
 	class homeController extends Controller {
 
 		private $userMiddleware;
 		private $userModel;
 		private $galleryModel;
 
-		public function				__construct()
+		public function 				__construct()
 		{
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->userModel = self::call_model('UsersModel');
@@ -24,7 +28,7 @@
 		// 	}
 		// }
 
-		public function				index ()
+		public function 				index ()
 		{
 			session_start();
 			$homeObj = new homeController();
@@ -39,7 +43,7 @@
 			$homeObj->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
 		}
 		
-		public function				signup()
+		public function 				signup()
 		{
 			$viewData = [];
 			
@@ -71,7 +75,7 @@
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', $viewData)->render();
 		}
 		
-		public function		signin()
+		public function 				signin()
 		{
 			$viewData = [];
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
@@ -95,7 +99,7 @@
 			}
 		}
 
-		public function		reset_password ( )
+		public function 				reset_password ( )
 		{
 			session_start();
 			$viewData = array();
@@ -130,13 +134,13 @@
 			}
 		}
 
-		private function		validateToken ( $data )
+		private function 				validateToken ( $data )
 		{
 			if ( ( !isset( $data[0] ) || !isset( $data[1] ) ) || ( $data[0] !== "token" || !$data[1] ) ) { return "No token found !"; }
 			else { return null; }
 		}
 
-		public function		new_password ( $data )
+		public function 				new_password ( $data )
 		{
 			session_start();
 			$viewData = [];
@@ -193,7 +197,7 @@
 			}
 		}
 		
-		public function account_confirmation ( $data )
+		public function 				account_confirmation ( $data )
 		{
 			$viewData = [];
 			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
@@ -229,7 +233,7 @@
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', $viewData)->render();
 		}
 
-		public function		notfound()
+		public function 				notfound()
 		{
 			$this->call_view( 'notfound')->render();
 		}

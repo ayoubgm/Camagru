@@ -1,5 +1,8 @@
 <?php
 
+	/**
+	 * 	gallery controller class
+	 */
 	class galleryController extends Controller {
 
 		private $galleryMiddleware;
@@ -8,7 +11,7 @@
 		private $likesModel;
 		private $commentsModel;
 
-		public function         		__construct()
+		public function 				__construct()
 		{
 			session_start();
 			$this->usersModel = self::call_model('UsersModel');
@@ -19,7 +22,7 @@
 		}
 		
 		/* Load all images edited by users  */
-		public function					index ( $data )
+		public function 				index ( $data )
 		{
 			$viewData = array();
 			$viewData['data'] = [];
@@ -44,7 +47,7 @@
 		}
 
 		/* Load all images edited by a user  */
-		public function					user ( $data )
+		public function 				user ( $data )
 		{
 			$viewData = array();
 			$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
@@ -78,7 +81,7 @@
 		}
 		
 		/* Delete an image by author of image */
-		public function					delete ( $data )
+		public function 				delete ( $data )
 		{
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
 				$viewData = array();
@@ -122,7 +125,7 @@
 			}
 		}
 
-		public function					notfound()
+		public function 				notfound()
 		{
 			$this->call_view( 'notfound')->render();
 		}
