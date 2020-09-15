@@ -1,11 +1,15 @@
 <?php
+
+	/**
+	 * 	router class
+	 */
 	class Router {
 		
 		protected $controller = "homeController";
 		protected $method = "index";
 		protected $params = [];
 		
-		public function __construct()
+		public function 				__construct()
 		{
 			require(CONFIG . 'config.php');
 			$url = $this->parseURL();
@@ -46,7 +50,7 @@
 			call_user_func_array([$this->controller, $this->method], [ $this->params ]);
 		}
 		
-		protected function parseURL()
+		protected function 				parseURL()
 		{
 			if ( isset($_GET['url']) ) { return  $url = explode('/', filter_var(rtrim(strtolower($_GET['url']), '/'), FILTER_SANITIZE_URL)); }
 		}
