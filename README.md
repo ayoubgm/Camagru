@@ -1,5 +1,5 @@
 # `Camagru` :camera:<br/>
-Web application allow to the user make a basic photo or video taken by webcam and mixed by some predefined images.<br/><br/><br/>
+Web application allow to the user make a basic photo or video taken by the webcam and mixed by some predefined images.<br/><br/><br/>
 ![Image of editing pictures](https://i.ibb.co/sQ9tZp5/6-editing.png)</br><br/>
 
 ## :heavy_dollar_sign: `New notions to discover`<br/>
@@ -10,23 +10,23 @@ Web application allow to the user make a basic photo or video taken by webcam an
 :dart: Cross origin resources sharing<br/><br/>
 
 ## :pencil2: `Objectives`<br/>
-:thought_balloon: Ability to take a picture by webcam.<br/>
-:thought_balloon: Allowing to user mix taken picture with other images.<br/><br/>
+:thought_balloon: Ability to take a picture by a webcam.<br/>
+:thought_balloon: Allow to the user mix the picture taken from the webcam with another image.<br/><br/>
 
 ## :open_file_folder: `Features`<br/>
 ### :family: `User features`<br/>
-:white_check_mark: The application allow a user to register by asking at least a valid email, username and a password.<br/>
+:white_check_mark: The application allow to the user register by asking at least a valid email, username and a password.<br/>
 :white_check_mark: The user can activate his account via a unique link sent to his email.<br/>
 :white_check_mark: The user will be able then to connect to the application using his username and password, he can also send a password reinitialisation mail, if he forget his password.<br/>
 :white_check_mark: The user can modify his informations. <br/><br/>
 
 ### :camera: `Editing features`<br/>
-:heavy_check_mark: Editing page is only to users that are connected.<br/>
+:heavy_check_mark: Editing page is only for users that are connected.<br/>
 :heavy_check_mark: The button allowing to take a picture will be inactive as long as no superposable image has been selected.<br/>
 :heavy_check_mark: Because not everyone has a webcam, the application allow to the user upload an image instead of capturing it with webcam.<br/><br/>
 
 ### :framed_picture: `Gallery features`<br/>
-:ballot_box_with_check: Display all images edited by all users must be public ordered by date of creation.<br/>
+:ballot_box_with_check: All images edited by all users will be public ordered by date of creation.<br/>
 :ballot_box_with_check: When an image receives a new comment, the author of image will be notified by email. This preference </br>
 is set as true by default but it can desactivated in user preferences.<br/><br/>
 
@@ -37,10 +37,9 @@ is set as true by default but it can desactivated in user preferences.<br/><br/>
 :alien: HTML5/CSS3<br/>
 :eyes: Bootstrap<br/>
 :fire: Javacript<br/>
-:neckbeard: Ajax<br/><br/>
 
 ## `How the project will be stuctured ?`<br/>
-I will use for this project MVC design pattern (concept), it separates application logic, interfaces, etc.<br/><br/>
+The project will stuctured with MVC design pattern (concept), it separates application logic, interfaces, etc.<br/><br/>
 
 ## `So How MVC works ?`
 ![Image of MVC structure 1](https://i.ibb.co/FgSsXxb/MVC.png)
