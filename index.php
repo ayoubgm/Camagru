@@ -18,7 +18,7 @@
 		str_replace(
 			$_SERVER['DOCUMENT_ROOT'],
 			'',
-			str_replace('\\', '/', dirname(__DIR__).'/camagru_git')
+			str_replace('\\', '/', dirname(__DIR__).'/camagru')
 		)
 	);
 	define("PUBLIC_FOLDER",
@@ -26,7 +26,7 @@
 		str_replace(
 			$_SERVER['DOCUMENT_ROOT'],
 			'',
-			str_replace('\\', '/', dirname(__DIR__).'/camagru_git/public')
+			str_replace('\\', '/', dirname(__DIR__).'/camagru/public')
 		)
 	);
 	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, MIDDLEWARES, CONFIG, PUBLIC_DIR, CSS, JS, IMAGES];
