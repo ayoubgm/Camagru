@@ -49,7 +49,7 @@
 								$viewData['success'] = "false";
 								$viewData['msg'] = "Failed to submit your like !";
 							} else {
-								header("Location: /camagru_git/gallery/index");
+								header("Location: /camagru/gallery/index");
 							}
 						} catch ( Exception $e ) {
 							$viewData['success'] = "false";
@@ -62,7 +62,7 @@
 				}
 				$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData)->render();
 			} else {
-				header("Location: /camagru_git/signin");
+				header("Location: /camagru/signin");
 			}
 		}
 
@@ -93,7 +93,7 @@
 								$viewData['success'] = "false";
 								$viewData['msg'] = "Failed to submit your unlike !";
 							} else {
-								header("Location: /camagru_git/gallery/index");
+								header("Location: /camagru/gallery/index");
 							}
 						} catch ( Exception $e ) {
 							$viewData['success'] = "false";
@@ -106,7 +106,7 @@
 				}
 				$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData)->render();
 			} else {
-				header("Location: /camagru_git/signin");
+				header("Location: /camagru/signin");
 			}
 		}
 		

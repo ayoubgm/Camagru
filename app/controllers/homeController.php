@@ -92,7 +92,7 @@
 							$userData = $this->userModel->findUserByUsername($_POST['username']);
 							$_SESSION['userid'] = $userData['id'];
 							$_SESSION['username'] = $userData['username'];
-							header("Location: /camagru_git/home");
+							header("Location: /camagru/home");
 						}
 					}
 				break;
@@ -104,7 +104,7 @@
 			session_start();
 			$viewData = array();
 
-			if ( isset( $_SESSION['userid'] ) ) { header("Location: /camagru_git/home"); }
+			if ( isset( $_SESSION['userid'] ) ) { header("Location: /camagru/home"); }
 			else {
 				switch ( $_SERVER['REQUEST_METHOD'] ) {
 					case "GET":
@@ -147,7 +147,7 @@
 			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
 			
 			if ( isset( $_SESSION['userid'] ) ) {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
 				$viewData[ 'success' ] = "false";
 				$viewData[ 'msg' ] = $error;
@@ -204,7 +204,7 @@
 
 			session_start();
 			if ( isset( $_SESSION['userid'] ) ) {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
 				$viewData [ 'success' ] = "false";
 				$viewData [ 'msg' ] = $error;

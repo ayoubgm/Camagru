@@ -23,7 +23,7 @@
 			
 			if ( !isset( $_SESSION['userid'] ) && empty( $_SESSION['userid'] ) ) {
 				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin')->render();
-				header("Location: /camagru_git/home/signin");
+				header("Location: /camagru/home/signin");
 			} else if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
 				$viewData['success'] = "true";
 				$viewData['data']['userData'] = $this->userModel->findUserByUsername( strtolower( $data[1] ) );
@@ -83,7 +83,7 @@
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'edit_infos', $viewData )->render();
 			} else {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			}
 		}
 
@@ -100,7 +100,7 @@
 				$viewData['success'] = "true";
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'settings', $viewData )->render();
 			} else {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			}
 		}
 
@@ -142,7 +142,7 @@
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'change_password', $viewData )->render();
 			} else {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			}
 		}
 
@@ -191,7 +191,7 @@
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR . 'notifications_preferences', $viewData)->render();
 			} else {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			}
 		}
 
@@ -258,7 +258,7 @@
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'editing', $viewData )->render();
 			} else {
-				header("Location: /camagru_git/signin");
+				header("Location: /camagru/signin");
 			}
 		}
 
@@ -267,7 +267,7 @@
 			if ( isset( $_SESSION['userid'] ) ) {
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
 			} else {
-				header("Location: /camagru_git/home");
+				header("Location: /camagru/home");
 			}
 		}
 

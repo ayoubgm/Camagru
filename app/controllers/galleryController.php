@@ -121,7 +121,7 @@
 				}
 				$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'delete', $viewData)->render();
 			} else {
-				header("Location: /camagru_git/signin");
+				header("Location: /camagru/signin");
 			}
 		}
 
