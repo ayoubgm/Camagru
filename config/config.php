@@ -3,7 +3,7 @@
 
 		private static $HOST = "localhost";
 		private static $USER = "root";
-		private static $PASSWORD = "";
+		private static $PASSWORD = "root";
 		private static $DB_NAME = "db_camagru";
 
 		public static function		connect()
