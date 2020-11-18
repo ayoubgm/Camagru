@@ -9,9 +9,16 @@
 </head>
 <body>
 	<div class="container">
-		<div class="card w-100">
-			<div class="row no-gutters">
-				<div class="col-md-4">
+		<div class="row h-100">
+			<div class="col-sm-12 my-auto">
+				<div class="card card-block w-25 mx-auto">I am Groot.</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="container-fluid p-0 h-100"> -->
+		<!-- <div class="card"> -->
+			<!-- <div class="row no-gutters"> -->
+				<!-- <div class="col-md-4">
 					<img src="<?php echo PUBLIC_FOLDER; ?>/images/background-img4.jpg" class="card-img">
 				</div>
 				<div class="col-md-8">
@@ -129,7 +136,7 @@
 									/>
 								</div>
 							</div>
-							<div class="row text-center px-5 py-2" style="height: 70px;">
+							<div class="row text-center px-5 py-2">
 								<span id="msg" class="w-100 
 										<?php 
 											if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
@@ -154,10 +161,10 @@
 						<a href="<?php echo SERVER; ?>">Home</a>
 						<a href="<?php echo SERVER; ?>/signin" id="link-signin">Log in</a>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+				</div> -->
+			<!-- </div> -->
+		<!-- </div> -->
+	<!-- </div> -->
 </body>
 <script>
 	const buttonRegister = document.querySelector('#btn-signup');
