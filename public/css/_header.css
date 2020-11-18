@@ -33,19 +33,19 @@ nav ul.nav-links li {
 
 nav ul.nav-links li a {
 	text-decoration: none;
-	letter-spacing: 3px;
-	color: rgb(226, 226, 226);
 	font-weight: bold;
 	font-size: 11pt;
-	transition: all 0.3s ease 0s;
 	padding: 8px 12px;
+	letter-spacing: 3px;
+	color: rgb(226, 226, 226);
+	transition: all 0.3s ease 0s;
 }
 
 
 nav ul.nav-links li:hover:not(:nth-last-child(-n+2)) {
-	background-color: #0088a9;
 	border-radius: 50px;
 	color: #edf0f1;
+	background-color: #0088a9;
 }
 
 nav ul.nav-links a#btn-signin,
@@ -54,10 +54,10 @@ nav ul.nav-links a#btn-signup {
 }
 
 nav .btn-auth img#profile-img {
+	width: 55px;
+	padding: 0px;
 	border: 1px solid white;
 	border-radius: 100%;
-	padding: 0px;
-	width: 55px;
 	cursor: pointer;
 }
 
@@ -66,9 +66,9 @@ nav .btn-auth img.active .dropdown {
 }
 
 nav .btn-auth img#notif-img {
+	width: 30px;
 	padding: 0px;
 	margin-right: 20px;
-	width: 30px;
 	cursor: pointer;
 }
 
