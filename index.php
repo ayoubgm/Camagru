@@ -13,22 +13,9 @@
 	define("IMAGES", PUBLIC_DIR . 'images' . DIRECTORY_SEPARATOR);
 	define("EDITEDPICS", IMAGES . 'editedPics' . DIRECTORY_SEPARATOR);
 	define("STICKERS", IMAGES . 'stickers' . DIRECTORY_SEPARATOR);
-	define("SERVER",
-		'http://'. $_SERVER['HTTP_HOST'].
-		str_replace(
-			$_SERVER['DOCUMENT_ROOT'],
-			'',
-			str_replace('\\', '/', dirname(__DIR__).'/camagru')
-		)
-	);
-	define("PUBLIC_FOLDER",
-		'http://'. $_SERVER['HTTP_HOST'].
-		str_replace(
-			$_SERVER['DOCUMENT_ROOT'],
-			'',
-			str_replace('\\', '/', dirname(__DIR__).'/camagru/public')
-		)
-	);
+	define("SERVER", 'http://'. $_SERVER['HTTP_HOST'] );
+	define("PUBLIC_FOLDER", 'http://'. $_SERVER['HTTP_HOST']. str_replace( $_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', '/public') ) );
+	
 	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, MIDDLEWARES, CONFIG, PUBLIC_DIR, CSS, JS, IMAGES];
 	set_include_path( get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $modules) );	
 	spl_autoload_register('spl_autoload', false);
