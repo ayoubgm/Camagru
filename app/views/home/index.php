@@ -31,7 +31,6 @@
 	<?php require_once(VIEWS . "_footer.php"); ?>
 	<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 	<script>
-		const btn_profile = document.querySelector("nav .btn-auth #profile-img")
 		const menu = document.querySelector("nav .btn-auth .dropdown");
 		
 		const showMenu = () => {
