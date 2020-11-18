@@ -1,8 +1,6 @@
 <nav>
 	<div class="logo-area">
-		<a href="/">
-			<img class="logo" src="/public/images/logo.png" alt="logo-camagru"/>
-		</a>
+		<a href="/"><img class="logo" src="/public/images/logo.png" alt="logo-camagru"/></a>
 	</div>
 	<ul class="nav-links">
 		<li class="active-link"><a href="/">Home</a></li>
@@ -21,11 +19,8 @@
 			<a href="/signup" id="btn-signup">Signup</a>
 		<?php } else { ?>
 			<img src="/public/images/notification.png"? id="notif-img">
-			<?php if ( $userData['gender'] === "female" ) { ?>
-				<img src="/public/images/user-female.png"? id="profile-img" onclick="showMenu()">
-			<?php } else { ?>
-				<img src="/public/images/user-male.png"? id="profile-img" onclick="showMenu()">
-			<?php } ?>
+			<?php if ( $userData['gender'] === "female" ) { ?> <img src="/public/images/user-female.png"? id="profile-img" onclick="showMenu()">
+			<?php } else { ?> <img src="/public/images/user-male.png"? id="profile-img" onclick="showMenu()"> <?php } ?>
 			<div class="dropdown">
 				<ul>
 					<?php if ( isset( $userGallery ) && !empty( $userGallery ) ) { ?>
@@ -37,26 +32,13 @@
 					<?php } ?>
 					<li>
 						<a href="/user/profile">
-							<?php if ( $userData['gender'] ==="female" ) { ?>
-								<img src="/public/images/profile-female.png" id="profile"/>
-							<?php } else { ?>
-								<img src="/public/images/profile-male.png" id="profile"/>
-							<?php } ?>
+							<?php if ( $userData['gender'] ==="female" ) { ?> <img src="/public/images/profile-female.png" id="profile"/>
+							<?php } else { ?> <img src="/public/images/profile-male.png" id="profile"/> <?php } ?>
 							Profile
 						</a>
 					</li>
-					<li>
-						<a href="/user/settings">
-							<img src="/public/images/settings.png" id="settings"/>
-							Settings
-						</a>
-					</li>
-					<li>
-						<a href="/user/logout">
-							<img src="/public/images/logout.png" id="logout"/>
-							Logout
-						</a>
-					</li>
+					<li><a href="/user/settings"> <img src="/public/images/settings.png" id="settings"/>Settings</a></li>
+					<li><a href="/user/logout"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
 				</ul>
 			</div>
 		<?php } ?>
