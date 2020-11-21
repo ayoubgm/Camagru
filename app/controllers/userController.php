@@ -258,16 +258,16 @@
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'editing', $viewData )->render();
 			} else {
-				header("Location: /camagru/signin");
+				header("Location: /signin");
 			}
 		}
 
 		public function 				logout ()
 		{
 			if ( isset( $_SESSION['userid'] ) ) {
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout', )->render();
+				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout' )->render();
 			} else {
-				header("Location: /camagru/home");
+				header("Location: /home");
 			}
 		}
 
