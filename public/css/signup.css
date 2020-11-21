@@ -5,24 +5,26 @@
 body {
 	background: url('../images/background-img2.jpg') no-repeat center center fixed; 
 	background-size: cover;
-	/* background-position: center; */
-	/* background-attachment: fixed; */
 }
-.container {
+html, body {
 	height: 100%;
 }
 
-/* 
-.container-fluid .card {
-	width: 60%;
-	height: 900px;
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .card {
+	width: 100%;
 	margin: 0 auto;
 	float: none;
-} */
+}
 
 .card div div img {
-	/* height: 100%; */
-	/* width: 100%; */
+	height: 100%;
+	width: 100%;
 }
 
 .card-body p{

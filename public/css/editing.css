@@ -6,10 +6,8 @@
 }
 
 body {
-	background-image: url('../images/background-img12.jpg');
-	background-repeat: no-repeat;
-	background-position: center;
-	background-attachment: fixed;
+    background: url('../images/background-img12.jpg') no-repeat center center fixed; 
+	background-size: cover;
 }
 
 form {

@@ -18,17 +18,10 @@ nav .logo-area .logo{
 	border-radius: 20px;
 }
 
-nav ul.nav-links{
-	display: inline-block;
-	justify-content: center;
-}
-
 nav ul.nav-links li {
-	width: 120px;
-	height: 30px;
 	text-align: center;
 	list-style: none;
-	display: inline-block;
+	display: inline;
 }
 
 nav ul.nav-links li a {
@@ -138,7 +131,7 @@ a#btn-signup {
 
 @media screen and (max-width: 1026px) {
 	body {
-		overflow-x: hidden;
+		overflow: hidden;
 	}
 	.btn-auth {
 		display: none;
@@ -147,8 +140,8 @@ a#btn-signup {
 		background-color: rgba(0, 136, 169, 1);
 		position: absolute;
 		right: 0;
-		height: 92vh;
-		top: 8vh;
+		height: 94.38%;
+		top: 4.2%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -157,13 +150,15 @@ a#btn-signup {
 		transition: transform 0.5s ease-in;
 		z-index: 1;
 	}
-	.nav-links li {
+	ul.nav-links li {
+		padding: 30px 0px;
 		opacity: 0;
 	}
 	.burger {
 		display: block;
 	}
-	.nav-links a#btn-signin, .nav-links a#btn-signup {
+	nav ul.nav-links a#btn-signin,
+	nav ul.nav-links a#btn-signup  {
 		display: block;
 		background-color: #1c1c20;
 	}
