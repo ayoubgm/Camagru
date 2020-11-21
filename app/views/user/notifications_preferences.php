@@ -1,6 +1,6 @@
 <?php
 	if ( !isset($_SESSION['userid']) ) {
-		header("Location: /camagru/home");
+		header("Location: /home");
 	} else {
 		$data = $this->view_data['data'];
 		$userData = $data['userData'];

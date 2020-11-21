@@ -8,23 +8,16 @@
 	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signup.css"/>
 </head>
 <body>
-	<div class="container">
-		<div class="row h-100">
-			<div class="col-sm-12 my-auto">
-				<div class="card card-block w-25 mx-auto">I am Groot.</div>
-			</div>
-		</div>
-	</div>
-	<!-- <div class="container-fluid p-0 h-100"> -->
-		<!-- <div class="card"> -->
-			<!-- <div class="row no-gutters"> -->
-				<!-- <div class="col-md-4">
+	<div class="container col-lg-7 p-0 h-100">
+		<div class="card">
+			<div class="row no-gutters">
+				<div class="col-md-4">
 					<img src="<?php echo PUBLIC_FOLDER; ?>/images/background-img4.jpg" class="card-img">
 				</div>
 				<div class="col-md-8">
 					<div class="card-body">
 						<p class="card-title">Registration</p>
-						<form action="<?php echo SERVER; ?>/signup" method="POST" onsubmit="return validateRegisterData();">
+						<form action="/signup" method="POST" onsubmit="return validateRegisterData();">
 							<div class="form-row">
 								<div class="form-group col-lg-6 m-0 mb-1">
 									<label for="inputFirstName">Firstname <span class="text-danger">*</span>:</label>
@@ -158,13 +151,13 @@
 						</form>
 					</div>
 					<div class="card-footer text-muted w-100">
-						<a href="<?php echo SERVER; ?>">Home</a>
-						<a href="<?php echo SERVER; ?>/signin" id="link-signin">Log in</a>
+						<a href="/">Home</a>
+						<a href="/signin" id="link-signin">Log in</a>
 					</div>
-				</div> -->
-			<!-- </div> -->
-		<!-- </div> -->
-	<!-- </div> -->
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 <script>
 	const buttonRegister = document.querySelector('#btn-signup');

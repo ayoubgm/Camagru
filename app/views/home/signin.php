@@ -17,7 +17,7 @@
 				<div class="col-md-8">
 					<div class="card-body">
 						<p class="card-title">Sign in</p>
-						<form method="POST" action="<?php echo SERVER; ?>/signin">
+						<form method="POST" action="/signin">
 							<div class="form-group row">
 								<label for="InputUsername" class="col-lg-4 col-form-label">Username :</label>
 								<div class="col-lg-8">
@@ -57,14 +57,14 @@
 							<div class="row">
 								<input type="submit" class="btn btn-primary w-75 mb-3" id="btn-login" value="Log in" name="btn-signin"/></br>
 								<span class="reset-pass">
-									Forget your password ? <a href="<?php echo SERVER; ?>/reset_password" id="link-reset"> Reset password</a>
+									Forget your password ? <a href="/reset_password" id="link-reset"> Reset password</a>
 								</span>
 							</div>
 						</form>
 					</div>
 					<div class="card-footer text-muted w-100">
-						<a href="<?php echo SERVER; ?>">Home</a>
-						<a href="<?php echo SERVER; ?>/signup" id="link-signup">Sign up</a>
+						<a href="/">Home</a>
+						<a href="/signup" id="link-signup">Sign up</a>
 					</div>
 				</div>
 			</div>
