@@ -13,8 +13,7 @@
 		{
 			require(CONFIG . 'config.php');
 			$url = $this->parseURL();
-			
-			$this->controller = new $this->controller();
+			$this->controller = new homeController();
 			if ( isset( $url[0] ) && !empty( $url[0] ) ) {
 				if ( file_exists( CONTROLLERS . strtolower($url[0]) .'Controller.php' ) ) {
 					$this->controller = strtolower( $url[0] ) . 'Controller';
