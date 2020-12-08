@@ -45,20 +45,13 @@
 								</div>
 							</div>
 							<div class="text-center" id="area-msg">
-								<span id="msg" class="
-										<?php 
-											if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
-											else { echo "text-danger"; }
-										?>
-									">
+								<span id="msg" class="<?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
 									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 								</span>
 							</div>
 							<div class="row">
 								<input type="submit" class="btn btn-primary w-75 mb-3" id="btn-login" value="Log in" name="btn-signin"/></br>
-								<span class="reset-pass">
-									Forget your password ? <a href="/reset_password" id="link-reset"> Reset password</a>
-								</span>
+								<span class="reset-pass">Forget your password ? <a href="/reset_password" id="link-reset"> Reset password</a></span>
 							</div>
 						</form>
 					</div>

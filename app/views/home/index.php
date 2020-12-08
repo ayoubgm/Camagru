@@ -30,6 +30,6 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
+<script src="/public/js/_menu.js"></script>
+<script src="/public/js/_userMenu.js"></script>
 </html>

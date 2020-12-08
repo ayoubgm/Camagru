@@ -4,13 +4,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Reset password</title>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/reset_password.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_header.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_footer.css"/>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/public/css/reset_password.css"/>
+	<link rel="stylesheet" href="/public/css/_header.css"/>
+	<link rel="stylesheet" href="/public/css/_footer.css"/>
 </head>
 <body>
-	<?php require_once(VIEWS . "_header.php");?>
 	<div class="container">
 		<div class="card offset-lg-2 col-lg-8">
 			<div class="card-body">
@@ -18,11 +17,11 @@
 					<span>Reset password</span>
 				</p>
 				<div id="icone" class="text-center">
-					<img src="<?php echo PUBLIC_FOLDER; ?>/images/forgot-password.png"/></br>
+					<img src="/public/images/forgot-password.png"/></br>
 				</div>
 				<hr/>
 				<div class="p-4">
-					<form method="POST" action="<?php echo SERVER; ?>/reset_password">
+					<form method="POST" action="/reset_password">
 						<div class="row offset-md-2">
 							<label for="inputEmail" class="col-md-2">Email : </label>
 							<input
@@ -35,12 +34,7 @@
 							/>
 						</div>
 						<div class="row text-center mt-4" style="height: 30px;">
-							<span id="msg" class="w-100 
-									<?php 
-										if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
-										else { echo "text-danger"; }
-									?>
-								">
+							<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?> ">
 								<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 							</span>
 						</div>
@@ -48,7 +42,7 @@
 							<div class="form-row">
 								<input
 									type="submit"
-									class="offset-2 col-8 btn btn-outline-dark w-50 mt-3"
+									class="offset-2 col-8 btn btn-outline-dark w-50 mt-3 mb-5"
 									value="Reset password"
 									name="btn-reset"
 								/>
@@ -57,19 +51,15 @@
 					</form>
 				</div>
 			</div>
+			<div class="card-footer w-100">
+				<a href="/signin" id="link-login">Back to login</a>
+			</div>
 		</div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
 <script>
 	const msg = document.getElementById("msg");
-	const menu = document.querySelector("nav .btn-auth .dropdown");
-
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	}
 	
 	const 			setError = ( target, msgerror ) => {
 		target.style.border = "1px solid red";
@@ -85,7 +75,7 @@
 		target.style.border = "1px solid green";
 	}
 	
-		// Validate email by run some regex
+	// Validate email by run some regex
 	const			validateEmail = ( email ) => {
 		if ( email.value == "" ) { setError( email, "the email can't be empty !" ); return false; }
 		else if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) { setError(email, "Invalid email address !"); return false; }

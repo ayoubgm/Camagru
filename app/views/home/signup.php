@@ -8,18 +8,18 @@
 	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signup.css"/>
 </head>
 <body>
-	<div class="container col-lg-7 p-0 h-100">
+	<div class="container col-md-7 p-0 h-100">
 		<div class="card">
 			<div class="row no-gutters">
-				<div class="col-md-4">
+				<div class="col-md-4 d-none d-lg-block">
 					<img src="<?php echo PUBLIC_FOLDER; ?>/images/background-img4.jpg" class="card-img">
 				</div>
-				<div class="col-md-8">
+				<div class="col-lg-8">
 					<div class="card-body">
 						<p class="card-title">Registration</p>
 						<form action="/signup" method="POST" onsubmit="return validateRegisterData();">
-							<div class="form-row">
-								<div class="form-group col-lg-6 m-0 mb-1">
+							<div class="form-row m-0 mb-1">
+								<div class="form-group col-lg-6">
 									<label for="inputFirstName">Firstname <span class="text-danger">*</span>:</label>
 									<input
 										type="text"
@@ -33,7 +33,7 @@
 										oninput="validateFirstName(this)"
 									/>
 								</div>
-								<div class="form-group col-lg-6 m-0 mb-1">
+								<div class="form-group col-lg-6">
 									<label for="inputLastName">Lastname <span class="text-danger">*</span>:</label>
 									<input
 										type="text"
@@ -46,8 +46,8 @@
 									/>
 								</div>
 							</div>
-							<div class="form-row">
-								<div class="form-group col-lg-4 m-0 mb-1">
+							<div class="form-row m-0 mb-1">
+								<div class="form-group col-lg-4">
 									<label for="inputUsername">Username <span class="text-danger">*</span>:</label>
 									<input
 										type="text"
@@ -59,7 +59,7 @@
 										oninput="validateUsername(this)"
 									/>
 								</div>
-								<div class="form-group col-lg-8 m-0 mb-1">
+								<div class="form-group col-lg-8">
 									<label for="inputEmail">Email <span class="text-danger">*</span>:</label>
 									<input
 										type="email"
@@ -72,8 +72,8 @@
 									/>
 								</div>
 							</div>
-							<div class="form-row">
-								<div class="form-group col-lg-2 m-0 mb-1">
+							<div class="form-row m-0 mb-1">
+								<div class="form-group col-lg-2">
 									<label for="inputGender">Gender <span class="text-danger">*</span>:</label>
 									<select class="custom-select" name="gender">
 										<option
@@ -90,7 +90,7 @@
 										?> value="female">Female</option>
 									</select>
 								</div>	
-								<div class="form-group col-lg-10 m-0 mb-1">
+								<div class="form-group col-lg-10">
 									<label for="inputAddress">Address :</label>
 									<input
 										type="text"
@@ -103,8 +103,8 @@
 									/>
 								</div>
 							</div>
-							<div class="form-row">
-								<div class="form-group col-lg-6 m-0 mb-1">
+							<div class="form-row mb-2 m-0">
+								<div class="form-group col-lg-6">
 									<label for="inputPassword">Password <span class="text-danger">*</span>:</label>
 									<input
 										type="password"
@@ -116,7 +116,7 @@
 										oninput="validatePassword(this)"
 									/>
 								</div>
-								<div class="form-group col-lg-6 m-0 mb-1">
+								<div class="form-group col-lg-6">
 									<label for="inputConfirmationPass">Confirmation password <span class="text-danger">*</span>:</label>
 									<input
 										type="password"
@@ -129,17 +129,12 @@
 									/>
 								</div>
 							</div>
-							<div class="row text-center px-5 py-2">
-								<span id="msg" class="w-100 
-										<?php 
-											if ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) { echo "text-success"; }
-											else { echo "text-danger"; }
-										?>
-									">
+							<div class="row text-center px-5 py-4">
+								<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
 									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 								</span>
 							</div>
-							<div class="form-row register my-4">
+							<div class="form-row register my-5">
 								<input
 									type="submit"
 									class="offset-2 col-8 btn btn-outline-primary w-50"

@@ -23,10 +23,10 @@
 				<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img"/>
 				<div class="dropdown">
 					<ul>
+						<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] ==="female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
 						<?php if ( isset( $userGallery ) && !empty( $userGallery ) ) { ?>
 							<li><a href="/gallery/user/username/<?php echo $userData['username'] ?>"><img src="/public/images/gallery-icone.png" id="gallery"/> My gallery</a></li>
 						<?php } ?>
-						<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] ==="female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
 						<li><a href="/user/settings"> <img src="/public/images/settings.png" id="settings"/>Settings</a></li>
 						<li><a href="/user/logout"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
 					</ul>
