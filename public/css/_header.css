@@ -66,15 +66,17 @@ nav .btn-auth img#notif-img {
 }
 
 nav .btn-auth .dropdown {
-	height: 125px;
 	position: absolute;
-	top: 60px;
-	right: 80px;
+	width: 150px;
+	text-align: left;
 	padding: 10px 20px;
+	height: 125px;
+	top: 75px;
+	/* right: 80px;
+	/* display: none; */
+	z-index: 1;
 	background-color: #fff;
 	border-radius: 8px;
-	display: none;
-	z-index: 1;
 }
 
 nav .btn-auth .dropdown ul {
@@ -82,9 +84,9 @@ nav .btn-auth .dropdown ul {
 }
 
 nav .btn-auth .dropdown ul li a {
-	color: #1c1c20;
+	font-size: 12pt;
 	text-decoration: none;
-	font-size: 11pt;
+	color: #1c1c20;
 }
 
 .dropdown #gallery,
@@ -92,6 +94,7 @@ nav .btn-auth .dropdown ul li a {
 .dropdown #settings, 
 .dropdown #logout {
 	width: 25px;
+	margin-right: 10px;
 }
 
 a#btn-signin:hover,
