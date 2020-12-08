@@ -72,8 +72,8 @@ nav .btn-auth .dropdown {
 	padding: 10px 20px;
 	height: 125px;
 	top: 75px;
-	/* right: 80px;
-	/* display: none; */
+	/* right: 80px; */
+	display: none;
 	z-index: 1;
 	background-color: #fff;
 	border-radius: 8px;
