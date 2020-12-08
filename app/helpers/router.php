@@ -25,9 +25,11 @@
 							$this->method = strtolower($url[1]);
 							unset($url[1]);
 						} else {
+							$this->controller = new homeController();
 							$this->method = 'notfound';
 						}
 					} else if ( !method_exists($this->controller, $this->method ) ) {
+						$this->controller = new homeController();
 						$this->method = 'notfound';
 					}
 				} else {
