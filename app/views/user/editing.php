@@ -113,9 +113,10 @@
 		</div>
 	</form>
 	<?php require_once(VIEWS . "_footer.php"); ?>
+</body>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
 <script>
-	const menu = document.querySelector("nav .btn-auth .dropdown");
 	const video = document.querySelector("#videoElement");
 	const fileInput = document.getElementById('fileInput');
 	const canvas = document.getElementById('canvas');
@@ -133,40 +134,12 @@
 	let context = canvas.getContext('2d');
 	let contextWebcam = canvasWebcam.getContext('2d');
 	let base_image = new Image();
-	
-	// display user menu
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	};
-	
+
 	// Web cam
 	var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
 
-	navigator.mediaDevices.getUserMedia(constraints)
-	.then(function(mediaStream) {
-		var video = document.querySelector('video');
-		video.srcObject = mediaStream;
-		video.onloadedmetadata = function(e) {
-			video.play();
-		};
-	})
-	.catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
-
-	// if ( navigator.mediaDevices.getUserMedia ) {
-	// 	await navigator.mediaDevices.getUserMedia({ 'video': true })
-	// 	.then(( stream ) => {
-	// 		video.srcObject = stream;
-	// 		btn_capture.removeAttribute('disabled');
-	// 	})
-	// 	.catch(( error ) => {
-	// 		console.log("If your camera doesn't work you can upload an image !");
-	// 		btn_capture.setAttribute('disabled', 'on');
-	// 	});
-	// }
-
 	const viewOption = ( option ) => {
-		if ( option.value != "" ) {
+		if ( option.value != "" && navigator.mediaDevices.getUserMedia ) {
 			navigator.mediaDevices.getUserMedia({ 'video': true })
 			.then(( stream ) => {
 				video.srcObject = stream;
@@ -239,7 +212,6 @@
 	});
 	
 </script>
-</body>
 </html>
 
 <?php

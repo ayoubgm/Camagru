@@ -53,16 +53,7 @@
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script>
-	const msg = document.getElementById("msg");
-	const menu = document.querySelector("nav .btn-auth .dropdown");
-
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	}
-	
-</script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
 </html>
 <?php
 	}

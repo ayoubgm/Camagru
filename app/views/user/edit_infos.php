@@ -150,18 +150,15 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
 <script>
-	const menu = document.querySelector("nav .btn-auth .dropdown");
 	const msg = document.getElementById("msg");
 	const firstname = document.getElementById('inputFirstName');
 	const lastname = document.getElementById('inputLastName');
 	const username = document.getElementById('inputUsername');
 	const email = document.getElementById('inputEmail');
 	const address = document.getElementById('inputAddress');
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	};
+
 	const 			setError = ( target, msgerror ) => {
 		target.style.border = "1px solid red";
 		msg.classList.add("text-danger");

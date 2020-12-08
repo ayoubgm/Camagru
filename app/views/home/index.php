@@ -31,20 +31,5 @@
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script>
-	const menu = document.querySelector("nav .btn-auth .dropdown");
-	
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	};
-	document.addEventListener('click', (event) => {
-		var isClickInside = menu.contains(event.target);
-		
-		if ( !isClickInside ) {
-			console.log('You clicked outside')
-			menu.style.display = "block";
-		}
-	});
-</script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
 </html>

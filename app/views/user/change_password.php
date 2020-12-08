@@ -100,18 +100,15 @@
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
 <script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
+<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
 <script>
 	const buttonSubmit = document.querySelector('#btn-submit');
 	const msg = document.getElementById("msg");
 	const btn_profile = document.querySelector("nav .btn-auth #profile-img");
-	const menu = document.querySelector("nav .btn-auth .dropdown");
 	const oldpassword = document.getElementById('inputOldPass');
 	const newpassword = document.getElementById('inputNewPass');
 	const confirmationPassword = document.getElementById('inputConfirmationPass');
-	const showMenu = () => {
-		if ( menu.style.display == "none" ) { menu.style.display = "block"; }
-		else { menu.style.display = "none"; }
-	};
+
 	const 			setError = ( target, msgerror ) => {
 		target.style.border = "1px solid red";
 		msg.classList.add("text-danger");
@@ -131,10 +128,14 @@
 		} else { setSuccess(password); return true; }
 	}
 	const			validateConfPass = ( ) => {
-	if ( newpassword.value !== confirmationPassword.value ) { setError(confirmationPassword, "Passwords doesn't match"); return false; }
-	else { setSuccess(confirmationPassword); return true; }
-	
-}
+		if ( newpassword.value !== confirmationPassword.value ) {
+			setError(confirmationPassword, "Passwords doesn't match");
+			return false;
+		} else {
+			setSuccess(confirmationPassword);
+			return true;
+		}
+	}
 	
 </script>
 </html>

@@ -20,7 +20,7 @@
 				<a href="/signup" id="btn-signup">Signup</a>
 			<?php } else { ?>
 				<img src="/public/images/notification.png"? id="notif-img">
-				<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img" onclick="showMenu()"/>
+				<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img"/>
 				<div class="dropdown">
 					<ul>
 						<?php if ( isset( $userGallery ) && !empty( $userGallery ) ) { ?>
