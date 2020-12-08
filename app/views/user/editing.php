@@ -141,17 +141,29 @@
 	};
 	
 	// Web cam
-	if ( navigator.mediaDevices.getUserMedia ) {
-		navigator.mediaDevices.getUserMedia({ 'video': true })
-		.then(( stream ) => {
-			video.srcObject = stream;
-			btn_capture.removeAttribute('disabled');
-		})
-		.catch(( error ) => {
-			console.log("If your camera doesn't work you can upload an image !");
-			btn_capture.setAttribute('disabled', 'on');
-		});
-	}
+	var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
+
+	navigator.mediaDevices.getUserMedia(constraints)
+	.then(function(mediaStream) {
+		var video = document.querySelector('video');
+		video.srcObject = mediaStream;
+		video.onloadedmetadata = function(e) {
+			video.play();
+		};
+	})
+	.catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
+
+	// if ( navigator.mediaDevices.getUserMedia ) {
+	// 	await navigator.mediaDevices.getUserMedia({ 'video': true })
+	// 	.then(( stream ) => {
+	// 		video.srcObject = stream;
+	// 		btn_capture.removeAttribute('disabled');
+	// 	})
+	// 	.catch(( error ) => {
+	// 		console.log("If your camera doesn't work you can upload an image !");
+	// 		btn_capture.setAttribute('disabled', 'on');
+	// 	});
+	// }
 
 	const viewOption = ( option ) => {
 		if ( option.value != "" ) {
