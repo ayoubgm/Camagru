@@ -192,8 +192,8 @@
 						}
 					break;
 				}
-				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData)->render();
 			}
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData)->render();
 		}
 		
 		public function 				account_confirmation ( $data )
