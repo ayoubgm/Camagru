@@ -14,6 +14,10 @@ body {
     padding: 50px;
 }
 
+.card {
+    margin-top: 180px;
+}
+
 .card-body p{
     letter-spacing: 3px;
     font-weight: bold;
@@ -40,8 +44,9 @@ body {
     left: 70px;
 }*/
 
+
 .reset-pass {
-    font-size: 8pt;
+    font-size: 10pt;
     color: rgb(77, 77, 77);
 }
 
