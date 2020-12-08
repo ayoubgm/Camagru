@@ -20,24 +20,13 @@
 				<a href="/signup" id="btn-signup">Signup</a>
 			<?php } else { ?>
 				<img src="/public/images/notification.png"? id="notif-img">
-				<?php if ( $userData['gender'] === "female" ) { ?> <img src="/public/images/user-female.png"? id="profile-img" onclick="showMenu()">
-				<?php } else { ?> <img src="/public/images/user-male.png"? id="profile-img" onclick="showMenu()"> <?php } ?>
+				<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img" onclick="showMenu()"/>
 				<div class="dropdown">
 					<ul>
 						<?php if ( isset( $userGallery ) && !empty( $userGallery ) ) { ?>
-							<li>
-								<a href="/gallery/user/username/<?php echo $userData['username'] ?>">
-									<img src="/public/images/gallery-icone.png" id="gallery"/> My gallery
-								</a>
-							</li>
+							<li><a href="/gallery/user/username/<?php echo $userData['username'] ?>"><img src="/public/images/gallery-icone.png" id="gallery"/> My gallery</a></li>
 						<?php } ?>
-						<li>
-							<a href="/user/profile">
-								<?php if ( $userData['gender'] ==="female" ) { ?> <img src="/public/images/profile-female.png" id="profile"/>
-								<?php } else { ?> <img src="/public/images/profile-male.png" id="profile"/> <?php } ?>
-								Profile
-							</a>
-						</li>
+						<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] ==="female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
 						<li><a href="/user/settings"> <img src="/public/images/settings.png" id="settings"/>Settings</a></li>
 						<li><a href="/user/logout"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
 					</ul>
