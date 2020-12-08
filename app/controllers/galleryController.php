@@ -125,9 +125,4 @@
 			}
 		}
 
-		public function 				notfound()
-		{
-			$this->call_view( 'notfound')->render();
-		}
-
 	}

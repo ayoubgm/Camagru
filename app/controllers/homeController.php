@@ -77,7 +77,6 @@
 		
 		public function 				signin()
 		{
-			$viewData = [];
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
 				case "GET":
 					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin' )->render();
