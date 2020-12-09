@@ -29,6 +29,10 @@ body {
 	margin-right: 20px;
 }
 
+.card-body #link-gallery {
+	font-weight: 800;
+	text-transform: lowercase;
+}
 
 .card-body #link-gallery img {
 	width: 35px;
@@ -57,5 +61,5 @@ body {
 }
 
 div a#btn-edit {
-	float: right;
+	font-weight: 800;
 }
