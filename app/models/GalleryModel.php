@@ -16,16 +16,16 @@
 			]);
 		}
 
-		public function         userGallery ( $userid, $depart = 0, $imagePerPage = 6 )
+		public function         userGallery ( $username, $depart = 0, $imagePerPage = 6 )
 		{
 			$query = '
 			    SELECT g.*, u.username, u.gender
 			    FROM `gallery` g INNER JOIN `users` u
 			    ON g.userid = u.id
-			    WHERE userid = ?
+			    WHERE username = ?
 			    ORDER BY createdat DESC LIMIT '.$depart.','.$imagePerPage;
 			$stt = $this->connect()->prepare($query);
-			$stt->execute([ $userid ]);
+			$stt->execute([ strtolower( $username ) ]);
 			return $stt->fetchAll(PDO::FETCH_ASSOC);
 		}
 

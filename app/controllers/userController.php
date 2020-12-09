@@ -21,21 +21,34 @@
 		{
 			$viewData = array();
 			
-			if ( !isset( $_SESSION['userid'] ) && empty( $_SESSION['userid'] ) ) {
-				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin')->render();
-				header("Location: /camagru/home/signin");
-			} else if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
-				$viewData['success'] = "true";
-				$viewData['data']['userData'] = $this->userModel->findUserByUsername( strtolower( $data[1] ) );
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-				$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
-			} else {
-				$viewData['success'] = "true";
-				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
+			try {
+				if ( !isset( $_SESSION['userid'] ) && empty( $_SESSION['userid'] ) ) {
+					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin')->render();
+					header("Location: /camagru/home/signin");
+				} else {
+					$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
+					if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
+						$viewData += [ "success" => "true" ]
+						$viewData['data'] += [
+							"userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ),
+							
+						]
+							// "userGallery" => $this->galleryModel->userGallery( $_SESSION['userid'] )
+						]
+						// $viewData['data']['userData'] = $this->userModel->findUserByUsername( strtolower( $data[1] ) );
+						// $viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+						// $viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
+						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
+					} else {
+						$viewData['success'] = "true";
+						$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
+						$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
+						$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
+					}
+				}
+			} catch ( Exception $e ) {
+				$viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
 			}
 		}
 		
