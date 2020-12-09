@@ -12,6 +12,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Settings</title>
+	<link rel="icon" href="/public/images/logo.png">
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="/public/css/settings.css"/>
 	<link rel="stylesheet" href="/public/css/_header.css"/>

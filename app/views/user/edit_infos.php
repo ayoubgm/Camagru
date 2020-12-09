@@ -12,6 +12,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Edit informations</title>
+	<link rel="icon" href="/public/images/logo.png">
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="/public/css/editinfos.css"/>
 	<link rel="stylesheet" href="/public/css/_header.css"/>
@@ -137,7 +138,7 @@
 						<div class="form-row edit">
 							<input
 								type="submit"
-								class="offset-2 col-8 btn btn-outline-warning w-50"
+								class="offset-2 col-8 btn btn-warning w-50 text-white"
 								value="Edit"
 								id="btn-edit"
 								name="btn-edit"

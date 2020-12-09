@@ -12,6 +12,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Profile</title>
+	<link rel="icon" href="/public/images/logo.png">
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="/public/css/profile.css"/>
 	<link rel="stylesheet" href="/public/css/_header.css"/>
@@ -25,7 +26,11 @@
 				<p class="card-title">
 					<span>Profile</span>
 					<?php if ( $_SESSION['userid'] == $userData['id'] ) { ?>
-						<a href="<?php echo SERVER; ?>/user/edit" class="btn btn-dark w-25" id="btn-edit">
+						<a
+							id="btn-edit"
+							class="btn btn-outline-dark w-25 float-right"
+							href="/user/edit"
+						>
 							<img id="icon-edit" src="/public/images/icone-edit.png"/>Edit
 						</a>
 					<?php } ?>
@@ -33,12 +38,15 @@
 				<div class="full-name text-center mt-5">
 					<img src="/public/images/user-profile.png"/></br>
 					</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
+					<hr/>
+					<a
+						id="link-gallery"
+						href="<?php echo "/gallery/user/username/".$userData['username'];?>"
+						class="btn btn-outline-dark w-50"
+					>
+						<img src="/public/images/gallery.png">Link to gallery
+					</a>
 				</div>
-				<hr/>
-				<a href="<?php echo SERVER."/gallery/user/username/".$userData['username']; ?>" id="link-gallery" class="btn btn-dark float-right">
-					<img src="<?php echo PUBLIC_FOLDER ?>/images/gallery.png">
-					Link to gallery
-				</a>
 				<div class="user-infos">
 					<span id="field">Full name : </span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?></br>
 					<span id="field">Username : </span><?php print($userData['username']); ?></br>

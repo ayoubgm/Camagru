@@ -15,6 +15,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Editing</title>
+	<link rel="icon" href="/public/images/logo.png">
 	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
 	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/editing.css"/>
 	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_header.css"/>
