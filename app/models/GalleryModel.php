@@ -8,11 +8,12 @@
 
 		public function         addImage ( $data )
 		{
-			$query = "INSERT INTO gallery (userid, src) VALUES (?, ?)";
+			$query = "INSERT INTO gallery (userid, src, `description`) VALUES (?, ?, ?)";
 			$stt = $this->connect()->prepare($query);
 			return $stt->execute([
 			    $data['id'],
-			    $data['src']
+				$data['src'],
+				"HOHOHOHOH"
 			]);
 		}
 
