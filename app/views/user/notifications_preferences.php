@@ -12,10 +12,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Notifications preferences</title>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/notification_preference.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_header.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_footer.css"/>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/public/css/notification_preference.css"/>
+	<link rel="stylesheet" href="/public/css/_header.css"/>
+	<link rel="stylesheet" href="/public/css/_footer.css"/>
 </head>
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
@@ -26,7 +26,7 @@
 					<span>Notifications preferences</span>
 				</p>
 				<div id="icone" class="text-center">
-					<img src="<?php echo PUBLIC_FOLDER; ?>/images/notifications_preferences.png"/></br>
+					<img src="/public/images/notifications_preferences.png"/></br>
 				</div>
 				<hr/>
 				<div class="p-4">
@@ -52,8 +52,8 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
+<script src="/public/js/_menu.js"></script>
+<script src="/public/js/_userMenu.js"></script>
 </html>
 <?php
 	}

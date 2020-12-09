@@ -3,8 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signin.css"/>
+	<link rel="stylesheet" href=/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href=/public/css/signin.css"/>
 	<title>Sign in</title>
 </head>
 <body>
@@ -12,7 +12,7 @@
 		<div class="card w-100">
 			<div class="row no-gutters">
 				<div class="col-md-4">
-					<img src="<?php echo PUBLIC_FOLDER; ?>/images/background-img0.jpg" class="card-img h-100">
+					<img src=/public/images/background-img0.jpg" class="card-img h-100">
 				</div>
 				<div class="col-md-8">
 					<div class="card-body">

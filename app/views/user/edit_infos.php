@@ -12,10 +12,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Edit informations</title>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/editinfos.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_header.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_footer.css"/>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/public/css/editinfos.css"/>
+	<link rel="stylesheet" href="/public/css/_header.css"/>
+	<link rel="stylesheet" href="/public/css/_footer.css"/>
 </head>
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
@@ -149,8 +149,8 @@
 		</div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
+<script src="/public/js/_menu.js"></script>
+<script src="/public/js/_userMenu.js"></script>
 <script>
 	const msg = document.getElementById("msg");
 	const firstname = document.getElementById('inputFirstName');

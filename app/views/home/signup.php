@@ -4,15 +4,15 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Registration</title>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/signup.css"/>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/public/css/signup.css"/>
 </head>
 <body>
 	<div class="container col-md-7 p-0 h-100">
 		<div class="card">
 			<div class="row no-gutters">
 				<div class="col-md-4 d-none d-lg-block">
-					<img src="<?php echo PUBLIC_FOLDER; ?>/images/background-img4.jpg" class="card-img">
+					<img src="/public/images/background-img4.jpg" class="card-img">
 				</div>
 				<div class="col-lg-8">
 					<div class="card-body">

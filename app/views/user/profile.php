@@ -12,10 +12,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Profile</title>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/profile.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_header.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_footer.css"/>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/public/css/profile.css"/>
+	<link rel="stylesheet" href="/public/css/_header.css"/>
+	<link rel="stylesheet" href="/public/css/_footer.css"/>
 </head>
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
@@ -26,12 +26,12 @@
 					<span>Profile</span>
 					<?php if ( $_SESSION['userid'] == $userData['id'] ) { ?>
 						<a href="<?php echo SERVER; ?>/user/edit" class="btn btn-dark w-25" id="btn-edit">
-							<img id="icon-edit" src="<?php echo PUBLIC_FOLDER; ?>/images/icone-edit.png"/>Edit
+							<img id="icon-edit" src="/public/images/icone-edit.png"/>Edit
 						</a>
 					<?php } ?>
 				</p>
 				<div class="full-name text-center mt-5">
-					<img src="<?php echo PUBLIC_FOLDER; ?>/images/user-profile.png"/></br>
+					<img src="/public/images/user-profile.png"/></br>
 					</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
 				</div>
 				<hr/>
@@ -54,8 +54,8 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
+<script src="/public/js/_menu.js"></script>
+<script src="/public/js/_userMenu.js"></script>
 </html>
 <?php
 	}
