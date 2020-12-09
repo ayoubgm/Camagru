@@ -28,46 +28,44 @@
 		// 	}
 		// }
 
-		public function 				index ()
+		public function 				index()
 		{
-			session_start();
-			$homeObj = new homeController();
 			$viewData = array();
-			$viewData ['data'] = [ 'gallery' => $homeObj->galleryModel->getAllEditedImages() ];
 			
-			if ( isset( $_SESSION['userid'] ) ) {
-				$viewData['data']['userData'] = $homeObj->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data']['userGallery'] = $homeObj->galleryModel->userGallery( $_SESSION['userid'] );
+			try {
+				session_start();
+				$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
+				if ( isset( $_SESSION['userid'] ) ) {
+					$viewData['data'] += [ 'userData' => $this->userModel->findUserById( $_SESSION['userid'] ), 'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ) ];
+				}
+				$viewData['success'] = "true";
+			} catch ( Exception $e ) {
+				$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
 			}
-			$viewData['success'] = "true";
-			$homeObj->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
 		}
 		
 		public function 				signup()
 		{
-			$viewData = [];
+			$viewData = array();
 			
 			switch( $_SERVER['REQUEST_METHOD'] ) {
-				case 'GET':
-					$viewData = [];
-				break;
 				case 'POST':
 					if ( isset($_POST['btn-signup']) ) {
 						unset( $_POST['btn-signup'] );
-
-						if ( ( $error = $this->userMiddleware->signup($_POST) ) != null ) {
-							$viewData = [ 'success' => "false", 'msg' => $error ];
-						} else {
-							try {
+						try {
+							if ( ( $error = $this->userMiddleware->signup($_POST) ) != null ) {
+								$viewData = [ 'success' => "false", 'msg' => $error ];
+							} else {
 								if ( $this->userModel->save( $_POST ) ) {
 									// $this->sendMail("Confirmation mail", strtolower($_POST['email']));
 									$viewData = [ 'success' => "true", 'msg' => "Successful registration, you will receive an email for activation account !" ];
 								} else {
 									$viewData = [ 'success' => "false", 'msg' => "Registration failed !" ];
 								}
-							} catch ( Exception $e ) {
-								$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
 							}
+						} catch ( Exception $e ) {
+							$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
 						}
 					}
 				break;
@@ -77,157 +75,132 @@
 		
 		public function 				signin()
 		{
+			$viewData = array();
+
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
-				case "GET":
-					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin' )->render();
-				break;
 				case "POST":
 					if ( isset( $_POST['btn-signin'] ) ) {
 						unset( $_POST['btn-signin'] );
-						if ( ($error = $this->userMiddleware->signin($_POST)) != null){
-							$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', [ 'success' => "false", 'msg' => $error ] )->render();
-						} else {
-							session_start();
-							$userData = $this->userModel->findUserByUsername($_POST['username']);
-							$_SESSION['userid'] = $userData['id'];
-							$_SESSION['username'] = $userData['username'];
-							header("Location: /home");
+						try {
+							if ( ($error = $this->userMiddleware->signin( $_POST )) != null) {
+								$viewData = [ 'success' => "false", 'msg' => $error ];
+							} else {
+								session_start();
+								$userData = $this->userModel->findUserByUsername( $_POST['username'] );
+								$_SESSION = [ 'userid' => $userData['id'], 'username' => $userData['username'] ];
+								header("Location: /home");
+							}
+						} catch ( Exception $e ) {
+							$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
 						}
 					}
 				break;
 			}
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', $viewData )->render();
 		}
 
-		public function 				reset_password ( )
+		public function 				reset_password()
 		{
-			session_start();
 			$viewData = array();
-
-			if ( isset( $_SESSION['userid'] ) ) { header("Location: /home"); }
-			else {
-				switch ( $_SERVER['REQUEST_METHOD'] ) {
-					case "GET":
-						$viewData = [ 'success' => "false" ];
-					break;
-					case "POST":
-						if ( isset( $_POST['btn-reset'] ) ) {
-							unset( $_POST['btn-reset'] );
-							if ( ( $error = $this->userMiddleware->reset_password($_POST['email']) ) != null ) {
-								$viewData = [ 'success' => "false", 'msg' => $error ];
-							} else {
-								try {
+			
+			try {
+				session_start();
+				if ( isset( $_SESSION['userid'] ) ) {
+					header("Location: /home");
+				} else {
+					switch ( $_SERVER['REQUEST_METHOD'] ) {
+						case "POST":
+							if ( isset( $_POST['btn-reset'] ) ) {
+								if ( ( $error = $this->userMiddleware->reset_password($_POST['email']) ) != null ) {
+									$viewData = [ 'success' => "false", 'msg' => $error ];
+								} else {	
 									if ( $this->userModel->resetpassword($_POST['email']) ) {
 										// $this->sendMail("Reset password", strtolower($_POST['email']));
 										$viewData = [ 'success' => "true", 'msg' => "A direct link for reset password has been sent successfully !" ];
 									} else {
 										$viewData = [ 'success' => "false", 'msg' => "Failed to reset your password !" ];
 									}
-								} catch ( Exception $e ) {
-									$viewData = [ 'success' => "false", 'msg' => "Something goes wrong while reseting your password !" ];
 								}
 							}
-						}
-					break;
+						break;
+					}
 				}
-				$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData)->render();
+			} catch ( Exception $e ) {
+				$viewData = [ 'success' => "false", 'msg' => "Something goes wrong while reseting your password !" ];
 			}
+			$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData)->render();
 		}
 
-		private function 				validateToken ( $data )
+		private function 				validateToken( $data )
 		{
 			if ( ( !isset( $data[0] ) || !isset( $data[1] ) ) || ( $data[0] !== "token" || !$data[1] ) ) { return "No token found !"; }
 			else { return null; }
 		}
 
-		public function 				new_password ( $data )
+		public function 				new_password( $data )
 		{
-			session_start();
-			$viewData = [];
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
+			$viewData = array();
 			
-			if ( isset( $_SESSION['userid'] ) ) {
-				header("Location: /home");
-			} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
-				$viewData[ 'success' ] = "false";
-				$viewData[ 'msg' ] = $error;
-			} else {
-				switch ( $_SERVER['REQUEST_METHOD'] ) {
-					case "GET":
-						if ( ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) != null ) {
-							$viewData[ 'success' ] = "false";
-							$viewData[ 'msg' ] = $error;
-							$viewData[ 'data' ] = [ 'token' => $data[1] ];
-						}
-						else {
-							$viewData[ 'success'] = "true";
-							$viewData[ 'data' ] = [ 'token' => $data[1] ];
-						}
-					break;
-					case "POST":
-						if ( isset( $_POST['btn-submit'] ) ) {
-							unset( $_POST['btn-submit'] );
-							$_POST['token'] = $data[1];
-							if ( ( $error = $this->userMiddleware->new_password( $_POST ) ) != null ) {
-								$viewData[ 'success' ] = "false";
-								$viewData[ 'msg' ] = $error;
-								$viewData[ 'data' ] = [ 'token' => $data[1] ];
+			try {
+				session_start();
+				if ( isset( $_SESSION['userid'] ) ) {
+					header("Location: /home");
+				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
+					$viewData = [ "success" => "false", "msg" => $error ];
+				} else {
+					switch ( $_SERVER['REQUEST_METHOD'] ) {
+						case "GET":
+							if ( ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) != null ) {
+								$viewData = [ "success" => "false", "msg" => $error, "data" => [ 'token' => $data[1] ] ];
 							} else {
-								try {
-									if ( $this->userModel->newpassword( array( 'newpassword' =>  password_hash($_POST['newpassword'], PASSWORD_ARGON2I), 'token' => $data[1] ) ) ) {
-										$viewData[ 'success' ] = "true";
-										$viewData[ 'msg' ] = "Your password has been changed successfully !";
-										$viewData[ 'data' ] = [ 'token' => $data[1] ];
-									}
-									else {
-										$viewData[ 'success' ] = "false";
-										$viewData[ 'msg' ] = "Failed to change your password !";
-										$viewData[ 'data' ] = [ 'token' => $data[1] ];
-									}
-								} catch ( Exception $e ) {
-									$viewData[ 'success' ] = "false";
-									$viewData[ 'msg' ] = "Something goes wrong while changing your password !";
-									$viewData[ 'data' ] = [ 'token' => $data[1] ];
+								$viewData = [ "success" => "true", "data" => [ 'token' => $data[1] ] ];
+							}
+						break;
+						case "POST":
+							if ( isset( $_POST['btn-submit'] ) ) {
+								unset( $_POST['btn-submit'] );
+								$_POST['token'] = $data[1];
+								if ( ( $error = $this->userMiddleware->new_password( $_POST ) ) != null ) {
+									$viewData = [ "success" => "false", "msg" => $error, "data" => [ 'token' => $data[1] ] ];
+								} else if ( $this->userModel->newpassword( array( 'newpassword' =>  password_hash($_POST['newpassword'], PASSWORD_ARGON2I), 'token' => $data[1] ) ) ) {
+									$viewData = [ "success" => "true", "msg" => "Your password has been changed successfully !", "data" => [ 'token' => $data[1] ] ];
+								} else {
+									$viewData = [ "success" => "false", "msg" => "Failed to change your password !", "data" => [ 'token' => $data[1] ] ];
 								}
 							}
-						}
-					break;
+						break;
+					}
 				}
+			} catch ( Exception $e ) {
+				$viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
 			}
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $viewData)->render();
 		}
 		
 		public function 				account_confirmation ( $data )
 		{
-			$viewData = [];
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
+			$viewData = array();
 
-			session_start();
-			if ( isset( $_SESSION['userid'] ) ) {
-				header("Location: /home");
-			} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
-				$viewData [ 'success' ] = "false";
-				$viewData [ 'msg' ] = $error;
-			} else {
-				if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
-					$viewData [ 'success' ] = "false";
-					$viewData [ 'msg' ] = $error;
+			try {
+				session_start();
+				if ( isset( $_SESSION['userid'] ) ) {
+					header("Location: /home");
+				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
+					$viewData = [ "success" => "false", "msg" => $error ];
 				} else {
-					try {
+					if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
+						$viewData = [ "success" => "false", "msg" => $error ];
+					} else {
+						$viewData = [ "data" => $data[1] ];
 						if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
-							$viewData [ 'success' ]  = "true";
-							$viewData [ 'msg' ] = "Your account has been activated successfully !";
-							$viewData [ 'data' ] = $data[1];
+							$viewData = [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
 						} else {
-							$viewData [ 'success' ] = "false";
-							$viewData [ 'msg' ] = "Failed to activate your account !";
-							$viewData [ 'data' ] = $data[1];
-						}
-					} catch ( Exception $e ) {
-						$viewData [ 'success' ] = "false";
-						$viewData [ 'msg' ] = "Something goes wrong while activating your account !";
-						$viewData [ 'data' ] = $data[1];
+							$viewData = [ "success" => "false", "msg" => "Failed to activate your account !" ];
+						}	
 					}
 				}
+			} catch ( Exception $e ) {
+				$viewData = [ "success" => "false", "msg" => "Something goes wrong while activating your account !", "data" => $data[1] ];
 			}
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', $viewData)->render();
 		}
