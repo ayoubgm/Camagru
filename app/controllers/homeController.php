@@ -11,6 +11,7 @@
 
 		public function 				__construct()
 		{
+			session_start();
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->userModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
@@ -33,7 +34,6 @@
 			$viewData = array();
 			
 			try {
-				session_start();
 				$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
 				if ( isset( $_SESSION['userid'] ) ) {
 					$viewData['data'] += [ 'userData' => $this->userModel->findUserById( $_SESSION['userid'] ), 'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ) ];
@@ -104,7 +104,6 @@
 			$viewData = array();
 			
 			try {
-				session_start();
 				if ( isset( $_SESSION['userid'] ) ) {
 					header("Location: /home");
 				} else {
@@ -142,7 +141,6 @@
 			$viewData = array();
 			
 			try {
-				session_start();
 				if ( isset( $_SESSION['userid'] ) ) {
 					header("Location: /home");
 				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
@@ -182,7 +180,6 @@
 			$viewData = array();
 
 			try {
-				session_start();
 				if ( isset( $_SESSION['userid'] ) ) {
 					header("Location: /home");
 				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {

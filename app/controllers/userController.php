@@ -239,17 +239,16 @@
 					break;
 					case 'POST':
 						if ( isset( $_POST['btn-save'] ) ) {
-							$_POST['id'] = $viewData['data']['userData']['id'];
-							$imgWebcam = $_POST['dataimage'];
-							$imgWebcam = str_replace('data:image/png;base64', '', $imgWebcam);
-							$imgWebcam = str_replace(' ', '+', $imgWebcam);
-							$fileData = base64_decode( $imgWebcam );
-							$pathFile = EDITEDPICS .'IMG'.'_'.time().'_'.$viewData['data']['userData']['id'].'_'.$viewData['data']['userData']['username'].'.png';
-							file_put_contents($pathFile, $fileData);
-							$srcPath = $_POST['sticker'];
-							$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
-							$this->makeMixedImage( $viewData['data']['userData'], $destPath, $srcPath, intval($_POST['x']), intval($_POST['y']) );
 							try {
+								$imgWebcam = $_POST['dataimage'];
+								$imgCamBase64 = str_replace('data:image/png;base64', '', $imgWebcam);
+								$finalImageCam = str_replace(' ', '+', $imgCamBase64);
+								$fileData = base64_decode( $finalImageCam );
+								$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
+								file_put_contents($pathFile, $fileData);
+								$srcPath = $_POST['sticker'];
+								$destPath = str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $pathFile ) ) );
+								$this->makeMixedImage( $viewData['data']['userData'], $destPath, $srcPath, intval($_POST['x']), intval($_POST['y']) );
 								if ( $this->galleryModel->addImage([ 'id' => $_SESSION['userid'], 'src' => $destPath ]) ) {
 									$viewData['success'] = "true";
 									$viewData['msg'] = "Image has been saved successfully !";
