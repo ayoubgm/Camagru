@@ -31,7 +31,7 @@
 
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
 				$viewData['data'][ 'userData'] = $this->usersModel->findUserById( $_SESSION['userid'] );
-				$viewData['data'][ 'userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+				$viewData['data'][ 'userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 			}
 			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
 				$page = intval($data[1]);
@@ -66,7 +66,7 @@
 					} else {
 						$viewData['success'] = "true";
 						$viewData['username'] = $data[1];
-						$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $dataUser['id'] );
+						$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $dataUser['username'] );
 					}
 				} catch ( Exception $e ) {
 					$viewData['success'] = "false";
@@ -75,7 +75,7 @@
 			} else {
 				$viewData['success'] = "true";
 				$viewData['username'] = $_SESSION['username'];
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 			}
 			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'user', $viewData)->render();
 		}
@@ -88,7 +88,7 @@
 				$viewData['data'] = [
 					'userData' => $this->usersModel->findUserById( $_SESSION['userid'] ),
 					'gallery' => $this->galleryModel->getAllEditedImages(),
-					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] )
+					'userGallery' => $this->galleryModel->userGallery( $_SESSION['username'] )
 				];
 
 				if ( isset( $data[0] ) && $data[0] === "id" && !empty( $data[1] ) ) {
@@ -104,7 +104,7 @@
 							if ( $this->galleryModel->deleteImage( $data[1], $_SESSION['userid'] ) ) {
 								$viewData['success'] = "true";
 								$viewData['msg'] = "Your image has been deleted successfully !";
-								$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+								$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 								$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
 							} else {
 								$viewData['success'] = "false";

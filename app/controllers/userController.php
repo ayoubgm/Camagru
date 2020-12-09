@@ -17,82 +17,81 @@
 			$this->galleryModel = self::call_model('GalleryModel');
 		}
 
-		public function 				profile ( $data )
+		public function 				profile( $data )
 		{
 			$viewData = array();
-			
-			try {
-				if ( !isset( $_SESSION['userid'] ) && empty( $_SESSION['userid'] ) ) {
-					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin')->render();
-					header("Location: /camagru/home/signin");
-				} else {
+			$redirect = null;
+
+			if ( !isset( $_SESSION['userid'] ) && empty( $_SESSION['userid'] ) ) {
+				$redirect = "signin";
+				header("Location: /camagru/home/signin");
+			} else {
+				$redirect = "profile";
+				try {
 					$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
+					$viewData += [ "success" => "true" ];
 					if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
-						$viewData += [ "success" => "true" ]
 						$viewData['data'] += [
-							"userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ),
-							
-						]
-							// "userGallery" => $this->galleryModel->userGallery( $_SESSION['userid'] )
-						]
-						// $viewData['data']['userData'] = $this->userModel->findUserByUsername( strtolower( $data[1] ) );
-						// $viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-						// $viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
-						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
+							"userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ),
+							"userGallery" => $this->galleryModel->userGallery( strtolower( $data[1] ) )
+						];
 					} else {
-						$viewData['success'] = "true";
-						$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-						$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
-						$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-						$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData)->render();
+						$viewData['data'] += [
+							"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+							"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] )
+						];
 					}
+				} catch ( Exception $e ) {
+					$viewData["success"] = "false";
+					$viewData["msg"] = "Something goes wrong, try later !";
 				}
-			} catch ( Exception $e ) {
-				$viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
+			}
+			if ( $redirect == "signin" ) {
+				$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin' )->render();
+			} else {
+				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'profile', $viewData )->render();
 			}
 		}
 		
-		public function 				edit ()
+		public function 				edit()
 		{
 			$viewData = array();
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
 
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-				$oldData = $this->userModel->findUserById( $_SESSION['userid'] );
-
-				switch( $_SERVER['REQUEST_METHOD'] ) {
-					case 'GET':
-						$viewData[ 'success' ] = "true";
-					break;
-					case 'POST':
-						if ( isset($_POST['btn-edit']) ) {
-							$userID = $oldData['id'];
-							unset( $_POST['btn-edit'] ); unset( $oldData['id'] ); unset( $oldData['createdat'] ); unset( $oldData['notifEmail'] );
-							$editedData = array_replace_recursive( $oldData, $_POST );
-							if ( ($error = $this->userMiddleware->edit( $userID, $editedData )) != null){
-								$viewData[ 'success' ] = "false";
-								$viewData[ 'msg' ] = $error;
-								$viewData['data']['userData'] = $editedData;
-							} else {
-								try {
-									if ( $this->userModel->edit( $userID, $editedData ) ) {
-										$newData = $this->userModel->findUserById( $_SESSION['userid'] );
-										$viewData[ 'success' ] = "true";
-										$viewData[ 'msg' ] = "Your informations has been edited successfully !";
-										$viewData['data']['userData'] = $newData;
+				try {
+					$viewData["data"] = [
+						"gallery" => $this->galleryModel->getAllEditedImages(),
+						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] )
+					];
+					$oldData = $this->userModel->findUserById( $_SESSION['userid'] );
+					switch( $_SERVER['REQUEST_METHOD'] ) {
+						case 'GET':
+							$viewData[ "success" ] = "true";
+						break;
+						case 'POST':
+							if ( isset($_POST['btn-edit']) ) {
+								unset( $_POST['btn-edit'] ); unset( $oldData['id'] ); unset( $oldData['createdat'] ); unset( $oldData['notifEmail'] );
+								$editedData = array_replace_recursive( $oldData, $_POST );
+								if ( ($error = $this->userMiddleware->edit( $_SESSION['userid'], $editedData )) != null) {
+									$viewData += [ "success" => "false", "msg" => $error ];
+									$viewData["data"][ "userData"] += $editedData;
+								} else {
+									if ( $this->userModel->edit( $_SESSION['userid'], $editedData ) ) {
+										$viewData += [
+											"success" => "true",
+											"msg" => "Your informations has been edited successfully !",
+										];
+										$viewData["data"] += [ "userData" => $this->userModel->findUserById( $_SESSION['userid'] ) ];
 									} else {
-										$viewData[ 'success' ] = "false";
-										$viewData[ 'msg' ] = "Failed to update your informations !";
+										$viewData += [ "success" => "false", "msg" => "Failed to update your informations !" ];
 									}
-								} catch( Exception $e ) {
-									$viewData[ 'success' ] = "false";
-									$viewData[ 'msg' ] = "Something goes wrong while edit informations, try later !";
 								}
 							}
-						}
-					break;
+						break;
+					}
+				} catch ( Exception $e ) {
+					$viewData += [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'edit_infos', $viewData )->render();
 			} else {
@@ -103,14 +102,21 @@
 		public function 				settings ()
 		{
 			$viewData = array();
-			
+
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data'] = [
-					'userData' => $this->userModel->findUserById( $_SESSION['userid'] ),
-					'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ),
-					'gallery' => $this->galleryModel->getAllEditedImages()
-				];
-				$viewData['success'] = "true";
+				try {
+					$viewData['data'] = [
+						"success" => "true",
+						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] ),
+						"gallery" => $this->galleryModel->getAllEditedImages()
+					];
+				} catch ( Exception $e ) {
+					$viewData += [
+						"success" => "false",
+						"msg" => "Something goes wrong, try later !"
+					];
+				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'settings', $viewData )->render();
 			} else {
 				header("Location: /camagru/home");
@@ -120,77 +126,72 @@
 		public function 				change_password ()
 		{
 			$viewData = array();
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
 
-			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-				
-				switch( $_SERVER['REQUEST_METHOD'] ) {
-					case 'GET':
-						$viewData['success'] = "true";
-					break;
-					case 'POST':
-						if ( isset($_POST['btn-submit']) && !empty($_POST['btn-submit']) ) {
-							unset( $_POST['btn-submit'] );
-							if ( ( $error = $this->userMiddleware->change_password( $_SESSION['userid'], $_POST ) ) != null ) {
-								$viewData['success'] = "false";
-								$viewData['msg'] = $error;
-							} else {
-								try {
-									if ( $this->userModel->change_password( $_SESSION['userid'], password_hash($_POST['newpassword'], PASSWORD_ARGON2I) ) ) {
-										$viewData['success'] = "true";
-										$viewData['msg'] = "Your password has been changed successfully";
-									} else {
-										$viewData['success'] = "false";
-										$viewData['msg'] = "Failed to change your password !";
+			try {
+				$viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
+				if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
+					$viewData["data"] += [
+						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+					];
+					switch( $_SERVER['REQUEST_METHOD'] ) {
+						case 'GET':
+							$viewData['success'] = "true";
+						break;
+						case 'POST':
+							if ( isset($_POST['btn-submit']) && !empty($_POST['btn-submit']) ) {
+								unset( $_POST['btn-submit'] );
+								if ( ( $error = $this->userMiddleware->change_password( $_SESSION['userid'], $_POST ) ) != null ) {
+									$viewData += [ "success" => "false", "msg" => $error ];
+								} else {
+									try {
+										if ( $this->userModel->change_password( $_SESSION['userid'], password_hash($_POST['newpassword'], PASSWORD_ARGON2I) ) ) {
+											$viewData += [ "success" => "true", "msg" => "Your password has been changed successfully" ];
+										} else {
+											$viewData += [ "success" => "false", "msg" => "Failed to change your password !" ];
+										}
+									} catch ( Exception $e ) {
+										$viewData += [ "success" => "false", "msg" => "Something goes wrong while changing your password !" ];
 									}
-								} catch ( Exception $e ) {
-									$viewData['success'] = "false";
-									$viewData['msg'] = "Something goes wrong while changing your password !";
 								}
 							}
-						}
-					break;
+						break;
+					}
+					$this->call_view( 'user' . DIRECTORY_SEPARATOR .'change_password', $viewData )->render();
+				} else {
+					header("Location: /camagru/home");
 				}
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'change_password', $viewData )->render();
-			} else {
-				header("Location: /camagru/home");
+			} catch ( Exception $e ) {
+				$viewData += [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
 			}
 		}
 
 		public function 				notifications_preferences ( $data )
 		{
 			$viewData = array();
-			$viewData['data'] = [ 'gallery' => $this->galleryModel->getAllEditedImages() ];
 			
 			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
-				
-				if ( isset( $data[0] ) && isset( $data[1] ) ) {
-					if ( ( isset( $data[0] ) && $data[0] === "notificationsemail" ) && ( isset( $data[1] ) && ( $data[1] === "1" || $data[1] === "0" ) ) ) {
+				try {
+					$viewData['data'] = [
+						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] ),
+						"gallery" => $this->galleryModel->getAllEditedImages()
+					];
+					if ( isset( $data[0] ) && isset( $data[1] ) && ( isset( $data[0] ) && $data[0] === "notificationsemail" ) && ( isset( $data[1] ) && ( $data[1] === "1" || $data[1] === "0" ) ) ) {
 						switch( $_SERVER['REQUEST_METHOD'] ) {
 							case 'GET':
-								$viewData ['success'] = "true";
+								$viewData['success'] = "true";
 							break;
 							case 'POST':
-								if ( isset( $_POST['btn-change-preference'] ) && !empty($_POST['btn-change-preference']) ) {
+								if ( isset( $_POST['btn-change-preference'] ) ) {
 									unset( $_POST['btn-change-preference'] );
-									try {
-										if ( $this->userModel->change_preference_email_notifs( $_SESSION['userid'], $data[1] ) ) {
-											$userData = $this->userModel->findUserById( $_SESSION['userid'] );
-											
-											$viewData['success'] = "true";
-											$viewData['data']['userData'] = $userData;
-										} else {
-											$viewData['success'] = "false";
-											$viewData['msg'] = "Failed to change your notifications preference !";
-										}
-									} catch ( Exception $e ) {
+									if ( $this->userModel->change_preference_email_notifs( $_SESSION['userid'], $data[1] ) ) {
+										$viewData['success'] = "true";
+										$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
+									} else {
 										$viewData['success'] = "false";
-										$viewData['msg'] = "Something is wrong, try later !";
-									}
+										$viewData['msg'] = "Failed to change your notifications preference !";
+									}						
 								}
 							break;
 						}
@@ -198,9 +199,9 @@
 						$viewData['success'] = "false";
 						$viewData['msg'] = "Something is wrong !";
 					}
-				} else {
+				} catch ( Exception $e ) {
 					$viewData['success'] = "false";
-					$viewData['msg'] = "Something is wrong !";
+					$viewData['msg'] = "Something is wrong, try later !";
 				}
 				$this->call_view( 'user' . DIRECTORY_SEPARATOR . 'notifications_preferences', $viewData)->render();
 			} else {
@@ -230,7 +231,7 @@
 
 			if ( isset( $_SESSION['userid'] ) ) {
 				$viewData['data']['userData'] = $this->userModel->findUserById( $_SESSION['userid'] );
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 
 				switch( $_SERVER['REQUEST_METHOD'] ) {
 					case 'GET':
@@ -253,18 +254,18 @@
 									$viewData['success'] = "true";
 									$viewData['msg'] = "Image has been saved successfully !";
 									$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
-									$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+									$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 								} else {
 									$viewData['success'] = "false";
 									$viewData['msg'] = "Failed to edit snapchat !";
 									$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
-									$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+									$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 								}
 							} catch ( Exception $e ) {
 								$viewData['success'] = "false";
 								$viewData['msg'] = "Something goes wrong, try later !";
 								$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
-								$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['userid'] );
+								$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
 							}
 						}
 					break;
@@ -277,11 +278,8 @@
 
 		public function 				logout ()
 		{
-			if ( isset( $_SESSION['userid'] ) ) {
-				$this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout' )->render();
-			} else {
-				header("Location: /home");
-			}
+			if ( isset( $_SESSION['userid'] ) ) { $this->call_view( 'user' . DIRECTORY_SEPARATOR .'logout' )->render(); }
+			else { header("Location: /signin"); }
 		}
 
 	}
