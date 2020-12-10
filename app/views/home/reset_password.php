@@ -1,3 +1,7 @@
+<?php
+	$data;
+	if ( isset( $this->view_data ) ) { $data = $this->view_data; }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,15 +39,15 @@
 							/>
 						</div>
 						<div class="row text-center mt-4" style="height: 30px;">
-							<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?> ">
-								<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
+							<span id="msg" class="w-100 <?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?> ">
+								<?php if ( isset($data['msg']) ) echo $data['msg'];?>
 							</span>
 						</div>
 						<div class="text-center">
 							<div class="form-row">
 								<input
 									type="submit"
-									class="offset-2 col-8 btn btn-outline-dark w-50 mt-3 mb-5"
+									class="offset-2 col-8 btn btn-outline-dark w-50 my-3"
 									value="Reset password"
 									name="btn-reset"
 								/>
@@ -78,10 +82,13 @@
 	
 	// Validate email by run some regex
 	const			validateEmail = ( email ) => {
-		if ( email.value == "" ) { setError( email, "the email can't be empty !" ); return false; }
-		else if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) { setError(email, "Invalid email address !"); return false; }
-		else { setSuccess(email); return true; }
+		if ( email.value == "" ) {
+			setError( email, "the email can't be empty !" ); return false;
+		} else if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) {
+			setError(email, "Invalid email address !"); return false;
+		} else {
+			setSuccess(email); return true;
+		}
 	}
-
 </script>
 </html>

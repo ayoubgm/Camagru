@@ -22,7 +22,7 @@
 				<div class="col-lg-12">
 					<div class="card-body">
 						<p class="card-title">Registration</p>
-						<form action="/signup" method="POST" >
+						<form action="/signup" method="POST" onsubmit="validateRegisterData(this)">
 							<div class="form-row m-0 mb-1">
 								<div class="form-group col-lg-6">
 									<label for="inputFirstName">Firstname <span class="text-danger">*</span>:</label>

@@ -32,6 +32,9 @@
 					</span>
 				</div>
 			</div>
+			<div class="card-footer w-100">
+				<a href="/home" id="link-home" class="text-muted">Home</a>
+			</div>
 		</div>
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>

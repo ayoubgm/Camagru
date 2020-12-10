@@ -64,7 +64,7 @@
 						<div class="form-row">
 							<input
 								type="submit"
-								class="offset-2 col-8 btn btn-outline-danger w-50 mb-5"
+								class="offset-2 col-8 btn btn-outline-danger w-50 my-3"
 								value="Submit"
 								id="btn-submit"
 								name="btn-submit"
@@ -101,12 +101,16 @@
 		if ( !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/.test( password.value ) ) {
 			setError(password, "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !");
 			return false;
-		} else { setSuccess(password); return true; }
+		} else {
+			setSuccess(password); return true;
+		}
 	}
 	const			validateConfPass = ( ) => {
-		if ( newpassword.value !== confirmationPassword.value ) { setError(confirmationPassword, "Passwords doesn't match"); return false; }
-		else { setSuccess(confirmationPassword); return true; }
+		if ( newpassword.value !== confirmationPassword.value ) {
+			setError(confirmationPassword, "Passwords doesn't match"); return false;
+		} else {
+			setSuccess(confirmationPassword); return true;
+		}
 	}
-	
 </script>
 </html>
