@@ -11,11 +11,11 @@
 
 		public function 				__construct()
 		{
-			session_start();
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->userModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
-		} 
+		}
+
 		// private function 	sendMail ( $subject, $to )
 		// {
 		// 	switch ( $subject ) {
@@ -34,69 +34,74 @@
 			$viewData = array();
 			
 			try {
-				$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
+				session_start();
+				$viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
 				if ( isset( $_SESSION['userid'] ) ) {
-					$viewData['data'] += [ 'userData' => $this->userModel->findUserById( $_SESSION['userid'] ), 'userGallery' => $this->galleryModel->userGallery( $_SESSION['userid'] ) ];
+					$viewData["data"] += [
+						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] )
+					];
 				}
-				$viewData['success'] = "true";
+				$viewData["success"] = "true";
 			} catch ( Exception $e ) {
-				$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
+				$viewData["success"] = "false";
+				$viewData["msg"] = "Something goes wrong, try later !";
 			}
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $viewData )->render();
+		}
+
+		public function 				signin()
+		{
+			$viewData = array();
+
+			switch ( $_SERVER["REQUEST_METHOD"] ) {
+				case "POST":
+					if ( isset( $_POST["btn-signin"] ) ) {
+						unset( $_POST["btn-signin"] );
+						try {
+							if ( $error = $this->userMiddleware->signin( $_POST ) ) {
+								$viewData = [ "success" => "false", "msg" => $error ];
+							} else {
+								session_start();
+								$userData = $this->userModel->findUserByUsername( $_POST["username"] );
+								$_SESSION = [ "userid" => $userData["id"], "username" => $userData["username"] ];
+								header("Location: /home");
+							}
+						} catch ( Exception $e ) {
+							$viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
+						}
+					}
+				break;
+			}
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', $viewData )->render();
 		}
 		
 		public function 				signup()
 		{
 			$viewData = array();
 			
-			switch( $_SERVER['REQUEST_METHOD'] ) {
-				case 'POST':
-					if ( isset($_POST['btn-signup']) ) {
-						unset( $_POST['btn-signup'] );
+			switch( $_SERVER["REQUEST_METHOD"] ) {
+				case "POST":
+					if ( isset($_POST["btn-signup"]) ) {
+						unset( $_POST["btn-signup"] );
 						try {
-							if ( ( $error = $this->userMiddleware->signup($_POST) ) != null ) {
-								$viewData = [ 'success' => "false", 'msg' => $error ];
+							if ( $error = $this->userMiddleware->signup($_POST) ) {
+								$viewData = [ "success" => "false", "msg" => $error ];
 							} else {
 								if ( $this->userModel->save( $_POST ) ) {
-									// $this->sendMail("Confirmation mail", strtolower($_POST['email']));
-									$viewData = [ 'success' => "true", 'msg' => "Successful registration, you will receive an email for activation account !" ];
+									// $this->sendMail("Confirmation mail", strtolower($_POST["email"]));
+									$viewData = [ "success" => "true", "msg" => "Successful registration, you will receive an email for activation account !" ];
 								} else {
-									$viewData = [ 'success' => "false", 'msg' => "Registration failed !" ];
+									$viewData = [ "success" => "false", "msg" => "Registration failed !" ];
 								}
 							}
 						} catch ( Exception $e ) {
-							$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
+							$viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
 						}
 					}
 				break;
 			}
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', $viewData)->render();
-		}
-		
-		public function 				signin()
-		{
-			$viewData = array();
-
-			switch ( $_SERVER['REQUEST_METHOD'] ) {
-				case "POST":
-					if ( isset( $_POST['btn-signin'] ) ) {
-						unset( $_POST['btn-signin'] );
-						try {
-							if ( ($error = $this->userMiddleware->signin( $_POST )) != null) {
-								$viewData = [ 'success' => "false", 'msg' => $error ];
-							} else {
-								session_start();
-								$userData = $this->userModel->findUserByUsername( $_POST['username'] );
-								$_SESSION = [ 'userid' => $userData['id'], 'username' => $userData['username'] ];
-								header("Location: /home");
-							}
-						} catch ( Exception $e ) {
-							$viewData = [ 'success' => "false", 'msg' => "Something goes wrong, try later !" ];
-						}
-					}
-				break;
-			}
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', $viewData )->render();
 		}
 
 		public function 				reset_password()
@@ -104,6 +109,7 @@
 			$viewData = array();
 			
 			try {
+				session_start();
 				if ( isset( $_SESSION['userid'] ) ) {
 					header("Location: /home");
 				} else {
@@ -141,6 +147,7 @@
 			$viewData = array();
 			
 			try {
+				session_start();
 				if ( isset( $_SESSION['userid'] ) ) {
 					header("Location: /home");
 				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
@@ -180,6 +187,7 @@
 			$viewData = array();
 
 			try {
+				session_start();
 				if ( isset( $_SESSION['userid'] ) ) {
 					header("Location: /home");
 				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
