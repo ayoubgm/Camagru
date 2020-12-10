@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`password`			VARCHAR(255) NOT NULL,
 	`gender`			VARCHAR(255) NOT NULL,
 	`address`			VARCHAR(255) NULL,
-	`activationToken`	VARCHAR(255) NOT NULL,
+	`activationToken`	VARCHAR(255) NULL,
 	`recoveryToken`		VARCHAR(255) DEFAULT NULL,
 	`notifEmail`		BOOLEAN DEFAULT 1,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
