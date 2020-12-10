@@ -108,38 +108,39 @@
 		{
 			$viewData = array();
 			
-			try {
-				session_start();
-				if ( isset( $_SESSION['userid'] ) ) {
-					header("Location: /home");
-				} else {
-					switch ( $_SERVER['REQUEST_METHOD'] ) {
-						case "POST":
-							if ( isset( $_POST['btn-reset'] ) ) {
-								if ( ( $error = $this->userMiddleware->reset_password($_POST['email']) ) != null ) {
-									$viewData = [ 'success' => "false", 'msg' => $error ];
+			session_start();
+			if ( isset( $_SESSION["userid"] ) ) {
+				header("Location: /home");
+			} else {
+				switch ( $_SERVER["REQUEST_METHOD"] ) {
+					case "POST":
+						if ( isset( $_POST["btn-reset"] ) ) {
+							try {
+								if ( $error = $this->userMiddleware->reset_password($_POST["email"]) ) {
+									$viewData = [ "success" => "false", "msg" => $error ];
 								} else {	
-									if ( $this->userModel->resetpassword($_POST['email']) ) {
-										// $this->sendMail("Reset password", strtolower($_POST['email']));
-										$viewData = [ 'success' => "true", 'msg' => "A direct link for reset password has been sent successfully !" ];
+									if ( $this->userModel->resetpassword($_POST["email"]) ) {
+										// $this->sendMail("Reset password", strtolower($_POST["email"]));
+										$viewData = [ "success" => "true", "msg" => "A direct link for reset password has been sent successfully !" ];
 									} else {
-										$viewData = [ 'success' => "false", 'msg' => "Failed to reset your password !" ];
+										$viewData = [ "success" => "false", "msg" => "Failed to reset your password !" ];
 									}
 								}
+							} catch ( Exception $e ) {
+								$viewData = [ "success" => "false", "msg" => "Something goes wrong while reseting your password !" ];
 							}
-						break;
-					}
+						}
+					break;
 				}
-			} catch ( Exception $e ) {
-				$viewData = [ 'success' => "false", 'msg' => "Something goes wrong while reseting your password !" ];
 			}
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $viewData)->render();
 		}
 
 		private function 				validateToken( $data )
 		{
-			if ( ( !isset( $data[0] ) || !isset( $data[1] ) ) || ( $data[0] !== "token" || !$data[1] ) ) { return "No token found !"; }
-			else { return null; }
+			if ( ( !isset( $data[0] ) || !isset( $data[1] ) ) || ( $data[0] !== "token" || !$data[1] ) ) {
+				return "No token found !";
+			}
 		}
 
 		public function 				new_password( $data )
@@ -148,29 +149,48 @@
 			
 			try {
 				session_start();
-				if ( isset( $_SESSION['userid'] ) ) {
+				if ( isset( $_SESSION["userid"] ) ) {
 					header("Location: /home");
-				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
+				} else if ( $error = $this->validateToken( $data ) ) {
 					$viewData = [ "success" => "false", "msg" => $error ];
 				} else {
-					switch ( $_SERVER['REQUEST_METHOD'] ) {
+					switch ( $_SERVER["REQUEST_METHOD"] ) {
 						case "GET":
-							if ( ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) != null ) {
-								$viewData = [ "success" => "false", "msg" => $error, "data" => [ 'token' => $data[1] ] ];
+							if ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) {
+								$viewData = [
+									"success" => "false",
+									"msg" => $error,
+									"data" => [ "token" => $data[1] ]
+								];
 							} else {
-								$viewData = [ "success" => "true", "data" => [ 'token' => $data[1] ] ];
+								$viewData = [
+									"success" => "true",
+									"data" => [ "token" => $data[1] ]
+								];
 							}
 						break;
 						case "POST":
-							if ( isset( $_POST['btn-submit'] ) ) {
-								unset( $_POST['btn-submit'] );
-								$_POST['token'] = $data[1];
-								if ( ( $error = $this->userMiddleware->new_password( $_POST ) ) != null ) {
-									$viewData = [ "success" => "false", "msg" => $error, "data" => [ 'token' => $data[1] ] ];
-								} else if ( $this->userModel->newpassword( array( 'newpassword' =>  password_hash($_POST['newpassword'], PASSWORD_ARGON2I), 'token' => $data[1] ) ) ) {
-									$viewData = [ "success" => "true", "msg" => "Your password has been changed successfully !", "data" => [ 'token' => $data[1] ] ];
+							if ( isset( $_POST["btn-submit"] ) ) {
+								unset( $_POST["btn-submit"] );
+								$_POST["token"] = $data[1];
+								if ( $error = $this->userMiddleware->new_password( $_POST ) ) {
+									$viewData = [
+										"success" => "false",
+										"msg" => $error,
+										"data" => [ "token" => $data[1] ]
+									];
+								} else if ( $this->userModel->newpassword( array( "newpassword" => password_hash($_POST["newpassword"], PASSWORD_ARGON2I), "token" => $data[1] ) ) ) {
+									$viewData = [
+										"success" => "true",
+										"msg" => "Your password has been changed successfully !",
+										"data" => [ "token" => $data[1] ]
+									];
 								} else {
-									$viewData = [ "success" => "false", "msg" => "Failed to change your password !", "data" => [ 'token' => $data[1] ] ];
+									$viewData = [
+										"success" => "false",
+										"msg" => "Failed to change your password !",
+										"data" => [ "token" => $data[1] ]
+									];
 								}
 							}
 						break;
