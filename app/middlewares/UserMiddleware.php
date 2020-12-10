@@ -45,57 +45,78 @@
 				return "The email is already exists !";
 			}
 		}
-		
-		// Middleware for validating edited data
-		public function      edit ( $userID, $data )
-		{
-			if ( isset( $data['firstname']) && ( $error = $this->validateFirstname( $data['firstname'] ) ) ) { return $error; }
-			else if ( isset( $data['lastname']) && ( $error = $this->validateLastname( $data['lastname'] ) ) ) { return $error; }
-			else if ( isset( $data['username']) && ( $error = $this->validateUsername( $data['username'] ) ) ) { return $error; }
-			else if ( isset( $data['email']) && ( $error = $this->validateEmail( $data['email'] ) ) ) { return $error; }
-			else if ( isset( $data['gender']) && ( $error = $this->validateGender( $data['gender'] ) ) ) { return $error; }
-			else if ( isset( $data['address']) && ( $error = $this->validateAddress( $data['address'] ) ) ) { return $error; }
-			else if ( isset( $data['username']) && $this->isUsernameEditedExists( $userID, $data['username'] ) ) { return "The username is already exists !"; }
-			else if ( isset( $data['email']) && $this->isEmailEditedExists( $userID, $data['email'] ) ) { return "The email is already exists !"; }
-			else { return null; }
-		}
-
-		public function		change_password ( $id, $data )
-		{
-			if ( $error = $this->validateNewPassword( $data['oldpassword'] ) ) { return $error; }
-			else if ( $error = $this->validateOldPassword( $data['newpassword'] ) ) { return $error; }
-			else if ( $data['newpassword'] != $data['confirmation_password'] ) { return "Passwords doesn't match !"; }
-			else if ( !$this->isThePasswordIsValid( $id, null, $data['oldpassword'] ) ) { return "The old password is Incorrect !"; }
-			else { return null; }
-		}
 
 		public function		reset_password ( $email )
 		{
-			if ( $email == "" ) { return "the email can't be empty !"; }
-			else if ( $error = $this->validateEmail( $email ) ) { return $error; }
-			else if ( !$this->isEmailExists( strtolower( $email ) ) ) { return "The email is not found !"; }
-			else { return null; }
+			if ( !$email ) {
+				return "the email can't be empty !";
+			} else if ( $error = $this->validateEmail( $email ) ) {
+				return $error;
+			} else if ( !$this->isEmailExists( strtolower( $email ) ) ) {
+				return "The email is not found !";
+			}
+		}
+
+		public function		validateRecoveryToken ( $token ) {
+			if ( !$token ) {
+				return "No token found !";
+			} else if ( !$this->isRecoveryTokenValid( $token ) ) {
+				return "The recovery token is invalid or has already expired !";
+			}
+		}
+
+		public function		validateActivationToken ( $token ) {
+			if ( !$token ) {
+				return "No token found !";
+			} else if ( !$this->isActivationTokenValid( $token ) ) {
+				return "The activation token is invalid or the account already activated !";
+			}
 		}
 
 		public function		new_password ( $data )
 		{
-			if ( $data['newpassword'] == "" || $data['confirmation_password'] == "" || $data['token'] == "" ) { return "Invalid data provided !"; }
-			else if ( $error = $this->validatePassword( $data['newpassword'] ) ) { return $error; }
-			else if ( $data['newpassword'] != $data['confirmation_password'] ) { return "Passwords doesn't match !"; }
-			else if ( !$this->isRecoveryTokenValid( $data['token'] ) ) { return "The recovery token is invalid or has already expired !"; }
-			else { return null; }
+			if ( !$data['newpassword'] || !$data['confirmation_password'] || !$data['token'] ) {
+				return "Invalid data provided !";
+			} else if ( $error = $this->validatePassword( $data['newpassword'] ) ) {
+				return $error;
+			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {
+				return "Passwords doesn't match !";
+			} else if ( !$this->isRecoveryTokenValid( $data['token'] ) ) {
+				return "The recovery token is invalid or has already expired !";
+			}
+		}
+		
+		// Middleware for validating edited data
+		public function      edit ( $userID, $data )
+		{
+			if (
+				( $error = $this->validateFirstname( $data['firstname'] ) ) ||
+				( $error = $this->validateLastname( $data['lastname'] ) ) ||
+				( $error = $this->validateUsername( $data['username'] ) ) ||
+				( $error = $this->validateEmail( $data['email'] ) ) ||
+				( $error = $this->validateGender( $data['gender'] ) ) ||
+				( $error = $this->validateAddress( $data['address'] ) )
+			) {
+				return $error;
+			} else if ( $this->isUsernameEditedExists( $userID, $data['username'] ) ) {
+				return "The username is already exists !";
+			} else if ( $this->isEmailEditedExists( $userID, $data['email'] ) ) {
+				return "The email is already exists !";
+			}
 		}
 
-		public function		validateRecoveryToken ( $token ) {
-			if ( !$token ) { return "No token found !"; }
-			else if ( !$this->isRecoveryTokenValid( $token ) ) { return "The activation token is invalid or has already expired !"; }
-			else { return null; }
-		}
-
-		public function		validateActivationToken ( $token ) {
-			if ( !$token ) { return "No token found !"; }
-			else if ( !$this->isActivationTokenValid( $token ) ) { return "The activation token is invalid or the account already activated !"; }
-			else { return null; }
+		public function		change_password ( $id, $data )
+		{
+			if (
+				( $error = $this->validateNewPassword( $data['oldpassword'] ) ) ||
+				( $error = $this->validateOldPassword( $data['newpassword'] ) )
+			) {
+				return $error;
+			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {
+				return "Passwords doesn't match !";
+			} else if ( !$this->isThePasswordIsValid( $id, null, $data['oldpassword'] ) ) {
+				return "The old password is Incorrect !";
+			}
 		}
 
 	}
