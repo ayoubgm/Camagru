@@ -6,6 +6,8 @@
 }
 
 body {
+	height:100%;
+    /*display: table;*/
 	background: url('../images/background-img7.jpg') no-repeat center center fixed; 
 	background-size: cover;
 }
