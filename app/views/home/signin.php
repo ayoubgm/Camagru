@@ -1,3 +1,7 @@
+<?php
+	$data;
+	if ( isset( $this->view_data ) ) { $data = $this->view_data; }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,8 +49,8 @@
 								</div>
 							</div>
 							<div class="text-center" id="area-msg">
-								<span id="msg" class="<?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
-									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
+								<span id="msg" class="<?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
+									<?php if ( isset($data['msg']) ) echo $data['msg']; ?>
 								</span>
 							</div>
 							<div class="row">

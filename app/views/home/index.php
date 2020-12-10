@@ -20,9 +20,9 @@
 <body>
 	<?php require_once(VIEWS . "_header.php"); ?>
 	<div class="jumbotron">
-		<div class="container col-lg-8">
-			<h1 class="display-3">
-				<?php echo ( isset($_SESSION['userid']) ) ? "Welcome" : ""; ?>
+		<div class="container col-lg-10">
+			<h1 class="display-4">
+				<?php echo ( isset($_SESSION['userid']) ) ? "Welcome ".$userData["username"] : "Welcome"; ?>
 			</h1>
 			<p class="lead">Make your pictures looks nice with our editor.</p>
 			<hr class="my-4">

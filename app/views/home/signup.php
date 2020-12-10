@@ -1,3 +1,7 @@
+<?php
+	$data;
+	if ( isset( $this->view_data ) ) { $data = $this->view_data; }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,13 +16,13 @@
 	<div class="container col-md-7 p-0 h-100">
 		<div class="card">
 			<div class="row no-gutters">
-				<div class="col-md-4 d-none d-lg-block">
+				<div class="col-md-4 d-none d-xlg-block">
 					<img src="/public/images/background-img4.jpg" class="card-img">
 				</div>
-				<div class="col-lg-8">
+				<div class="col-lg-12">
 					<div class="card-body">
 						<p class="card-title">Registration</p>
-						<form action="/signup" method="POST" onsubmit="return validateRegisterData();">
+						<form action="/signup" method="POST" >
 							<div class="form-row m-0 mb-1">
 								<div class="form-group col-lg-6">
 									<label for="inputFirstName">Firstname <span class="text-danger">*</span>:</label>
@@ -28,7 +32,7 @@
 										id="inputFirstName"
 										name="firstname"
 										placeholder="firstname"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['firstname']) ){
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['firstname']) ){
 											echo $_POST['firstname'];
 										} ?>"
 										oninput="validateFirstName(this)"
@@ -42,7 +46,7 @@
 										name="lastname"
 										id="inputLastName"
 										placeholder="lastname"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['lastname']) ){ echo $_POST['lastname']; } ?>"
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['lastname']) ){ echo $_POST['lastname']; } ?>"
 										oninput="validateLastName(this)"
 									/>
 								</div>
@@ -56,7 +60,7 @@
 										name="username"
 										id="inputUsername"
 										placeholder="username"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['username']) ){ echo $_POST['username']; } ?>"
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['username']) ){ echo $_POST['username']; } ?>"
 										oninput="validateUsername(this)"
 									/>
 								</div>
@@ -68,7 +72,7 @@
 										name="email"
 										id="inputEmail"
 										placeholder="email"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['email']) ){ echo $_POST['email']; } ?>"
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['email']) ){ echo $_POST['email']; } ?>"
 										oninput="validateEmail(this)"
 									/>
 								</div>
@@ -79,13 +83,13 @@
 									<select class="custom-select" name="gender">
 										<option
 										<?php 
-											if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "male"){
+											if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "male"){
 												echo "Selected";
 											}
 										?> value="male">Male</option>
 										<option
 										<?php 
-											if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "female"){
+											if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "female"){
 												echo "Selected";
 											}
 										?> value="female">Female</option>
@@ -99,7 +103,7 @@
 										name="address"
 										id="inputAddress"
 										placeholder="address"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['address']) ){ echo $_POST['address']; } ?>"
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['address']) ){ echo $_POST['address']; } ?>"
 										oninput="validateAddress(this)"
 									/>
 								</div>
@@ -113,7 +117,7 @@
 										name="password"
 										id="inputPassword"
 										placeholder="password"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['password']) ){ echo $_POST['password']; } ?>"
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['password']) ){ echo $_POST['password']; } ?>"
 										oninput="validatePassword(this)"
 									/>
 								</div>
@@ -125,20 +129,20 @@
 										name="confirmation_password"
 										id="inputConfirmationPass"
 										placeholder="Confirmation password"
-										value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['confirmation_password']) ){ echo $_POST['confirmation_password']; } ?>"
+										value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['confirmation_password']) ){ echo $_POST['confirmation_password']; } ?>"
 										oninput="validateConfPass(this)"
 									/>
 								</div>
 							</div>
 							<div class="row text-center px-5 py-4">
-								<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
-									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
+								<span id="msg" class="w-100 <?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
+									<?php if ( isset($data['msg']) ) echo $data['msg'];?>
 								</span>
 							</div>
 							<div class="form-row register my-5">
 								<input
 									type="submit"
-									class="offset-2 col-8 btn btn-outline-primary w-50"
+									class="offset-2 col-8 btn btn-primary w-50"
 									value="Register"
 									id="btn-signup"
 									name="btn-signup"
@@ -182,54 +186,76 @@
 
 	// Validate firstname by run some regex
 	const 			validateFirstName = ( firstname ) => {
-		if ( !/^[a-zA-Z]{3,30}$/.test( firstname.value ) ) { setError(firstname, "The firstname must contains letters only ( between 3 and 30 ) !"); return false; }
-		else { setSuccess(firstname); return true;}
+		if ( !/^[a-zA-Z]{3,30}$/.test( firstname.value ) ) {
+			setError(firstname, "The firstname must contains letters only ( between 3 and 30 ) !"); return false;
+		} else {
+			setSuccess(firstname); return true;
+		}
 	}
 	// Validate lastname by run some regex
 	const 			validateLastName = ( lastname ) => {
-		if ( !/^[a-zA-Z]{3,30}$/.test( lastname.value ) ) { setError(lastname, "The lastname must contains letters only ( between 3 and 30 ) !"); return false; }
-		else { setSuccess(lastname); return true; }
+		if ( !/^[a-zA-Z]{3,30}$/.test( lastname.value ) ) {
+			setError(lastname, "The lastname must contains letters only ( between 3 and 30 ) !"); return false;
+		} else {
+			setSuccess(lastname); return true;
+		}
 	}
 	// Validate lastname by run some regex
 	const 			validateUsername = ( username ) => {
 		if ( !/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-zA-Z0-9._-]+(?<![-_.])$/.test( username.value ) ) {
 			setError(username, "The username should contain between 3 and 20 letters or numbers ( -, _ or . ) !"); return false;
-		} else { setSuccess(username); return true; }
+		} else {
+			setSuccess(username); return true;
+		}
 	}
 	// Validate email by run some regex
 	const			validateEmail = ( email ) => {
-		if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) { setError(email, "Invalid email address !"); return false; }
-		else { setSuccess(email); return true; }
+		if ( !/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/.test( email.value ) ) {
+			setError(email, "Invalid email address !"); return false;
+		} else {
+			setSuccess(email); return true;
+		}
 	}
 	// Validate address by run adress
 	const 			validateAddress = ( address ) => {
 		if ( !/^[a-zA-Z0-9\s,'-]*$/.test( address.value ) ) {
 			setError(address, "The address should be contains letters or numbers ( ',', ' or - ) !");
 			return false;
-		} else { setSuccess(address); return true; }
+		} else {
+			setSuccess(address); return true;
+		}
 	}
 	// Validate password by run some regex
 	const 			validatePassword = ( password ) => {
 		if ( !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/.test( password.value ) ) {
 			setError(password, "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !");
 			return false;
-		} else { setSuccess(password); return true; }
+		} else {
+			setSuccess(password); return true;
+		}
 	}
 
 	const			validateConfPass = ( confirmationPassword ) => {
-		if ( password.value !== confirmationPassword.value ) { setError(confirmationPassword, "Passwords doesn't match"); return false; }
-		else { setSuccess(confirmationPassword); return true; }
+		if ( password.value !== confirmationPassword.value ) {
+			setError(confirmationPassword, "Passwords doesn't match"); return false;
+		} else {
+			setSuccess(confirmationPassword); return true;
+		}
 	}
 
 	const validateRegisterData = () => {
-		if ( firstname.value === "" || lastname.value === "" || username.email === "" || email.value === "" || password.value === "" || confirmationPassword.value === "" ) { setError(firstname, "Invalid data provided"); return false; }
-		else if ( !validateFirstName( firstname ) ) { return false; }
-		else if ( !validateLastName( lastname ) ) { return false; }
-		else if ( !validateUsername( username ) ) { return false; }
-		else if ( !validateEmail( email ) ) { return false; }
-		else if ( !validateAddress( address ) ) { return false; }
-		else if ( !validatePassword( password ) ) { return false; }
-		else if ( !validateConfPass( confirmationPassword ) ) { return false; }
+		if ( firstname.value === "" || lastname.value === "" || username.email === "" || email.value === "" || password.value === "" || confirmationPassword.value === "" ) {
+			setError(firstname, "Invalid data provided");
+			return false;
+		} else if (
+			!validateFirstName( firstname ) ||
+			!validateLastName( lastname ) ||
+			!validateUsername( username ) ||
+			!validateEmail( email ) ||
+			!validateAddress( address ) ||
+			!validatePassword( password ) ||
+			!validateConfPass( confirmationPassword )
+		) { return false; }
 		else { return true; }
 	}
 </script>
