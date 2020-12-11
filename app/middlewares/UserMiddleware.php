@@ -11,11 +11,11 @@
 		{
 			if ( !$data['username'] || !$data['password'] ) {
 				return "Invalid data provided !";
-			} else if ( !$this->isUsernameExists( strtolower( $data['username']) ) ) {
+			} else if ( !$this->isUsernameExists( $data['username']) ) {
 				return "The account does't exists !";
-			} else if ( !$this->isActiveAccount( strtolower( $data['username' ]) ) ) {
+			} else if ( !$this->isActiveAccount( $data['username' ]) ) {
 				return "You must activate your account first !";
-			} else if ( !$this->isThePasswordIsValid( null, strtolower( $data['username' ]), $data['password'] ) ) {
+			} else if ( !$this->isThePasswordIsValid( null, $data['username' ], $data['password'] ) ) {
 				return "Incorrect password !";
 			}
 		}
@@ -23,7 +23,7 @@
 		// Middleware for validating register data
 		public function      signup ( $data )
 		{
-			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email'] || !$data['password'] || !$data['confirmation_password'] ) {
+			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email'] || !$data['gender']  || !$data['password'] || !$data['confirmation_password'] ) {
 				return "Invalid data provided !";
 			} else if (
 				( $error = $this->validateFirstname( $data['firstname'] ) ) ||
@@ -89,7 +89,9 @@
 		// Middleware for validating edited data
 		public function      edit ( $userID, $data )
 		{
-			if (
+			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email']  || !$data['gender'] ) {
+				return "Invalid data provided !";
+			} else if (
 				( $error = $this->validateFirstname( $data['firstname'] ) ) ||
 				( $error = $this->validateLastname( $data['lastname'] ) ) ||
 				( $error = $this->validateUsername( $data['username'] ) ) ||

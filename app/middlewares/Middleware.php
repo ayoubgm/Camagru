@@ -7,42 +7,42 @@
 
 		protected function		validateFirstname ( $firstname )
 		{
-			return ( !preg_match( "/^[a-zA-Z]{3,30}$/", $firstname ) )
+			return ( !preg_match( "/^[a-z]{3,30}$/", strtolower( $firstname ) ) )
 			? "The firstname must contains letters only ( between 3 and 30 ) !"
 			: null;
 		}
 
 		protected function		validateLastname ( $lastname )
 		{
-			return ( !preg_match( "/^[a-zA-Z]{3,30}$/", $lastname ) )
+			return ( !preg_match( "/^[a-z]{3,30}$/", strtolower( $lastname ) ) )
 			? "The lastname must contains letters only ( between 3 and 30 ) !"
 			: null;
 		}
 
 		protected function		validateUsername ( $username )
 		{
-			return ( !preg_match( "/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-zA-Z0-9._-]+(?<![-_.])$/", $username ) )
+			return ( !preg_match( "/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-z0-9._-]+(?<![-_.])$/", strtolower( $username ) ) )
 			? "The username should contain between 3 and 20 letters or numbers ( -, _ or . ) !"
 			: null;
 		}
 
 		protected function		validateEmail ( $email )
 		{
-			return ( !preg_match( "/[a-zA-Z0-9-_.]{1,50}@[a-zA-Z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/", $email ) )
+			return ( !preg_match( "/[a-z0-9-_.]{1,50}@[a-z0-9-_.]{1,50}\.[a-z0-9]{2,10}$/", strtolower( $email ) ) )
 			? "Invalid email address !"
 			: null;
 		}
 
 		protected function		validateGender ( $gender )
 		{
-			return ( $gender == "male" || $gender == "female" )
+			return ( strtolower($gender) == "male" || strtolower($gender) == "female" )
 			? null
 			: "The gender should be either male or female !";
 		}
 
 		protected function		validateAddress ( $address )
 		{
-			return ( !preg_match("/^[a-zA-Z0-9\s,'-]*$/", $address) )
+			return ( !preg_match("/^[a-z0-9\s,'-]*$/", strtolower($address)) )
 			? "The address should be contains letters or numbers ( ',', ' or - ) !"
 			: null;
 		}
@@ -72,28 +72,28 @@
 		protected function		isFullnameExists ( $firstname, $lastname )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE firstname = ? AND lastname = ?");
-			$stt->execute([ $firstname, $lastname ]);
+			$stt->execute([ strtolower($firstname), strtolower($lastname) ]);
 			return( $stt->fetch() );
 		}
 
 		protected function		isUsernameExists ( $username )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
-			$stt->execute([ $username ]);
+			$stt->execute([ strtolower( $username ) ]);
 			return( $stt->fetch() );
 		}
 
 		protected function		isEmailExists ( $email )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE email = ?");
-			$stt->execute([ $email ]);
+			$stt->execute([ strtolower( $email ) ]);
 			return( $stt->fetch() );
 		}
 
 		protected function		isActiveAccount ( $username )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
-			$stt->execute([ $username ]);
+			$stt->execute([ strtolower( $username ) ]);
 			$userData = $stt->fetch();
 			
 			return ( empty($userData['activationToken']) );
@@ -101,12 +101,12 @@
 
 		protected function		isThePasswordIsValid( $id, $username, $password )
 		{
-			if (  $id != null ) {
+			if ( $id ) {
 				$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE id = ?");
 				$stt->execute([ $id ]);
-			} else if ( $username != null ){
+			} else if ( $username ){
 				$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
-				$stt->execute([ $username ]);
+				$stt->execute([ strtolower( $username ) ]);
 			}
 			$userData = $stt->fetch();
 			return ( password_verify($password, $userData['password']) );
@@ -115,14 +115,14 @@
 		protected function		isUsernameEditedExists ( $userid, $username )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ? AND id <> ?");
-			$stt->execute([ $username, $userid ]);
+			$stt->execute([ strtolower( $username ), $userid ]);
 			return( $stt->fetch() );
 		}
 
 		protected function		isEmailEditedExists ( $userid, $email )
 		{
 			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE email = ? AND id <> ?");
-			$stt->execute([ $email, $userid ]);
+			$stt->execute([ strtolower( $email ), $userid ]);
 			return( $stt->fetch() );
 		}
 
