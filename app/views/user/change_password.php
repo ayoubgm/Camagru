@@ -126,7 +126,10 @@
 		if ( !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/.test( password.value ) ) {
 			setError(password, "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !");
 			return false;
-		} else { setSuccess(password); return true; }
+		} else {
+			setSuccess(password);
+			return true;
+		}
 	}
 	const			validateConfPass = ( ) => {
 		if ( newpassword.value !== confirmationPassword.value ) {
