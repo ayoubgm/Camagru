@@ -66,7 +66,7 @@
 			$editedData['id'] = $userID;
 			$query = 'UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?';
 			$stt = $this->connect()->prepare( $query );
-			return $stt->execute( array_values($editedData) );
+			return $stt->execute( array_map( 'strtolower', array_values($editedData) ) );
 		}
 
 		public function			change_password ( $userID, $newPassword )
