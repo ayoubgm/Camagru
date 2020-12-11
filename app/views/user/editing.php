@@ -16,10 +16,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Editing</title>
 	<link rel="icon" href="/public/images/logo.png">
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/editing.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_header.css"/>
-	<link rel="stylesheet" href="<?php echo PUBLIC_FOLDER; ?>/css/_footer.css"/>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/public/css/editing.css"/>
+	<link rel="stylesheet" href="/public/css/_header.css"/>
+	<link rel="stylesheet" href="/public/css/_footer.css"/>
 </head>
 <body>
 	<?php require_once(VIEWS . "_header.php");?>
@@ -47,18 +47,18 @@
 						<hr/>
 						<div class="row">
 							<select id="stickers-select" class="col-6 form-control" name="sticker" multiple onchange="viewOption(this)">
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker01.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker01.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker02.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker02.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker03.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker03.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker04.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker04.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker05.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker05.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker06.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker06.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker07.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker07.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker08.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker08.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker09.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker09.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker10.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker10.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker11.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker11.png"></option>
-								<option style="background-image: url(<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker12.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker12.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker01.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker01.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker02.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker02.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker03.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker03.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker04.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker04.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker05.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker05.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker06.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker06.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker07.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker07.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker08.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker08.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker09.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker09.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker10.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker10.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker11.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker11.png"></option>
+								<option style="background-image: url(/public/images/stickers/sticker12.png);" value="<?php echo PUBLIC_FOLDER; ?>/images/stickers/sticker12.png"></option>
 							</select>
 							<div class="col-6">
 								<div class="form-row">
@@ -90,20 +90,24 @@
 							}
 						}
 					?>
-				</div>`
+				</div>
 			</div>
 		</div>
 		<div class="model-bg">
-			<div class="model row">
+			<div class="model row col-md-6">
 				<div id="canvas-area">
 					<div class="row" id="model-header" >
 						<h4>Save it to the gallery</h4>
-						<img id="icon-cancel" src="<?php echo PUBLIC_FOLDER; ?>/images/cancel.png"/>
+						<img id="icon-cancel" src="/public/images/cancel.png"/>
 					</div>
 					<hr/>
 					<div id="row" class="p-2">
-						<canvas id="canvas" width="640" height="480" name="image"></canvas>	
+						<canvas id="canvas" width="640" height="480" name="image" class="img-fluid"></canvas>	
 						<canvas id="canvas-webcam" width="640" height="480" name="image" hidden></canvas>
+					</div>
+					<div id="area-description" class="row">
+						<label for="description" class="col-lg-2 font-weight-bold">Description :</label>
+						<input id="description" name="description" class="col-lg-10 w-100" autocomplete="off" required />
 					</div>
 					<div class="row d-flex justify-content-between px-5 py-1">
 						<input type="submit" name="btn-save" id="btn-save" class="btn btn-dark w-25" value="Save" />
@@ -115,8 +119,8 @@
 	</form>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_menu.js"></script>
-<script src="<?php echo PUBLIC_FOLDER; ?>/js/_userMenu.js"></script>
+<script src="/public/js/_menu.js"></script>
+<script src="/public/js/_userMenu.js"></script>
 <script>
 	const video = document.querySelector("#videoElement");
 	const fileInput = document.getElementById('fileInput');
@@ -132,6 +136,7 @@
 	const modelBG = document.querySelector('.model-bg');
 	const modelClose = document.querySelector('#icon-cancel');
 	const textarea = document.getElementById('textarea');
+	const description = document.getElementById('description');
 	let context = canvas.getContext('2d');
 	let contextWebcam = canvasWebcam.getContext('2d');
 	let base_image = new Image();
@@ -139,18 +144,14 @@
 	// Web cam
 	var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
 
+	if ( navigator.mediaDevices.getUserMedia ) {
+		navigator.mediaDevices.getUserMedia({ 'video': true })
+		.then(( stream ) => { video.srcObject = stream; })
+		.catch(( error ) => { console.log("If your camera doesn't work you can upload an image !"); });
+	}
 	const viewOption = ( option ) => {
 		if ( option.value != "" && navigator.mediaDevices.getUserMedia ) {
-			navigator.mediaDevices.getUserMedia({ 'video': true })
-			.then(( stream ) => {
-				video.srcObject = stream;
-				fileInput.removeAttribute('disabled');
-				btn_capture.removeAttribute('disabled');
-			})
-			.catch(( error ) => {
-				console.log("If your camera doesn't work you can upload an image !");
-				fileInput.removeAttribute('disabled');
-			});
+			btn_capture.removeAttribute('disabled');
 			base_image.src = option.value;
 		} else {
 			btn_capture.setAttribute('disabled', 'on');
@@ -169,8 +170,8 @@
 		fileInput.value = "";
 	});
 	btn_cancel.addEventListener('click', () => {
-		fileInput.files = "";
 		modelBG.classList.remove('active-model');
+		fileInput.value = "";
 	});
 
 	// Event listener for image upload 
