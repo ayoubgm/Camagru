@@ -97,7 +97,7 @@ form {
 
 .model {
     width: 80%;
-    height: 100%;
+    height: 50% ;
     background-color: white;
     border-radius: 8px;
     padding: 8px;
@@ -129,10 +129,21 @@ form {
     border-radius: 100%;
 }
 
+.model #canvas-area #area-description {
+    width: 100%;
+    position: relative;
+}
+.model #canvas-area #area-description #description {
+    font-size: 14pt;
+    height: 35px;
+}
+
+
 #canvas {
     border-radius: 8px;
 }
 
 @media (max-width: 991.98px) {
     #main #main-section { height: 1180px; }
+    .model #canvas-area #area-description { padding-left: 18px; }
 }
