@@ -13,7 +13,7 @@
 			return $stt->execute([
 			    $data['id'],
 				$data['src'],
-				"HOHOHOHOH"
+				$data['description']
 			]);
 		}
 
@@ -41,7 +41,7 @@
 		public function         getAllEditedImages ( $depart = 0, $imagePerPage = 5 )
 		{
 			$query = '
-			    SELECT g.*, u.username, u.gender, g.createdat
+			    SELECT g.*, u.username, u.gender
 			    FROM `gallery` g INNER JOIN `users` u
 			    ON g.userid = u.id
 			    ORDER BY g.createdat DESC LIMIT '.$depart.','.$imagePerPage;
