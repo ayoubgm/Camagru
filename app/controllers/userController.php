@@ -234,33 +234,38 @@
 						break;
 						case "POST":
 							if ( isset( $_POST["btn-save"] ) ) {
-								$imgWebcam = $_POST["dataimage"];
-								$imgCamBase64 = str_replace('data:image/png;base64', '', $imgWebcam);
-								$finalImageCam = str_replace(' ', '+', $imgCamBase64);
-								$fileData = base64_decode( $finalImageCam );
-								$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
-								file_put_contents($pathFile, $fileData);
-								$srcPath = $_POST['sticker'];
-								$destPath = self::transformPathFileToUrl( $pathFile );
-								if ( $srcFinaleImg = $this->makeMixedImage( $this->viewData['data']['userData'], $destPath, $srcPath, intval($_POST['x']), intval($_POST['y']) ) ) {
-									unlink( $pathFile );
-									$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
-									if ( $this->galleryModel->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg ]) ) {
-										unlink( $pathFile );
-										$this->viewData['success'] = "true";
-										$this->viewData['msg'] = "Image has been saved successfully !";
-										$this->viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
-										$this->viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
-									} else {
-										$this->viewData['success'] = "false";
-										$this->viewData['msg'] = "Failed to create final image !";
-										$this->viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
-										$this->viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
-									}
-								} else {
-									unlink( $pathFile );
+								if ( $error = $this->userMiddleware->validateDescription( $_POST["description"] ) ) {
 									$this->viewData["success"] = "false";
-									$this->viewData["msg"] = "Something goes wrong while create final image try later !";
+									$this->viewData["msg"] = $error;
+								} else {
+									$imgWebcam = $_POST["dataimage"];
+									$imgCamBase64 = str_replace('data:image/png;base64', '', $imgWebcam);
+									$finalImageCam = str_replace(' ', '+', $imgCamBase64);
+									$fileData = base64_decode( $finalImageCam );
+									$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
+									file_put_contents($pathFile, $fileData);
+									$srcPath = $_POST["sticker"];
+									$destPath = self::transformPathFileToUrl( $pathFile );
+									if ( $srcFinaleImg = $this->makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
+										unlink( $pathFile );
+										$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
+										if ( $this->galleryModel->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
+											unlink( $pathFile );
+											$this->viewData["success"] = "true";
+											$this->viewData["msg"] = "Image has been saved successfully !";
+											$this->viewData["data"]["gallery"] = $this->galleryModel->getAllEditedImages();
+											$this->viewData["data"]["userGallery"] = $this->galleryModel->userGallery( $_SESSION["username"] );
+										} else {
+											$this->viewData["success"] = "false";
+											$this->viewData["msg"] = "Failed to create final image !";
+											$this->viewData["data"]["gallery"] = $this->galleryModel->getAllEditedImages();
+											$this->viewData["data"]["userGallery"] = $this->galleryModel->userGallery( $_SESSION["username"] );
+										}
+									} else {
+										unlink( $pathFile );
+										$this->viewData["success"] = "false";
+										$this->viewData["msg"] = "Something goes wrong while create final image try later !";
+									}
 								}
 							}
 						break;
