@@ -121,5 +121,10 @@
 			}
 		}
 
+		public function		validateDescription ( $description )
+		{
+			return $this->validateImageDescription( $description );
+		} 
+
 	}
 ?>
