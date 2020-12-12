@@ -1,96 +1,100 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial';
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Arial';
 }
 
 body {
-    background-image: url('../images/background-img13.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    flex-direction: column;
+	background: url('../images/background-img13.jpg') no-repeat center center fixed; 
+	background-size: cover;
+	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 #alert-msg {
-    width: 100%;
-    font-size: 12pt;
-    font-weight: bold;
+	width: 100%;
+	font-size: 12pt;
+	font-weight: bold;
 }
 
 #gallery {
-    margin-top: 5px;
-    margin-left: 5px;
+	margin-top: 15px;
+	margin-left: 7%;
 }
 
 .card {
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    padding: 2px;
-    box-shadow: 5px 10px 20px rgb(87, 87, 87);
-    width: 32.5%;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	padding: 2px;
+	box-shadow: 5px 10px 20px rgb(87, 87, 87);
 }
 
 .card .card-title {
-    margin: 0;
-    font-weight: bold;
-    font-size: 11pt;
-    color: white;
+	margin: 0;
+	font-weight: bold;
+	font-size: 11pt;
+	color: white;
 }
 
 .card .card-title img#user-img {
-    border-radius: 100%;
-    width: 55px;
-    cursor: pointer;
+	border-radius: 100%;
+	width: 55px;
+	cursor: pointer;
 }
 
 .card .card-title a#user-link {
-    text-decoration: none;
-    color: rgb(46, 46, 46);
+	text-decoration: none;
+	color: rgb(46, 46, 46);
+}
+
+.card .card-title #area-description {
+	color: black;
+	padding: 3px;
+	font-weight: lighter;
 }
 
 .card .card-body {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .card .card-body img {
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 }
 
 .card .card-footer {
-    padding: 10px 0px 10px 0px;
-    margin: 0;
-    font-size: 10pt;
-    color: rgb(46, 46, 46);
+	padding: 10px 0px 10px 0px;
+	margin: 0;
+	font-size: 10pt;
+	color: rgb(46, 46, 46);
 }
 .card .card-footer .footer1 {
-    margin-bottom: 30px;
-    padding: 0px 10px;
+	margin-bottom: 30px;
+	padding: 0px 10px;
 }
 .card .card-footer .footer2 {
-    padding: 0px 35px;
+	padding: 0px 35px;
 }
 .card .card-footer .footer1,
 .card .card-footer .footer2 {
-    width: 100%;
+	width: 100%;
 }
 
 .card .card-footer .footer1 .footer-side1 {
-    font-size: 8pt;
-    float: left;
+	font-size: 8pt;
+	float: left;
 }
 
 .card .card-footer .footer1 .footer-side2 {
-    float: right;
+	float: right;
 }
 
 .card .card-footer .footer1 .footer-side2 span {
-    font-size: 9pt;
+	font-size: 9pt;
 }
 
 .card .card-footer .footer1 .footer-side1 div#likes,
@@ -99,114 +103,114 @@ body {
 
 .card .card-footer .footer1 .footer-side1 div#likes img#icone-like,
 .card .card-footer .footer1 .footer-side1 div#comments img#icone-comment {
-    cursor: pointer;
-    width: 15px;
-    height: 15px;
-    margin-bottom: 4px;
+	cursor: pointer;
+	width: 15px;
+	height: 15px;
+	margin-bottom: 4px;
 }
 
 .card .card-footer .footer2 .like {
-    float: left;
+	float: left;
 }
 
 .card .card-footer .footer2 .comment {
-    float: right;
+	float: right;
 }
 
 .card .card-footer .footer2 .like #btn-like,
 .card .card-footer .footer2 .comment #btn-comment {
-    border: 0;
-    background-color: transparent; 
+	border: 0;
+	background-color: transparent; 
 }
 
 .card .card-footer .footer2 .like #btn-like img,
 .card .card-footer .footer2 .comment #btn-comment img {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
 }
 
 /* comments model */
 .model-bg {
-    width: 100%;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(141, 191, 255, 0.363);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.5s;
+	width: 100%;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(141, 191, 255, 0.363);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.5s;
 }
 
 .active-model {
-    visibility: visible;
-    opacity: 1;
+	visibility: visible;
+	opacity: 1;
 }
 
 .model {
-    width: 80%;
-    height: 80%;
-    background-color: white;
-    border-radius: 8px;
-    padding: 8px;
-    position: relative;
+	width: 80%;
+	height: 80%;
+	background-color: white;
+	border-radius: 8px;
+	padding: 8px;
+	position: relative;
 }
 
 .model #model-header {
-    padding: 10px 0px 0px 10px;
+	padding: 10px 0px 0px 10px;
 }
 .model #model-header div#title {
-    font-size: 14pt;
-    text-align: left;
+	font-size: 14pt;
+	text-align: left;
 }
 
 .model #model-header div#close img {
-    margin-right: 20px;
+	margin-right: 20px;
 }
 
 .model #model-header div h6 {
-    letter-spacing: 3px;
-    font-size: 11pt;
-    font-weight: bold;
-    color: rgb(54, 54, 54);
+	letter-spacing: 3px;
+	font-size: 11pt;
+	font-weight: bold;
+	color: rgb(54, 54, 54);
 }
 .model #model-header div #icon-cancel {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    cursor: pointer;
-    border-radius: 100%;
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	border-radius: 100%;
 }
 
 .model .area-comments {
-    width: 100%;
-    height: 80%;
+	width: 100%;
+	height: 80%;
 }
 
 .model .area-comments .comments {
-    height: 80%;
-    background-color: #d1d1d1;
-    border-radius: 8px;
+	height: 80%;
+	background-color: #d1d1d1;
+	border-radius: 8px;
 }
 
 .area-write-coment div #user-img {
-    width: 55px;
-    height: 55px;
+	width: 55px;
+	height: 55px;
 }
 
 .area-write-coment div textarea#commentInput {
-    height: 90px;
-    resize: none;
+	height: 90px;
+	resize: none;
 }
 
 @media (max-width: 750.98px) {
-    .card {
-        width: 100%;
-    } 
+	#gallery {
+		margin-left: 0%;
+	}
 }
