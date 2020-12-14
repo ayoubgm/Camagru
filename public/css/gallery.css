@@ -98,15 +98,16 @@ body {
 }
 
 .card .card-footer .footer1 .footer-side1 div#likes,
-.card .card-footer .footer1 .footer-side1 div#comments
-{ padding: 0px 5px; float: left; font-size: 9pt; font-weight: 500; }
+.card .card-footer .footer1 .footer-side1 div#comments {
+	width: 30px;
+	height: 20px;
+	float: left;
+}
 
 .card .card-footer .footer1 .footer-side1 div#likes img#icone-like,
 .card .card-footer .footer1 .footer-side1 div#comments img#icone-comment {
-	cursor: pointer;
 	width: 15px;
 	height: 15px;
-	margin-bottom: 4px;
 }
 
 .card .card-footer .footer2 .like {
@@ -123,7 +124,7 @@ body {
 	background-color: transparent; 
 }
 
-.card .card-footer .footer2 .like #btn-like img,
+.card .card-footer .footer2 .like img,
 .card .card-footer .footer2 .comment #btn-comment img {
 	width: 25px;
 	height: 25px;
