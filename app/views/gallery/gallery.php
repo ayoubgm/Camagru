@@ -1,16 +1,20 @@
 <?php
-	var_dump( $this->view_data['data']['gallery'][0] );
-   	if ( isset( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-		$totalImages = $data['totalImages'];
-		$imagePerPage = 5;
-		$currentPage = $data['page'];
-		$totalPages = ceil( $totalImages / $imagePerPage );
-		$gallery = $data['gallery'];
-		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
-		$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
-		$usersLikedImgs = ( isset( $data['usersLikedImgs'] ) ) ? $data['usersLikedImgs'] : null;
+	$data = $this->view_data["data"];
+	$totalImages = $data['totalImages'];
+	$imagePerPage = 5;
+	$currentPage = $data['page'];
+	$totalPages = ceil( $totalImages / $imagePerPage );
+	$gallery = $data['gallery'];
+	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
+	$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
+	
+	function		searchForMyLike ( $users, $userid ) {
+		foreach ( $users as $key => $value ) {
+			if ( $value["id"] == $userid ) { return true; }
+		}
+		return false;
 	}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,9 +42,35 @@
 				<div class="card col-md-4 col-lg-5 col-xl-3" id="image">
 					<div class="card-body">
 						<div class="card-title">
-							<img id="user-img" src="<?php echo ( $image['gender'] == "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png" ?>"/>
-							<a id="user-link" href="/user/profile/username/"<?php echo $image['username']; ?>">By <?php print( $image['username'] ); ?></a>
-							<div id="area-description"><?php print( $image['description'] ); ?></div>
+							<div class="float-right w-100">
+								<div id="area-user" class="float-left">
+									<img id="user-img" src="<?php echo ( $image['gender'] == "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png" ?>"/>
+									<a id="user-link" href="/user/profile/username/"<?php echo $image['username']; ?>">By <?php print( $image['username'] ); ?></a>
+								</div>
+								<div id="area-img-menu" class="float-right">
+									<?php if ( $image["userid"] == $_SESSION["userid"] ) { ?>
+										<div
+											id="btn-details-img-<?php echo $image["id"]; ?>"
+											class="burger-img"
+											onclick="showDetailsImgMenu ( this.id );"
+										>
+											<div class="line1"></div>
+											<div class="line2"></div>
+											<div class="line3"></div>
+										</div>
+										<div
+											id="details-img-<?php echo $image["id"]; ?>"
+											style="display: none;"
+										>
+											<ul id="details-imgList">
+												<li>Edit</li>
+												<li>Delete</li>
+											</ul>
+										</div>
+									<?php } ?>
+								</div>
+							</div>
+							<div id="area-description" class="float-left"><?php print( $image['description'] ); ?></div>
 						</div>
 					</div>
 					<img id="img-<?php echo $image['id']; ?>" class="card-img" src="<?php print( $image['src'] ); ?>">
@@ -61,37 +91,19 @@
 								</div>
 							</div>
 							<div class="footer-side2">
-								<span>
-									<?php
-										$gmtTimezone = new DateTimeZone('GMT+1');
-										$creatDate = new DateTime( $image['createdat'], $gmtTimezone );
-										$currDate = new DateTime("now", $gmtTimezone);
-										$interval = date_diff( $currDate, $creatDate );
-										$string = "";
-
-										if ( $interval->format('%Y') > 0 ) {
-											$string = $interval->format('%Y').", ".$interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
-										} else if ( $interval->format('%m') > 0 && $interval->format('%m') > 7 ) {
-											$string = $interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
-										} else if ( $interval->format('%d') >= 1 ) {
-											$string = $interval->format('%d')." d";
-										} else if ( $interval->format('%H') >= 1 && $interval->format('%H') <= 24 ) {
-											$string = $interval->format('%h')." h";
-										} else if ( $interval->format('%i') >= 1 && $interval->format('%i') <= 60 ) {
-											$string = $interval->format('%i')." min";
-										} else if ( $interval->format('%s') >= 1 && $interval->format('%s') <= 60 ) {
-											$string = $interval->format('%s')." sec";
-										}
-										echo $string;
-									?>
-								</span>
+								<span> <?php echo $image["moments"]; ?> </span>
 							</div>
 						</div>
 						<div class="footer2">
+						<?php ; ?>
 							<div class="like">
 								<img
 									id="like-img-<?php echo $image['id']; ?>"
-									src="/public/images/icone-like-inactive.png"
+									src="<?php
+											echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) )
+											? "/public/images/icone-like-active.png"
+											: "/public/images/icone-like-inactive.png";
+										?>"
 									onclick="like( this.id )"
 								/>
 							</div>
@@ -149,6 +161,15 @@
 		const activeModel = () => { modelBG.classList.add('active-model'); };
 		const closeModel = () => { modelBG.classList.remove('active-model'); }
 
+		const showDetailsImgMenu = ( burgerId ) => {
+			let imgid = burgerId.split('-')[3];
+			let menuDetailsImg = document.getElementById("details-img-"+imgid);
+			let btnDetailsImg = document.getElementById( burgerId );
+
+			if ( menuDetailsImg.style["display"] == "none" ) menuDetailsImg.style.display = "block";
+			else menuDetailsImg.style.display = "none";
+		}
+		
 		const like = ( id ) => {
 			const imgid = id.split('-')[2];
 			const xhr = new XMLHttpRequest();
@@ -186,6 +207,21 @@
 				}
 			}
 		}
+
+		document.addEventListener("click", ( event ) => {
+				const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
+
+				[].forEach.call( listMenusDetails, ( node ) => {
+					const imgid = node.id.split('-')[2];
+					let btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
+					let btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
+					let menuDetailsIsClicked = node.contains( event.target );
+
+					if ( !btnBurgerIsClicked && !menuDetailsIsClicked && node.style.display == "block" ) {
+						node.style.display = "none"
+					}
+				});
+			});
 
 		setTimeout(() => { if ( alert ) alert.style.display = 'none'; }, 3000);
 
