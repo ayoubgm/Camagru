@@ -24,7 +24,8 @@
 			    FROM `gallery` g INNER JOIN `users` u
 			    ON g.userid = u.id
 			    WHERE u.username = ?
-			    ORDER BY g.createdat DESC LIMIT '.$depart.','.$imagePerPage;
+				ORDER BY g.createdat DESC
+				LIMIT '.$depart.','.$imagePerPage;
 			$stt = $this->connect()->prepare($query);
 			$stt->execute([ strtolower( $username ) ]);
 			return $stt->fetchAll(PDO::FETCH_ASSOC);
@@ -44,7 +45,8 @@
 			    SELECT g.*, u.username, u.gender
 			    FROM `gallery` g INNER JOIN `users` u
 			    ON g.userid = u.id
-			    ORDER BY g.createdat DESC LIMIT '.$depart.','.$imagePerPage;
+				ORDER BY g.createdat DESC
+				LIMIT '.$depart.','.$imagePerPage;
 			$stt = $this->connect()->prepare($query);
 			$stt->execute();
 			return $stt->fetchAll(PDO::FETCH_ASSOC);
