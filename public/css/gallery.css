@@ -69,21 +69,29 @@ body {
 
 [id^=details-img-] {
 	width: 100px;
-	height: 80px;
+	height: 95px;
 	position: absolute;
 	top: 35px;
 	right: 10px;
-	padding: 10px;
 	border-radius: 4px;
 	font-weight: lighter;
 	background-color: rgb(255, 255, 255);
-	box-shadow: 3px 3px 7px rgb(199, 199, 199);
+	box-shadow: 3px 3px 7px rgb(233, 233, 233);
 	display: none;
 	z-index: 1;
 }
 
 [id^=details-img-] ul#details-imgList {
 	list-style-type: none;
+}
+
+[id^=details-img-] ul#details-imgList li {
+	padding: 5px 10px;
+	border-radius: 4px;
+}
+
+[id^=details-img-] ul#details-imgList li:hover {
+	background-color: rgb(163, 172, 251);
 }
 
 .card .card-title #area-description {
@@ -167,7 +175,7 @@ body {
 }
 
 .card .card-footer .footer2 .like img,
-.card .card-footer .footer2 .comment #btn-comment img {
+.card .card-footer .footer2 .comment img {
 	width: 25px;
 	height: 25px;
 	cursor: pointer;
@@ -187,6 +195,7 @@ body {
 	visibility: hidden;
 	opacity: 0;
 	transition: visibility 0s, opacity 0.5s;
+	z-index: 1;
 }
 
 .active-model {
