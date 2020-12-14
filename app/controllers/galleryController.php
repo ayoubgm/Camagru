@@ -5,6 +5,7 @@
 	 */
 	class galleryController extends Controller {
 
+		private $viewData;
 		private $galleryMiddleware;
 		private $usersModel;
 		private $galleryModel;
@@ -14,6 +15,7 @@
 		public function 				__construct()
 		{
 			session_start();
+			$this->viewData = array();
 			$this->usersModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
 			$this->likesModel = self::call_model('LikesModel');
@@ -21,29 +23,58 @@
 			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
 		}
 		
+		static public function			getMomentOfDate( $date )
+		{
+			$gmtTimezone = new DateTimeZone('GMT+1');
+			$creatDate = new DateTime( $date, $gmtTimezone );
+			$currDate = new DateTime("now", $gmtTimezone);
+			$interval = date_diff( $currDate, $creatDate );
+			$string = "";
+
+			if ( $interval->format('%Y') > 0 ) {
+				$string = $interval->format('%Y').", ".$interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
+			} else if ( $interval->format('%m') > 0 && $interval->format('%m') > 7 ) {
+				$string = $interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
+			} else if ( $interval->format('%d') >= 1 ) {
+				$string = $interval->format('%d')." d";
+			} else if ( $interval->format('%H') >= 1 && $interval->format('%H') <= 24 ) {
+				$string = $interval->format('%h')." h";
+			} else if ( $interval->format('%i') >= 1 && $interval->format('%i') <= 60 ) {
+				$string = $interval->format('%i')." min";
+			} else if ( $interval->format('%s') >= 1 && $interval->format('%s') <= 60 ) {
+				$string = $interval->format('%s')." sec";
+			}
+			return $string;
+		}
+
 		/* Load all images edited by users  */
 		public function 				index ( $data )
 		{
-			$viewData = array();
-			$viewData['data'] = [];
 			$page = 1;
 			$imagePerPage = 5;
 
-			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['data'][ 'userData'] = $this->usersModel->findUserById( $_SESSION['userid'] );
-				$viewData['data'][ 'userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
+			if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
+				$this->viewData = [
+					"userData" => $this->usersModel->findUserById( $_SESSION["userid"] ),
+					"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+				];
 			}
 			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
-				$page = intval($data[1]);
+				$page = intval( $data[1] );
 			}
 			$depart = ( $page - 1 ) * $imagePerPage;
-			$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages( $depart, $imagePerPage );
-			foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['usersLikedImgs'][$value['id']] = $this->likesModel->getUsersLikeImage( $value['id'] ); }
-			foreach ($viewData['data']['gallery'] as $value) { $viewData['data']['comments'][$value['id']] = $this->commentsModel->getCommentOfImg( $value['id'] ); }
-			$viewData['data']['totalImages'] = $this->galleryModel->getCountImages();
-			$viewData['data']['page'] = $page;
-
-			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData )->render();
+			$this->viewData += [ "gallery" => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ) ];
+			foreach ( $this->viewData["gallery"] as $key => $value ) {
+				$this->viewData["gallery"][ $key ] += [ "momemnts" => self::getMomentOfDate( $value["createdat"] ) ];
+				$this->viewData["gallery"][ $key ] += [ "usersWhoLike" => $this->likesModel->getUsersLikeImage( $value["id"] ) ];
+				$this->viewData["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentOfImg( $value["id"] ) ];
+			}
+			$this->viewData += [
+				"totalImages" => $this->galleryModel->getCountImages(),
+				"page" => $page
+			];
+			var_dump( $this->viewData );
+			// $this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData )->render();
 		}
 
 		/* Load all images edited by a user  */

@@ -247,10 +247,9 @@
 									$srcPath = $_POST["sticker"];
 									$destPath = self::transformPathFileToUrl( $pathFile );
 									if ( $srcFinaleImg = $this->makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
-										unlink( $pathFile );
+										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
 										$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
 										if ( $this->galleryModel->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
-											unlink( $pathFile );
 											$this->viewData["success"] = "true";
 											$this->viewData["msg"] = "Image has been saved successfully !";
 											$this->viewData["data"]["gallery"] = $this->galleryModel->getAllEditedImages();
@@ -262,7 +261,7 @@
 											$this->viewData["data"]["userGallery"] = $this->galleryModel->userGallery( $_SESSION["username"] );
 										}
 									} else {
-										unlink( $pathFile );
+										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
 										$this->viewData["success"] = "false";
 										$this->viewData["msg"] = "Something goes wrong while create final image try later !";
 									}
@@ -271,6 +270,7 @@
 						break;
 					}
 				} catch ( Exception $e ) {
+					if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
 					$this->viewData["success"] = "false";
 					$this->viewData["msg"] = "Something goes wrong, try later !";
 				}
@@ -278,6 +278,11 @@
 			} else {
 				header("Location: /signin");
 			}
+		}
+
+		public function					logout()
+		{
+			$this->call_view( "user" . DIRECTORY_SEPARATOR ."logout" )->render();
 		}
 
 	}
