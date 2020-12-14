@@ -4,6 +4,12 @@ CREATE DATABASE IF NOT EXISTS `db_camagru`;
 
 USE `db_camagru`;
 
+database structure
+
+---------------------------------------------------------------------------------------------
+----------------------------------* DATABASE STRUCTURE *-------------------------------------
+---------------------------------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`firstname`			VARCHAR(255) NOT NULL,
@@ -58,24 +64,39 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 	`userid`			INT NOT NULL,
 	`likeid`			INT,
 	`commentid`			INT,
+	`seen`				BOOLEAN DEFAULT 0,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT fk_userid_notif FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT fk_likeid_notif FOREIGN KEY ( likeid ) REFERENCES likes( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT fk_commentid_notif FOREIGN KEY ( commentid ) REFERENCES comments( id ) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- TIGGERS
 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------
+-----------------------------------------* TIGGERS *-----------------------------------------
+---------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------
+-- Trigger for increment count likes of an image and create a notification for author
+---------------------------------------------------------------------------------------------
+
+DROP TRIGGER `tr_insert_like`;
 DELIMITER //
 
--- Trigger for increment count likes of an image and create a notification for author
-CREATE TRIGGER tr_insert_like
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+CREATE TRIGGER `tr_insert_like`
 AFTER INSERT ON likes
 FOR EACH ROW
 BEGIN
 	DECLARE author_id INT DEFAULT 0;
     
-	-- Increment cout likes of the image liked
+	-- Increment count likes of the image liked
 	UPDATE gallery SET countlikes = countlikes + 1
 	WHERE id = NEW.imgid;
 	-- Create notification for author image
@@ -89,8 +110,18 @@ BEGIN
 	END IF;
 END//
 
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+DELIMITER ;
+DROP TRIGGER `tr_delete_like`;
+DELIMITER //
+
+---------------------------------------------------------------------------------------------
 -- Trigger for decrement count likes of an image and remove notification of the like
-CREATE IF NOT EXISTS TRIGGER tr_delete_like
+---------------------------------------------------------------------------------------------
+
+CREATE TRIGGER `tr_delete_like`
 AFTER DELETE on likes
 FOR EACH ROW
 BEGIN
@@ -99,3 +130,64 @@ BEGIN
 	-- Remove like notification 
 	DELETE FROM notifications WHERE likeid = OLD.id;
 END//
+
+---------------------------------------------------------------------------------------------
+-- Trigger for increment count comments of an image and create a notification for author
+---------------------------------------------------------------------------------------------
+
+DROP TRIGGER `tr_insert_com`;
+DELIMITER //
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+CREATE TRIGGER `tr_insert_com`
+AFTER INSERT ON comments
+FOR EACH ROW
+BEGIN
+	DECLARE author_id INT DEFAULT 0;
+    
+	-- Increment count comments of the image
+	UPDATE gallery SET countcomments = countcomments + 1
+	WHERE id = NEW.imgid;
+	-- Create notification for author image
+    SELECT userid
+	INTO @author_id
+	FROM gallery
+	WHERE id = NEW.imgid;
+    IF ( NEW.userid <> @author_id ) THEN
+    	INSERT INTO notifications (content, userid, commentid)
+    	VALUES ("New comment on your picture !", @author_id, NEW.id);
+	END IF;
+END//
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+DELIMITER ;
+DROP TRIGGER IF EXISTS `tr_delete_com`;
+DELIMITER //
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------
+-- Trigger for decrement count comments of an image and remove notification of the comment
+---------------------------------------------------------------------------------------------
+
+CREATE TRIGGER `tr_delete_com`
+AFTER DELETE on comments
+FOR EACH ROW
+BEGIN
+	-- Decrement count comments of the image
+	UPDATE gallery SET countcomments = countcomments - 1 WHERE id = OLD.imgid;
+	-- Remove like notification 
+	DELETE FROM notifications WHERE commentid = OLD.id;
+END//
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+DELIMITER ;
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
