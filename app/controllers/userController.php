@@ -28,10 +28,7 @@
 			} else {
 				$redirect = "profile";
 				try {
-					$this->viewData = [
-						"success" => "true",
-						"data" => [ "gallery" => $this->galleryModel->getAllEditedImages() ]
-					];
+					$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
 					if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
 						$this->viewData["data"] += [
 							"userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ),
@@ -193,14 +190,14 @@
 			}
 		}
 
-		private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $udest )
+		private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $ydest )
 		{
 			$dest = imagecreatefrompng( $destPath ); 
 			$src = imagecreatefrompng( $srcPath);
 			// Get new sizes
 			list($width, $height) = getimagesize($srcPath);
 			// Copy and merge 
-			imagecopyresized($dest, $src, 0, 0, $xdest, $xdest, 120, 100, $width, $height);
+			imagecopyresized($dest, $src, $xdest, $ydest, 0, 0, 150, 150, $width, $height);
 			// Output and free from memory
 			$pathFinalImg = EDITEDPICS .'IMG'.'_'.time().'_'.$userData['id'].'_'.$userData['username'].'.jpeg';
 			if ( imagejpeg($dest, $pathFinalImg) ) {
