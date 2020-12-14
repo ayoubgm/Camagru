@@ -36,87 +36,82 @@
 		<div class="row col-12" id="gallery">
 			<?php if ( count($gallery ) === 0 ) { ?>
 				<p> <?php echo "No Edited images !"; ?> </p>
-			<?php } else {
-				foreach ( $gallery as $image ) {
-			?>
-				<div class="card col-md-4 col-lg-5 col-xl-3" id="image">
-					<div class="card-body">
-						<div class="card-title">
-							<div class="float-right w-100">
-								<div id="area-user" class="float-left">
-									<img id="user-img" src="<?php echo ( $image['gender'] == "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png" ?>"/>
-									<a id="user-link" href="/user/profile/username/"<?php echo $image['username']; ?>">By <?php print( $image['username'] ); ?></a>
-								</div>
-								<div id="area-img-menu" class="float-right">
-									<?php if ( $image["userid"] == $_SESSION["userid"] ) { ?>
-										<div
-											id="btn-details-img-<?php echo $image["id"]; ?>"
-											class="burger-img"
-											onclick="showDetailsImgMenu ( this.id );"
-										>
-											<div class="line1"></div>
-											<div class="line2"></div>
-											<div class="line3"></div>
-										</div>
-										<div
-											id="details-img-<?php echo $image["id"]; ?>"
-											style="display: none;"
-										>
-											<ul id="details-imgList">
-												<li>Edit</li>
-												<li>Delete</li>
-											</ul>
-										</div>
-									<?php } ?>
-								</div>
+			<?php } else { foreach ( $gallery as $image ) { ?>
+			<div class="card col-md-4 col-lg-5 col-xl-3" id="image">
+				<div class="card-body">
+					<div class="card-title">
+						<div class="float-right w-100">
+							<div id="area-user" class="float-left">
+								<img id="user-img" src="<?php echo ( $image['gender'] == "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png" ?>"/>
+								<a id="user-link" href="/user/profile/username/<?php echo $image['username']; ?>">By <?php print( $image['username'] ); ?></a>
 							</div>
-							<div id="area-description" class="float-left"><?php print( $image['description'] ); ?></div>
+							<div id="area-img-menu" class="float-right">
+								<?php if ( $image["userid"] == $_SESSION["userid"] ) { ?>
+									<div
+										id="btn-details-img-<?php echo $image["id"]; ?>"
+										class="burger-img"
+										onclick="showDetailsImgMenu ( this.id );"
+									>
+										<div class="line1"></div>
+										<div class="line2"></div>
+										<div class="line3"></div>
+									</div>
+									<div
+										id="details-img-<?php echo $image["id"]; ?>"
+										style="display: none;"
+									>
+										<ul id="details-imgList">
+											<li>Edit</li>
+											<li>Delete</li>
+											<li>Share</li>
+										</ul>
+									</div>
+								<?php } ?>
+							</div>
+						</div>
+						<div id="area-description" class="float-left"><?php print( $image['description'] ); ?></div>
+					</div>
+				</div>
+				<img id="img-<?php echo $image['id']; ?>" class="card-img" src="<?php print( $image['src'] ); ?>">
+				<div class="card-footer w-100">
+					<div class="footer1">
+						<div class="footer-side1">
+							<div id="likes">
+								<img id="icone-like" src="/public/images/like-icone.png"/>
+								<span id="countLikes-<?php echo $image['id']; ?>" >
+									<?php echo $image['countlikes']; ?>
+								</span>
+							</div>
+							<div id="comments">
+								<img id="icone-comment" src="/public/images/comment-icone.png"/>
+								<span id="countComments">
+									<?php echo $image['countcomments']; ?>
+								</span>
+							</div>
+						</div>
+						<div class="footer-side2">
+							<span> <?php echo $image["moments"]; ?> </span>
 						</div>
 					</div>
-					<img id="img-<?php echo $image['id']; ?>" class="card-img" src="<?php print( $image['src'] ); ?>">
-					<div class="card-footer w-100">
-						<div class="footer1">
-							<div class="footer-side1">
-								<div id="likes">
-									<img id="icone-like" src="/public/images/like-icone.png"/>
-									<span id="countLikes-<?php echo $image['id']; ?>" >
-										<?php echo $image['countlikes']; ?>
-									</span>
-								</div>
-								<div id="comments">
-									<img id="icone-comment" src="/public/images/comment-icone.png"/>
-									<span id="countComments">
-										<?php echo $image['countcomments']; ?>
-									</span>
-								</div>
-							</div>
-							<div class="footer-side2">
-								<span> <?php echo $image["moments"]; ?> </span>
-							</div>
+					<div class="footer2">
+						<div class="like">
+							<img
+								id="like-img-<?php echo $image['id']; ?>"
+								src="<?php echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) ) ? "/public/images/icone-like-active.png" : "/public/images/icone-like-inactive.png"; ?>"
+								onclick="like( this.id )"
+							/>
 						</div>
-						<div class="footer2">
-						<?php ; ?>
-							<div class="like">
-								<img
-									id="like-img-<?php echo $image['id']; ?>"
-									src="<?php
-											echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) )
-											? "/public/images/icone-like-active.png"
-											: "/public/images/icone-like-inactive.png";
-										?>"
-									onclick="like( this.id )"
-								/>
-							</div>
-							<div class="comment">
-								<button type="button" id="btn-comment" onclick="activeModel()">
-									<img id="icone-comment" src="/public/images/comment-icone.png"/>
-								</button>
-							</div>
+						<div class="comment">
+							<img
+								id="comments-img-<?php echo $image['id']; ?>"
+								src="/public/images/comment-icone.png"
+								onclick="getComments( this.id )"
+							/>
 						</div>
 					</div>
 				</div>
-			<?php }
-			} ?>
+			</div>
+			<?php } } ?>
 		</div>
 		<div class="model-bg" >
 			<div class="model">
@@ -145,7 +140,7 @@
 				</div>
 			</div>
 		</div>
-		<?php //require_once(VIEWS . "_footer.php");?>
+		<?php require_once(VIEWS . "_footer.php");?>
 	</body>
 	<script src="/public/js/_menu.js"></script>
 	<script src="/public/js/_userMenu.js"></script>
@@ -158,8 +153,9 @@
 		const btnCancel = document.getElementById("btn-cancel");
 		const modelClose = document.querySelector('#icon-cancel');
 
-		const activeModel = () => { modelBG.classList.add('active-model'); };
-		const closeModel = () => { modelBG.classList.remove('active-model'); }
+		const closeModel = () => {
+			modelBG.classList.remove('active-model');
+		}
 
 		const showDetailsImgMenu = ( burgerId ) => {
 			let imgid = burgerId.split('-')[3];
@@ -174,11 +170,7 @@
 			const imgid = id.split('-')[2];
 			const xhr = new XMLHttpRequest();
 		
-			xhr.open(
-				"POST",
-				"/like/add/id/"+imgid,
-				true
-			);
+			xhr.open( "POST", "/like/add/id/"+imgid, true );
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhr.send();
 			xhr.onload = () => {
@@ -190,7 +182,7 @@
 					if ( result.success == "false" ) {
 						if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
 						else {
-							// Display msg in alert
+							alert( result.msg );
 						}
 					} else {
 						const srcBtnLike = document.getElementById( id ).src;
@@ -208,6 +200,15 @@
 			}
 		}
 
+		const getComments = ( imgid ) => {
+			modelBG.classList.add('active-model');
+			const imgid = id.split('-')[2];
+			const xhr = new XMLHttpRequest();
+
+			// Get all comments of an image
+			
+		}
+
 		document.addEventListener("click", ( event ) => {
 				const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
 
@@ -223,7 +224,7 @@
 				});
 			});
 
-		setTimeout(() => { if ( alert ) alert.style.display = 'none'; }, 3000);
+		setTimeout(() => { if ( alert ) alert.remove() }, 2500);
 
 
 	</script>
