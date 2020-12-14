@@ -25,11 +25,10 @@ body {
 }
 
 .card {
-	margin-top: 10px;
-	margin-right: 10px;
-	margin-bottom: 10px;
+	margin: 15px;
 	padding: 2px;
-	box-shadow: 5px 10px 20px rgb(87, 87, 87);
+	box-shadow: 5px 10px 18px rgb(199, 199, 199);
+	background-color: rgb(241, 241, 241);
 }
 
 .card .card-title {
@@ -39,15 +38,52 @@ body {
 	color: white;
 }
 
-.card .card-title img#user-img {
+.card .card-title #area-user img#user-img {
 	border-radius: 100%;
 	width: 55px;
 	cursor: pointer;
 }
 
-.card .card-title a#user-link {
+.card .card-title #area-user a#user-link {
 	text-decoration: none;
 	color: rgb(46, 46, 46);
+}
+
+.card .card-title #area-img-menu {
+	position: relative;
+	color: black;
+}
+
+.card .card-title #area-img-menu .burger-img {
+	padding: 3px;
+	cursor: pointer;
+}
+
+.card .card-title #area-img-menu .burger-img div{
+	width: 6px;
+	height: 6px;
+	margin: 2px;
+	background-color: black;
+	border-radius: 100%;
+}
+
+[id^=details-img-] {
+	width: 100px;
+	height: 80px;
+	position: absolute;
+	top: 35px;
+	right: 10px;
+	padding: 10px;
+	border-radius: 4px;
+	font-weight: lighter;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 3px 3px 7px rgb(199, 199, 199);
+	display: none;
+	z-index: 1;
+}
+
+[id^=details-img-] ul#details-imgList {
+	list-style-type: none;
 }
 
 .card .card-title #area-description {
@@ -104,10 +140,16 @@ body {
 	float: left;
 }
 
-.card .card-footer .footer1 .footer-side1 div#likes img#icone-like,
+.card .card-footer .footer1 .footer-side1 div#likes img#icone-like {
+	width: 20px;
+	height: 20px;
+}
+
 .card .card-footer .footer1 .footer-side1 div#comments img#icone-comment {
-	width: 15px;
-	height: 15px;
+	margin-top: 2px;
+	margin-left: 2px;
+	width: 18px; 
+	height: 18px;
 }
 
 .card .card-footer .footer2 .like {
