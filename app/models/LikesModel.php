@@ -7,7 +7,7 @@
 	{
 		
 		/* Get all users who liked a picture */
-	 	public function          getUsersLikeImage ( $imgid )
+	 	public function			getUsersLikeImage ( $imgid )
 		{
 			$query = '
 				SELECT u.id, u.username
@@ -33,31 +33,19 @@
 		}
 
 		/* Like an image by a user */
-		public function          likeImage ( $imgid, $userid )
+		public function			likeImage ( $imgid, $userid )
 		{
-			if ( !self::isLikeExists( $imgid, $userid ) ) {
-				$query1 = '
-				    INSERT INTO `likes` (userid, imgid) values (?, ?);
-				    UPDATE `gallery` SET countlikes = countlikes + 1 WHERE id = ?;
-				';
-				$stt1 = $this->connect()->prepare( $query1 );
-				return $stt1->execute([ $userid, $imgid, $imgid ]);
-			}
-			return true;
+			$query1 = 'INSERT INTO `likes` (userid, imgid) values (?, ?);';
+			$stt1 = $this->connect()->prepare( $query1 );
+			return $stt1->execute([ $userid, $imgid ]);
 		}
 
 		/* unlike an image by a user */
-		public function          unlikeImage ( $imgid, $userid )
+		public function			unlikeImage ( $imgid, $userid )
 		{
-			if ( self::isLikeExists( $imgid, $userid ) ) {
-				$query = '
-				    DELETE FROM likes WHERE imgid = ? AND userid = ?;
-				    UPDATE `gallery` SET countlikes = countlikes - 1 WHERE id = ?;
-				';
-				$stt = $this->connect()->prepare($query);
-				return $stt->execute([ $imgid, $userid, $imgid ]);
-			}
-			return true;
+			$query = 'DELETE FROM likes WHERE imgid = ? AND userid = ?;';
+			$stt = $this->connect()->prepare($query);
+			return $stt->execute([ $imgid, $userid ]);
 		}
 
 	}
