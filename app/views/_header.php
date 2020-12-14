@@ -15,7 +15,7 @@
 			<?php } else { ?>
 				<li><a href="/user/profile" id="profile">Profile</a></li>
 				<li><a href="/user/settings" id="settings">Settings</a></li>
-				<li><a href="/logout" id="logout">Logout</a></li>
+				<li><a href="/user/logout" id="logout">Logout</a></li>
 			<?php } ?>
 		</ul>
 		<div class="btn-auth">
