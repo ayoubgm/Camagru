@@ -53,62 +53,34 @@
 			$page = 1;
 			$imagePerPage = 5;
 
-			if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
-				$this->viewData = [
-					"userData" => $this->usersModel->findUserById( $_SESSION["userid"] ),
-					"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
-				];
-			}
-			if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
-				$page = intval( $data[1] );
-			}
-			$depart = ( $page - 1 ) * $imagePerPage;
-			$this->viewData += [ "gallery" => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ) ];
-			foreach ( $this->viewData["gallery"] as $key => $value ) {
-				$this->viewData["gallery"][ $key ] += [ "momemnts" => self::getMomentOfDate( $value["createdat"] ) ];
-				$this->viewData["gallery"][ $key ] += [ "usersWhoLike" => $this->likesModel->getUsersLikeImage( $value["id"] ) ];
-				$this->viewData["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentOfImg( $value["id"] ) ];
-			}
-			$this->viewData += [
-				"totalImages" => $this->galleryModel->getCountImages(),
-				"page" => $page
-			];
-			var_dump( $this->viewData );
-			// $this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $viewData )->render();
-		}
+			try {
+				$this->viewData["data"] = array();
 
-		/* Load all images edited by a user  */
-		public function 				user ( $data )
-		{
-			$viewData = array();
-			$viewData['data'][ 'gallery'] = $this->galleryModel->getAllEditedImages();
-
-			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData['success'] = "true";
-				$viewData['data']['userData'] = $this->usersModel->findUserById( $_SESSION['userid'] );
-			}
-			if ( isset( $data[0] ) && $data[0] === "username" && !empty( $data[1] ) ) {
-				try {
-					$dataUser = $this->usersModel->findUserByUsername( strtolower( $data[1] ) );
-
-					if ( !isset( $dataUser ) || empty( $dataUser ) ) {
-						$viewData['success'] = "false";
-						$viewData['msg'] = "The user is not found !";
-					} else {
-						$viewData['success'] = "true";
-						$viewData['username'] = $data[1];
-						$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $dataUser['username'] );
-					}
-				} catch ( Exception $e ) {
-					$viewData['success'] = "false";
-					$viewData['msg'] = "Something goes wrong !";
+				if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
+					$this->viewData[ "data" ] += [
+						"userData" => $this->usersModel->findUserById( $_SESSION["userid"] ),
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+					];
 				}
-			} else {
-				$viewData['success'] = "true";
-				$viewData['username'] = $_SESSION['username'];
-				$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
+				if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
+					$page = intval( $data[1] );
+				}
+				$depart = ( $page - 1 ) * $imagePerPage;
+				$this->viewData["data"] += [ "gallery" => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ) ];
+				foreach ( $this->viewData["data"]["gallery"] as $key => $value ) {
+					$this->viewData["data"]["gallery"][ $key ] += [ "moments" => self::getMomentOfDate( $value["createdat"] ) ];
+					$this->viewData["data"]["gallery"][ $key ] += [ "usersWhoLike" => $this->likesModel->getUsersLikeImage( $value["id"] ) ];
+					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentOfImg( $value["id"] ) ];
+				}
+				$this->viewData["data"] += [
+					"totalImages" => $this->galleryModel->getCountImages(),
+					"page" => $page
+				];
+			} catch ( Exception $e ) {
+				$viewData['success'] = "false";
+				$viewData['msg'] = "Something goes wrong !";
 			}
-			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'user', $viewData)->render();
+			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $this->viewData )->render();
 		}
 		
 		/* Delete an image by author of image */
