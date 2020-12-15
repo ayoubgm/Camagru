@@ -70,7 +70,7 @@
 				foreach ( $this->viewData["data"]["gallery"] as $key => $value ) {
 					$this->viewData["data"]["gallery"][ $key ] += [ "moments" => self::getMomentOfDate( $value["createdat"] ) ];
 					$this->viewData["data"]["gallery"][ $key ] += [ "usersWhoLike" => $this->likesModel->getUsersLikeImage( $value["id"] ) ];
-					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentOfImg( $value["id"] ) ];
+					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentsOfImg( $value["id"] ) ];
 				}
 				$this->viewData["data"] += [
 					"totalImages" => $this->galleryModel->getCountImages(),
