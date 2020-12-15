@@ -7,7 +7,30 @@
 	$gallery = $data['gallery'];
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
-	
+
+	function			getMomentOfDate( $date ) {
+		$gmtTimezone = new DateTimeZone('GMT+1');
+		$creatDate = new DateTime( $date, $gmtTimezone );
+		$currDate = new DateTime("now", $gmtTimezone);
+		$interval = date_diff( $currDate, $creatDate );
+		$string = "";
+
+		if ( $interval->format('%Y') > 0 ) {
+			$string = $interval->format('%Y').", ".$interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
+		} else if ( $interval->format('%m') > 0 && $interval->format('%m') > 7 ) {
+			$string = $interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
+		} else if ( $interval->format('%d') >= 1 ) {
+			$string = $interval->format('%d')." d";
+		} else if ( $interval->format('%H') >= 1 && $interval->format('%H') <= 24 ) {
+			$string = $interval->format('%h')." h";
+		} else if ( $interval->format('%i') >= 1 && $interval->format('%i') <= 60 ) {
+			$string = $interval->format('%i')." min";
+		} else if ( $interval->format('%s') >= 1 && $interval->format('%s') <= 60 ) {
+			$string = $interval->format('%s')." sec";
+		}
+		return $string;
+	}
+
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
 			if ( $value["id"] == $userid ) { return true; }
@@ -43,7 +66,7 @@
 						<div class="float-right w-100">
 							<div id="area-user" class="float-left">
 								<img id="user-img" src="<?php echo ( $image['gender'] == "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png" ?>"/>
-								<a id="user-link" href="/user/profile/username/<?php echo $image['username']; ?>">By <?php print( $image['username'] ); ?></a>
+								<a id="user-link" href="/user/profile/username/<?php echo $image['username']; ?>"><?php print( $image['username'] ); ?></a>
 							</div>
 							<div id="area-img-menu" class="float-right">
 								<?php if ( $image["userid"] == $_SESSION["userid"] ) { ?>
@@ -82,7 +105,7 @@
 									<?php echo $image['countlikes']; ?>
 								</span>
 							</div>
-							<div id="comments">
+							<div id="comments" >
 								<img id="icone-comment" src="/public/images/comment-icone.png"/>
 								<span id="countComments">
 									<?php echo $image['countcomments']; ?>
@@ -90,7 +113,7 @@
 							</div>
 						</div>
 						<div class="footer-side2">
-							<span> <?php echo $image["moments"]; ?> </span>
+							<span> <?php echo $image["moments"]; ?></span>
 						</div>
 					</div>
 					<div class="footer2">
@@ -117,26 +140,35 @@
 			<div class="model">
 				<div class="row" id="model-header" >
 					<div class="col-8" id="title">
-						<h5>Comments</h5>
+						<h5>Comments (<span id="count-comments"></span>)</h5>
 					</div>
 					<div class="col-4" id="close">
 						<img id="icon-cancel" src="/public/images/cancel.png" onclick="closeModel()"/>
 					</div>
 				</div>
 				<div class="area-comments">
-					<div class="comments w-100 mt-4 p-3">
-						<?php if( empty( $data['comments'][$image['id']] ) ) { echo "No comments yet"; } ?>
-					</div>
-					<form method="POST" action="/gallery/comment/id/<?php echo $image['id']; ?>">
-						<div class="row area-write-coment w-100 mx-0 my-2 p-1" style="height: 20%; border-radius: 8px;">
-							<div class="col-10">
-								<textarea id="commentInput" name="comment" class="w-100 form-control" placeholder="Write a comment..."></textarea>
-							</div>
-							<div class="col-1">
-								<input id="btn-send" class="btn btn-primary" type="submit" name="btn-comment" value="Send">
-							</div>
+					<div id="comments-img" class="comments w-100 mt-4 p-3"></div>
+					<div class="row area-write-coment w-100 mx-0 my-4 p-1" style="height: 10%;">
+						<div class="col-10">
+							<input
+								id="commentInput"
+								class="w-100 form-control"
+								name="comment"
+								placeholder="Write a comment..."
+							/>
 						</div>
-					</form>
+						<div class="col-1">
+							<input
+								id="btn-send-comment"
+								class="btn btn-primary"
+								type="submit"
+								name="btn-comment"
+								value="Send"
+								onclick="addComment()"
+							>
+						</div>
+					</div>
+					<div id="area-error-msg"></div>
 				</div>
 			</div>
 		</div>
@@ -152,28 +184,17 @@
 		const btnDelete = document.getElementById("btn-delete");
 		const btnCancel = document.getElementById("btn-cancel");
 		const modelClose = document.querySelector('#icon-cancel');
+		const commentsImg = document.getElementById('comments-img');
+		const btnSendComment = document.getElementById('btn-send-comment');
+		const msgErrorComment = document.getElementById('area-error-msg');
 
-		const closeModel = () => {
-			modelBG.classList.remove('active-model');
-		}
-
-		const showDetailsImgMenu = ( burgerId ) => {
-			let imgid = burgerId.split('-')[3];
-			let menuDetailsImg = document.getElementById("details-img-"+imgid);
-			let btnDetailsImg = document.getElementById( burgerId );
-
-			if ( menuDetailsImg.style["display"] == "none" ) menuDetailsImg.style.display = "block";
-			else menuDetailsImg.style.display = "none";
-		}
-		
 		const like = ( id ) => {
 			const imgid = id.split('-')[2];
 			const xhr = new XMLHttpRequest();
 		
 			xhr.open( "POST", "/like/add/id/"+imgid, true );
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhr.send();
-			xhr.onload = () => {
+			xhr.onloadend = () => {
 				if ( xhr.status != 200 ) {
 					console.log( `Error: ${xhr.status}, ${xhr.statusText}` )
 				} else {
@@ -181,9 +202,7 @@
 					
 					if ( result.success == "false" ) {
 						if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
-						else {
-							alert( result.msg );
-						}
+						else { console.log( `An error has occurenced: ${data.msg}`); }
 					} else {
 						const srcBtnLike = document.getElementById( id ).src;
 						const countLikes = parseInt( document.getElementById("countLikes-"+imgid).innerHTML );
@@ -198,34 +217,139 @@
 					}
 				}
 			}
+			xhr.send();
 		}
 
-		const getComments = ( imgid ) => {
-			modelBG.classList.add('active-model');
-			const imgid = id.split('-')[2];
+		const createComment = ( data ) => {
+			let div = document.createElement('div');
+			let Subdiv1 = document.createElement('div');
+			let Subdiv2 = document.createElement('div');
+
+			div.id = "comment-"+data.id;
+			div.classList.add("row");
+			div.style.cssText = "height: auto; margin-bottom: 5px;"
+			Subdiv1.classList.add("col-lg-1");
+			Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
+			Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
+			Subdiv2.classList.add("col-lg-11");
+			Subdiv2.innerHTML = "<div><span style='font-weight: bold; font-size: 13pt; color: rgb(78, 78, 78)'>"+data.username+"</span></br><div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span></div>";
+			div.append(Subdiv1);
+			div.append(Subdiv2);
+			commentsImg.scrollTop = commentsImg.scrollHeight - commentsImg.clientHeight;
+			commentsImg.appendChild( div );
+		}
+
+		const addComment = () => {
+			const xhr = new XMLHttpRequest();
+			const btnSend = document.querySelector('[id^="btn-send-comment-img-"]');
+			const imgid = btnSend.id.split('-')[4];
+			const commentContent = document.getElementById('commentInput');
+			const url = "/comment/add/id/" + imgid;
+			const params = 'comment=' + commentContent.value;
+
+			xhr.open("POST", url);
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.onloadend = () => {
+				if ( xhr.readyState === 4 && xhr.status === 200 ) {
+					const result = JSON.parse( xhr.response );
+					
+					if ( result.success == "false" ) {
+						if ( result.msg == "You need to login first !" ) {
+							location.href = "/signin";
+						} else {
+							msgErrorComment.innerHTML = `An error has occurenced: ${result.msg}`;
+							hideErrorComments();
+						}
+					} else {
+						createComment( result.data );
+					}
+				} else {
+					console.log( `Error: ${xhr.status}, ${xhr.statusText}` )
+				}
+			}
+			xhr.send( params );
+		}
+
+		const getComments = ( id ) => {
+			const areaCountComments = document.getElementById("count-comments");
+			let imgid = id.split('-')[2];
 			const xhr = new XMLHttpRequest();
 
-			// Get all comments of an image
-			
+			modelBG.classList.add('active-model');
+			btnSendComment.id = "btn-send-comment-img-" + imgid;
+			xhr.open("GET", "/comment/commentsImg/id/" + imgid, true);
+			xhr.onloadend = () => {
+				if ( xhr.status != 200 ) {
+					msgErrorComment.innerHTML = `Something wrong while load comments (Error: ${ xhr.statusText })`;
+					hideErrorComments();
+				} else {
+					const data = JSON.parse( xhr.response );
+
+					if ( data.success == "false" ) {
+						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+						else {
+							msgErrorComment.innerHTML = `An error has occurenced: ${data.msg}`;
+							hideErrorComments();
+						}
+					} else {
+						const comments = data.data;
+
+						if ( comments.length != 0 ) {
+							commentsImg.innerHTML = "";
+							areaCountComments.innerHTML = comments.length;
+							for ( let i = 0; i < comments.length; i++ ) {
+								createComment( comments[i] );
+							}
+						} else {
+							commentsImg.innerHTML = "No comments yet !"
+							areaCountComments.innerHTML = 0;
+						}
+					}
+				}
+			}
+			xhr.send();
 		}
 
 		document.addEventListener("click", ( event ) => {
-				const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
+			const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
 
-				[].forEach.call( listMenusDetails, ( node ) => {
-					const imgid = node.id.split('-')[2];
-					let btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
-					let btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
-					let menuDetailsIsClicked = node.contains( event.target );
+			[].forEach.call( listMenusDetails, ( node ) => {
+				const imgid = node.id.split('-')[2];
+				let btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
+				let btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
+				let menuDetailsIsClicked = node.contains( event.target );
 
-					if ( !btnBurgerIsClicked && !menuDetailsIsClicked && node.style.display == "block" ) {
-						node.style.display = "none"
-					}
-				});
+				if ( !btnBurgerIsClicked && !menuDetailsIsClicked && node.style.display == "block" ) {
+					node.style.display = "none"
+				}
 			});
+		});
 
-		setTimeout(() => { if ( alert ) alert.remove() }, 2500);
+		const		closeModel = () => {
+			let btnSend = document.querySelector('[id^=btn-send-comment]');
 
+			btnSend.id = "btn-send-comment";
+			modelBG.classList.remove('active-model');
+		}
+
+		const		showDetailsImgMenu = ( burgerId ) => {
+			let imgid = burgerId.split('-')[3];
+			let menuDetailsImg = document.getElementById("details-img-"+imgid);
+			let btnDetailsImg = document.getElementById( burgerId );
+
+			if ( menuDetailsImg.style["display"] == "none" ) menuDetailsImg.style.display = "block";
+			else menuDetailsImg.style.display = "none";
+		}
+
+		const		hideErrorComments = () => {
+			setTimeout(() => {
+				msgErrorComment.innerHTML = "";
+			}, 3500);
+		}
+
+		setTimeout(() => {
+			if ( alert ) alert.remove();
+		}, 3000);
 
 	</script>
 </html>
