@@ -1,14 +1,8 @@
 DROP DATABASE IF EXISTS `db_camagru`;
 
-CREATE DATABASE IF NOT EXISTS `db_camagru`;
+CREATE DATABASE `db_camagru`;
 
 USE `db_camagru`;
-
-database structure
-
----------------------------------------------------------------------------------------------
-----------------------------------* DATABASE STRUCTURE *-------------------------------------
----------------------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -23,8 +17,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`recoveryToken`		VARCHAR(255) DEFAULT NULL,
 	`notifEmail`		BOOLEAN DEFAULT 1,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
-	`modifyat`			DATETIME DEFAULT NULL,
-	CONSTRAINT uk_email_username UNIQUE ( email, username )
+	`modifyat`			DATETIME DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `gallery` (
@@ -34,17 +27,14 @@ CREATE TABLE IF NOT EXISTS `gallery` (
 	`src`				VARCHAR(255) NOT NULL,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`countlikes`		INT DEFAULT 0,
-	`countcomments`		INT DEFAULT 0,
-	CONSTRAINT fk_userid_img FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE
+	`countcomments`		INT DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS `likes` (
 	`id`				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`userid`			INT NOT NULL,
 	`imgid`				INT NOT NULL,
-	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT fk_userid_like FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT fk_imgid_like FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE
+	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS `comments` (
@@ -53,9 +43,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
 	`userid`			INT NOT NULL,
 	`imgid`				INT NOT NULL,
 	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
-	`modifyat`			DATETIME DEFAULT NULL,
-	CONSTRAINT fk_userid_comment FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT fk_imgid_comment FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE
+	`modifyat`			DATETIME DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `notifications` (
@@ -65,30 +53,48 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 	`likeid`			INT,
 	`commentid`			INT,
 	`seen`				BOOLEAN DEFAULT 0,
-	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT fk_userid_notif FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT fk_likeid_notif FOREIGN KEY ( likeid ) REFERENCES likes( id ) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT fk_commentid_notif FOREIGN KEY ( commentid ) REFERENCES comments( id ) ON DELETE CASCADE ON UPDATE CASCADE
+	`createdat`			DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `users`
+ADD CONSTRAINT uk_email_username UNIQUE ( email, username );
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------
------------------------------------------* TIGGERS *-----------------------------------------
----------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------
+ALTER TABLE `gallery`
+ADD CONSTRAINT fk_userid_img FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+ALTER TABLE `likes`
+ADD CONSTRAINT fk_userid_like FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT fk_imgid_like FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+ALTER TABLE `comments`
+ADD CONSTRAINT fk_userid_comment FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT fk_imgid_comment FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+ALTER TABLE `notifications`
+ADD CONSTRAINT fk_userid_notif FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT fk_likeid_notif FOREIGN KEY ( likeid ) REFERENCES likes( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT fk_commentid_notif FOREIGN KEY ( commentid ) REFERENCES comments( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+
+
+
 -- Trigger for increment count likes of an image and create a notification for author
----------------------------------------------------------------------------------------------
 
-DROP TRIGGER `tr_insert_like`;
+
+DROP TRIGGER IF EXISTS`tr_insert_like`;
 DELIMITER //
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
+
 
 CREATE TRIGGER `tr_insert_like`
 AFTER INSERT ON likes
@@ -110,16 +116,16 @@ BEGIN
 	END IF;
 END//
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
+
+
 
 DELIMITER ;
-DROP TRIGGER `tr_delete_like`;
+DROP TRIGGER IF EXISTS `tr_delete_like`;
 DELIMITER //
 
----------------------------------------------------------------------------------------------
+
 -- Trigger for decrement count likes of an image and remove notification of the like
----------------------------------------------------------------------------------------------
+
 
 CREATE TRIGGER `tr_delete_like`
 AFTER DELETE on likes
@@ -131,15 +137,16 @@ BEGIN
 	DELETE FROM notifications WHERE likeid = OLD.id;
 END//
 
----------------------------------------------------------------------------------------------
--- Trigger for increment count comments of an image and create a notification for author
----------------------------------------------------------------------------------------------
 
-DROP TRIGGER `tr_insert_com`;
+-- Trigger for increment count comments of an image and create a notification for author
+
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS `tr_insert_com`;
 DELIMITER //
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
+
+
 
 CREATE TRIGGER `tr_insert_com`
 AFTER INSERT ON comments
@@ -161,18 +168,18 @@ BEGIN
 	END IF;
 END//
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
+
+
 DELIMITER ;
 DROP TRIGGER IF EXISTS `tr_delete_com`;
 DELIMITER //
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------
+
+
+
 -- Trigger for decrement count comments of an image and remove notification of the comment
----------------------------------------------------------------------------------------------
+
 
 CREATE TRIGGER `tr_delete_com`
 AFTER DELETE on comments
@@ -184,10 +191,6 @@ BEGIN
 	DELETE FROM notifications WHERE commentid = OLD.id;
 END//
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
-DELIMITER ;
 
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------
+
+DELIMITER ;
