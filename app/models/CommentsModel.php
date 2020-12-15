@@ -5,27 +5,49 @@
 	 */
 	class 		CommentsModel extends DB
 	{
+		/* Get all comments of an image */
+		public function 		getCommentsOfImg ( $imgid )
+		{
+			$query = '
+				SELECT c.*, u.firstname, u.lastname, u.username, u.email, u.gender
+				FROM `comments` c INNER JOIN `users` u
+				ON c.userid = u.id
+				WHERE c.imgid = ?
+				ORDER BY c.createdat ASC
+			';
+			$stt = $this->connect()->prepare($query);
+			$stt->execute([ $imgid ]);
+			return $stt->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function			getComment ( $id )
+		{
+			$query = '
+				SELECT c.*, u.firstname, u.lastname, u.username, u.email, u.gender
+				FROM `comments` c INNER JOIN `users` u
+				ON c.id = ?
+			';
+			$stt = $this->connect()->prepare($query);
+			$stt->execute([ $id ]);
+			return $stt->fetch(PDO::FETCH_ASSOC);
+		}
 
 		/* Save a comment */
 		public function 		save ( $data )
 		{
 			$query = 'INSERT INTO `comments` (content, userid, imgid) values (?, ?, ?)';
-			$stt = $this->connect()->prepare($query);
-			return $stt->execute( array_values( $data ) );
+			$db = $this->connect();
+			$stt = $db->prepare($query);
+			if ( $stt->execute( array_values( $data ) ) ) { return $db->lastInsertId(); }
+			else { return NULL; }
 		}
 
-		/* Get all comments of an image */
-		public function 		getCommentOfImg ( $imgid )
+		/* Save a comment */
+		public function 		edit ( $data )
 		{
-			$query = '
-				SELECT c.*, u.firstname, u.lastname, u.username, u.email, u.gender 
-				FROM `comments` c INNER JOIN `users` u
-				ON c.userid = u.id
-				WHERE c.imgid = ?
-			';
-			$stt = $this->connect()->prepare($query);
-			$stt->execute([ $imgid ]);
-			return $stt->fetchAll(PDO::FETCH_ASSOC);
+			$query = 'UPDATE `comments` SET content = ? WHERE userid = ? AND imgid = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute( array_values( $data ) );
 		}
 
 	}
