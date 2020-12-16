@@ -50,6 +50,13 @@
 			return $stt->execute( array_values( $data ) );
 		}
 
+		public function			delete ( $id )
+		{
+			$query = 'DELETE FROM `comments` WHERE id = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ $id ]);
+		}
+
 	}
 
 ?>
