@@ -14,6 +14,13 @@
 			else { return NULL; }
 		}
 
+		public function			delete ( $id )
+		{
+			return ( ! $this->isCommentExists( $id ) )
+			? "The comment is not found !"
+			: NULL ;
+		}
+
 	}
 
 ?>

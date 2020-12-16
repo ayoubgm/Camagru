@@ -165,5 +165,13 @@
 			: null;
 		}
 
+		public function						isCommentExists ( $id )
+		{
+			$stt = $this->connect()->prepare("SELECT * FROM `comments` WHERE id = ?");
+			$stt->execute([ $id ]);
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
+			return ( $data ) ? $data : null;
+		}
+
 	}
 ?>
