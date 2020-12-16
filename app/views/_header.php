@@ -19,19 +19,34 @@
 				<li><a href="/user/logout" id="logout">Logout</a></li>
 			<?php } ?>
 		</ul>
-		<div class="btn-auth">
+		<div class="btn-auth m-0">
 			<?php if ( !isset($_SESSION['userid']) ) { ?>
 				<a href="/signin" id="btn-signin">Signin</a>
 				<a href="/signup" id="btn-signup">Signup</a>
 			<?php } else { ?>
-				<img src="/public/images/notification.png"? id="notif-img">
-				<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img"/>
-				<div class="dropdown">
-					<ul>
-						<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] == "female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
-						<li><a href="/user/settings"> <img src="/public/images/settings.png" id="settings"/>Settings</a></li>
-						<li><a href="/user/logout"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
-					</ul>
+				<div id="area-notifications">
+					<img src="/public/images/notification.png"? id="notif-img">
+					<span id="countNotifs"><?php echo $data["countUnreadNotifs"]; ?></span>
+					<div id="notifications" style="display: none;">
+						<div id="title"><span id="title">Notifications</span></div>
+						<hr>
+						<div id="manage-notifications">
+							<span id="see-all" class="float-left">read all</span>
+							<span id="delete-all" class="float-right">delete all</span>
+						</div>
+						<hr>
+						<div id="notifications-user"></div>
+					</div>
+				</div>
+				<div id="area-user">
+					<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img"/>
+					<div class="dropdown" style="display: none;">
+						<ul>
+							<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] == "female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
+							<li><a href="/user/settings"> <img src="/public/images/settings.png" id="settings"/>Settings</a></li>
+							<li><a href="/user/logout"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
+						</ul>
+					</div>
 				</div>
 			<?php } ?>
 		</div>

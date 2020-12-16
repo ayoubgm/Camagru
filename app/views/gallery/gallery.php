@@ -7,7 +7,8 @@
 	$gallery = $data['gallery'];
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
-
+	// var_dump( $data["countUnreadNotifs"] );
+	
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
 			if ( $value["id"] == $userid ) { return true; }
@@ -83,7 +84,7 @@
 						<div id="area-description" class="float-left"><?php print( $image['description'] ); ?></div>
 					</div>
 				</div>
-				<img id="img-<?php echo $image['id']; ?>" class="card-img" src="<?php print( $image['src'] ); ?>">
+				<img id="img-<?php echo $image['id']; ?>" class="card-img p-xlg-3" src="<?php print( $image['src'] ); ?>">
 				<div class="card-footer w-100">
 					<div class="footer1">
 						<div class="footer-side1">
@@ -102,7 +103,11 @@
 						<div class="like">
 							<img
 								id="like-img-<?php echo $image['id']; ?>"
-								src="<?php echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) ) ? "/public/images/icone-like-active.png" : "/public/images/icone-like-inactive.png"; ?>"
+								src="<?php
+									echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) )
+									? "/public/images/icone-like-active.png"
+									: "/public/images/icone-like-inactive.png";
+								?>"
 								onclick="likeOrUnlike( this.id )"
 							/>
 						</div>
@@ -156,8 +161,7 @@
 		</div>
 		<?php require_once(VIEWS . "_footer.php");?>
 	</body>
-	<script src="/public/js/_menu.js"></script>
-	<script src="/public/js/_userMenu.js"></script>
+	<script src="/public/js/_header.js"></script>
 	<script>
 		const btn_profile = document.querySelector("nav .btn-auth #profile-img");
 		const btn_like = document.getElementById('btn-like');
