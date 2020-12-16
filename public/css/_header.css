@@ -1,6 +1,7 @@
 div#alert-msg {
 	width: auto;
 	height: auto;
+	margin: 0;
 	padding: 10px 50px;
 	text-align: center;
 	font-weight: bold;
@@ -12,12 +13,15 @@ div#alert-msg {
 }
 
 nav {
+	width: 100%;
 	height: 65px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	position: relative;
+	/* left: 10px; */
 	background-color: #1c1c20;
 }
 
@@ -66,7 +70,83 @@ nav ul.nav-links a#btn-signup {
 	display: none;
 }
 
-nav .btn-auth img#profile-img {
+nav .btn-auth #area-notifications {
+	float: left;
+	margin-top: 10px;
+	position: relative;
+}
+
+nav .btn-auth #area-notifications img#notif-img {
+	width: 30px;
+	padding: 0px;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+nav .btn-auth #area-notifications #countNotifs {
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	position: absolute;
+	top: -10px;
+	left: 15px;
+	font-size: 10pt;
+	border-radius: 100%;
+	color: white;
+	background-color: #0088a9;
+}
+
+nav .btn-auth #area-notifications #notifications {
+	width: 340px;
+	height: 280px;
+	position: absolute;
+	top: 50px;
+	right: 10px;
+	border-radius: 8px;
+	background-color: white;
+	z-index: 1;
+}
+
+nav .btn-auth #area-notifications #notifications #title {
+	width: 100%;
+	text-align: center;
+}
+
+nav .btn-auth #area-notifications #notifications #title span {
+	text-transform: uppercase;
+	font-size: 11pt;
+	color: rgb(82, 82, 82);
+	margin: 0;
+}
+
+nav .btn-auth #area-notifications #notifications hr {
+	margin: 0;
+	padding: 0;
+}
+
+nav .btn-auth #area-notifications #notifications #manage-notifications {
+	width: 100%;
+	height: 28px;
+	padding: 5px;
+}
+
+nav .btn-auth #area-notifications #notifications #manage-notifications #see-all,
+nav .btn-auth #area-notifications #notifications #manage-notifications #delete-all  {
+	text-transform: uppercase;
+	font-size: 9pt;
+	color: #00728f;
+}
+
+nav .btn-auth #area-notifications #notifications #manage-notifications #delete-all {
+	float: right;
+}
+
+nav .btn-auth #area-user {
+	position: relative;
+	float: left;
+}
+
+nav .btn-auth #area-user img#profile-img {
 	width: 55px;
 	padding: 0px;
 	border: 1px solid white;
@@ -74,45 +154,38 @@ nav .btn-auth img#profile-img {
 	cursor: pointer;
 }
 
-nav .btn-auth img.active .dropdown {
+nav .btn-auth img.active #area-user .dropdown {
 	display: block;
 }
 
-nav .btn-auth img#notif-img {
-	width: 30px;
-	padding: 0px;
-	margin-right: 20px;
-	cursor: pointer;
-}
-
-nav .btn-auth .dropdown {
-	position: absolute;
+nav .btn-auth #area-user .dropdown {
 	width: 150px;
-	text-align: left;
-	padding: 8px 10px;
 	height: 125px;
-	top: 75px;
-	/* right: 80px; */
-	display: none;
-	z-index: 1;
-	background-color: #fff;
+	position: absolute;
+	padding: 8px 10px;
+	top: 60px;
+	left: -55px;
+	text-align: left;
 	border-radius: 8px;
+	background-color: #fff;
+	z-index: 1;
+	display: none;
 }
 
-nav .btn-auth .dropdown ul {
+nav .btn-auth #area-user .dropdown ul {
 	list-style: none;
 }
 
-nav .btn-auth .dropdown ul li a {
+nav .btn-auth #area-user .dropdown ul li a {
 	font-size: 12pt;
 	text-decoration: none;
 	color: #1c1c20;
 }
 
-.dropdown #gallery,
-.dropdown #profile, 
-.dropdown #settings, 
-.dropdown #logout {
+#area-user .dropdown #gallery,
+#area-user .dropdown #profile, 
+#area-user .dropdown #settings, 
+#area-user .dropdown #logout {
 	width: 25px;
 	margin-right: 10px;
 }
