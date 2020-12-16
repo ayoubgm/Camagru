@@ -53,14 +53,28 @@
 										<div class="line2"></div>
 										<div class="line3"></div>
 									</div>
-									<div
-										id="details-img-<?php echo $image["id"]; ?>"
-										style="display: none;"
-									>
+									<div id="details-img-<?php echo $image["id"]; ?>" style="display: none;" >
 										<ul id="details-imgList">
-											<li>Edit</li>
-											<li>Delete</li>
-											<li>Share</li>
+											<li id="btn-delete-img-<?php echo $image["id"]; ?>" onclick="deleteImage( this.id );">Delete</li>
+											<hr style="margin: 0;"/>
+											<li>
+												<a
+													href="http://www.facebook.com/sharer.php?u=<?php echo $image['src']; ?>"
+													target="_blank"
+													style="text-decoration: none; color: black;"
+												>
+													Share on facebook
+												</a>
+											</li>
+											<li>
+												<a
+													href="http://twitter.com/share?text=<?php echo $image['description']; ?>&amp;url=<?php echo $image['src']; ?>"
+													target="_blank"
+													style="text-decoration: none; color: black;"
+												>
+													Share on twitter
+												</a>
+											</li>
 										</ul>
 									</div>
 								<?php } ?>
@@ -75,27 +89,21 @@
 						<div class="footer-side1">
 							<div id="likes">
 								<img id="icone-like" src="/public/images/like-icone.png"/>
-								<span id="countLikes-<?php echo $image['id']; ?>" >
-									<?php echo $image['countlikes']; ?>
-								</span>
+								<span id="countLikes-<?php echo $image['id']; ?>"><?php echo $image['countlikes']; ?></span>
 							</div>
 							<div id="comments" >
 								<img id="icone-comment" src="/public/images/comment-icone.png"/>
-								<span id="countComments-<?php echo $image['id']; ?>">
-									<?php echo $image['countcomments']; ?>
-								</span>
+								<span id="countComments-<?php echo $image['id']; ?>"><?php echo $image['countcomments']; ?></span>
 							</div>
 						</div>
-						<div class="footer-side2">
-							<span> <?php echo $image["moments"]; ?></span>
-						</div>
+						<div class="footer-side2"><span><?php echo $image["moments"]; ?></span></div>
 					</div>
 					<div class="footer2">
 						<div class="like">
 							<img
 								id="like-img-<?php echo $image['id']; ?>"
 								src="<?php echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) ) ? "/public/images/icone-like-active.png" : "/public/images/icone-like-inactive.png"; ?>"
-								onclick="like( this.id )"
+								onclick="likeOrUnlike( this.id )"
 							/>
 						</div>
 						<div class="comment">
@@ -217,7 +225,7 @@
 			});
 		});
 
-		const			like = ( id ) => {
+		const			likeOrUnlike = ( id ) => {
 			const xhr = new XMLHttpRequest();
 			const imgid = id.split('-')[2];
 			const srcBtnLike = document.getElementById( id ).src;
@@ -264,13 +272,11 @@
 			Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
 			Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
 			Subdiv2.classList.add("col-lg-11");
-			htmlDiv2 += "<div>";
 			if ( connectedUserId.toString() == data.userid ) {
 				htmlDiv2 += "<span id='btn-delete-com-" + data.id + "' style='float: right; color: red; cursor: pointer;' onclick='deleteComment( "+data.imgid+", "+data.id+", "+connectedUserId+" )'>x</span>";
 			}
 			htmlDiv2 += "<span style='font-weight: bold; font-size: 13pt; color: rgb(78, 78, 78)'>"+data.username+"</span></br>";
 			htmlDiv2 += "<div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span>";
-			htmlDiv2 += "</div>";
 			Subdiv2.innerHTML = htmlDiv2;
 			div.append(Subdiv1);
 			div.append(Subdiv2);
@@ -322,7 +328,7 @@
 
 					if ( data.success == "false" ) {
 						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-						else { alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}`, "error" ); }
+						else { alertMessage( data.msg, "error" ); }
 					} else {
 						const comments = data.data;
 
@@ -336,7 +342,7 @@
 						}
 					}
 				} else {
-					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})` )
+					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
 				}
 				HideAlert();
 			}
@@ -354,14 +360,38 @@
 
 					if ( data.success == "false" ) {
 						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-						else { alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}`, "error" ); }
+						else { alertMessage( data.msg, "error" ); }
 					} else {
 						getComments( "comments-img-" + imgid, connectedUserid );
 						document.getElementById('countComments-'+imgid).innerHTML = countComment - 1;
 						alertMessage( data.msg, "success" );
 					}
 				} else {
-					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})` )
+					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
+				}
+				HideAlert();
+			}
+			xhr.send();
+		}
+
+		const deleteImage = ( id ) => {
+			const xhr = new XMLHttpRequest();
+			const imgid = id.split('-')[3];
+			
+			xhr.open("POST", "/gallery/delete/id/" + imgid, true);
+			xhr.onloadend = () => {
+				if ( xhr.readyState === 4 && xhr.status === 200 ) {
+					const data = JSON.parse( xhr.response );
+		
+					if ( data.success == "false" ) {
+						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+						else { alertMessage( data.msg, "error" ); }
+					} else {
+						alertMessage( data.msg, "success" );
+						location.reload();
+					}
+				} else {
+					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
 				}
 				HideAlert();
 			}
