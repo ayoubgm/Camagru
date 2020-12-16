@@ -78,7 +78,7 @@
 									"data" => $this->commentModel->getComment( $id )
 								];
 							} else {
-								$this->viewData = ["success" => "false", "msg" => "Something is wrong while save the comment !"];
+								$this->viewData = ["success" => "false", "msg" => "Failed to save the comment !"];
 							}
 						break;
 					}
@@ -101,6 +101,28 @@
 				}
 			} catch ( Exception $e ) {
 				$this->viewData = ["success" => "false", "msg" => "Something is wrong while load comments of the image !"];
+			}
+			die( json_encode( $this->viewData ) );
+		}
+
+		public function				delete ( $data )
+		{
+			if ( !isset( $_SESSION['userid'] ) ) {
+				return "You need to login first !";
+			} else if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
+				return "Something went wrong while validate the comment !";
+			} else {
+				try {
+					if ( $error = $this->commentMiddleware->delete( $data[1] ) ) {
+						$this->viewData = [ "success" => "false", "msg" => $error ];	
+					} else if ( $this->commentModel->delete( $data[1] ) ) {
+						$this->viewData = [ "success" => "true", "msg" => "The comment deleted successfully !" ];
+					} else {
+						$this->viewData = [ "success" => "false", "msg" => "Failed to delete the comment successfully !" ];
+					}
+				} catch ( Exception $e ) {
+					$this->viewData = ["success" => "false", "msg" => "Something is wrong while delete the comment !"];
+				}
 			}
 			die( json_encode( $this->viewData ) );
 		}
