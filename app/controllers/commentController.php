@@ -108,9 +108,9 @@
 		public function				delete ( $data )
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
-				return "You need to login first !";
+				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
 			} else if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
-				return "Something went wrong while validate the comment !";
+				$this->viewData = [ "success" => "false", "msg" => "Something went wrong while validate the comment !" ];	
 			} else {
 				try {
 					if ( $error = $this->commentMiddleware->delete( $data[1] ) ) {

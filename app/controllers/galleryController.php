@@ -86,46 +86,22 @@
 		/* Delete an image by author of image */
 		public function 				delete ( $data )
 		{
-			if ( isset( $_SESSION['userid'] ) && !empty( $_SESSION['userid'] ) ) {
-				$viewData = array();
-				$viewData['data'] = [
-					'userData' => $this->usersModel->findUserById( $_SESSION['userid'] ),
-					'gallery' => $this->galleryModel->getAllEditedImages(),
-					'userGallery' => $this->galleryModel->userGallery( $_SESSION['username'] )
-				];
-
-				if ( isset( $data[0] ) && $data[0] === "id" && !empty( $data[1] ) ) {
-					if ( !( $imgdata = $this->galleryMiddleware->isImageOwnerExist( $_SESSION['userid'], $data[1] ) ) ) {
-						$viewData['success'] = "false";
-						$viewData['msg'] = "No image exists with this id in your gallery !";
-
-					} else {
-						try {
-							// DELETE IMAGE UPLOADED ON THE SERVER
-							$pathimg = str_replace('\\\\\\', '\\', str_replace('/', '\\', str_replace( PUBLIC_FOLDER, PUBLIC_DIR . '/', $imgdata['src'] ) ) );;
-							// unset( $pathimg );
-							if ( $this->galleryModel->deleteImage( $data[1], $_SESSION['userid'] ) ) {
-								$viewData['success'] = "true";
-								$viewData['msg'] = "Your image has been deleted successfully !";
-								$viewData['data']['userGallery'] = $this->galleryModel->userGallery( $_SESSION['username'] );
-								$viewData['data']['gallery'] = $this->galleryModel->getAllEditedImages();
-							} else {
-								$viewData['success'] = "false";
-								$viewData['msg'] = "Failed to delete your image !";
-							}
-						} catch ( Exception $e ) {
-							$viewData['success'] = "false";
-							$viewData['msg'] = "Something goes wrong while delete your image !";
-						}
-					}
+			try {
+				if ( !isset( $_SESSION['userid'] ) ) {
+					$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
+				} else if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
+					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while validate the comment !" ];	
+				} else if ( ! $this->galleryMiddleware->isImageOwnerExist( $_SESSION['userid'], $data[1] ) ) {
+					$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
+				} else if ( $this->galleryModel->deleteImage( $data[1], $_SESSION['userid'] ) ) {
+					$this->viewData = [ "success" => "true", "msg" => "Your image has been deleted successfully !" ];
 				} else {
-					$viewData['success'] = "false";
-					$viewData['msg'] = "No id found !";
+					$this->viewData = [ "success" => "true", "msg" => "Failed to delete your image !" ];
 				}
-				$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'delete', $viewData)->render();
-			} else {
-				header("Location: /camagru/signin");
+			} catch ( Exception $e ) {
+				$this->viewData = [ "success" => "false", "msg" => "Something went wrong while delete the image  !" ];
 			}
+			die( json_encode( $this->viewData ) );
 		}
 
 	}
