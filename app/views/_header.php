@@ -1,4 +1,5 @@
 <header>
+	<div id="alert-msg" class="alert"></div>
 	<nav>
 		<div class="logo-area">
 			<a href="/"><img class="logo" src="/public/images/logo.png" alt="logo-camagru"/></a>
