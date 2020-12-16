@@ -9,6 +9,7 @@
 		private $userMiddleware;
 		private $userModel;
 		private $galleryModel;
+		private $notificationModel;
 
 		public function 				__construct()
 		{
@@ -16,6 +17,7 @@
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->userModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
+			$this->notificationModel = self::call_model('NotificationsModel');
 		}
 
 		// private function 	sendMail ( $subject, $to )
@@ -39,7 +41,8 @@
 				if ( isset( $_SESSION['userid'] ) ) {
 					$this->viewData["data"] += [
 						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] )
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] ),
+						"userNotifications" => $this->notificationModel->getUserNotifications( $_SESSION['userid'] )
 					];
 				}
 				$this->viewData["success"] = "true";

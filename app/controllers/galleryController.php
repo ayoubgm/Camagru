@@ -11,16 +11,18 @@
 		private $galleryModel;
 		private $likesModel;
 		private $commentsModel;
+		private $notificationsModel;
 
 		public function 				__construct()
 		{
 			session_start();
 			$this->viewData = array();
+			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
 			$this->usersModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
 			$this->likesModel = self::call_model('LikesModel');
 			$this->commentsModel = self::call_model('CommentsModel');
-			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
+			$this->notificationsModel = self::call_model('NotificationsModel');
 		}
 		
 		static public function			getMomentOfDate( $date )
@@ -59,7 +61,8 @@
 				if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
 					$this->viewData[ "data" ] += [
 						"userData" => $this->usersModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 				}
 				if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
