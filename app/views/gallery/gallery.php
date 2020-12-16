@@ -8,29 +8,6 @@
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
 
-	function			getMomentOfDate( $date ) {
-		$gmtTimezone = new DateTimeZone('GMT+1');
-		$creatDate = new DateTime( $date, $gmtTimezone );
-		$currDate = new DateTime("now", $gmtTimezone);
-		$interval = date_diff( $currDate, $creatDate );
-		$string = "";
-
-		if ( $interval->format('%Y') > 0 ) {
-			$string = $interval->format('%Y').", ".$interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
-		} else if ( $interval->format('%m') > 0 && $interval->format('%m') > 7 ) {
-			$string = $interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
-		} else if ( $interval->format('%d') >= 1 ) {
-			$string = $interval->format('%d')." d";
-		} else if ( $interval->format('%H') >= 1 && $interval->format('%H') <= 24 ) {
-			$string = $interval->format('%h')." h";
-		} else if ( $interval->format('%i') >= 1 && $interval->format('%i') <= 60 ) {
-			$string = $interval->format('%i')." min";
-		} else if ( $interval->format('%s') >= 1 && $interval->format('%s') <= 60 ) {
-			$string = $interval->format('%s')." sec";
-		}
-		return $string;
-	}
-
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
 			if ( $value["id"] == $userid ) { return true; }
@@ -53,9 +30,6 @@
 </head>
 	<body>
 		<?php require_once(VIEWS . "_header.php");?>
-		<div id="alert-msg" >
-			<!-- <span class="alert alert-danger">HELLO</span> -->
-		</div>
 		<div class="row col-12" id="gallery">
 			<?php if ( count($gallery ) === 0 ) { ?>
 				<p> <?php echo "No Edited images !"; ?> </p>
@@ -107,7 +81,7 @@
 							</div>
 							<div id="comments" >
 								<img id="icone-comment" src="/public/images/comment-icone.png"/>
-								<span id="countComments">
+								<span id="countComments-<?php echo $image['id']; ?>">
 									<?php echo $image['countcomments']; ?>
 								</span>
 							</div>
@@ -128,7 +102,7 @@
 							<img
 								id="comments-img-<?php echo $image['id']; ?>"
 								src="/public/images/comment-icone.png"
-								onclick="getComments( this.id )"
+								onclick="getComments( this.id, <?php echo $_SESSION['userid'] ?> )"
 							/>
 						</div>
 					</div>
@@ -164,7 +138,7 @@
 								type="submit"
 								name="btn-comment"
 								value="Send"
-								onclick="addComment()"
+								onclick="addComment( <?php echo $_SESSION['userid'] ?> )"
 							>
 						</div>
 					</div>
@@ -188,142 +162,29 @@
 		const btnSendComment = document.getElementById('btn-send-comment');
 		const msgErrorComment = document.getElementById('area-error-msg');
 
-		const like = ( id ) => {
-			const imgid = id.split('-')[2];
-			const xhr = new XMLHttpRequest();
+		const			alertMessage = ( text, type ) => {
+			switch ( type ) {
+				case "success":
+					alert.classList.add("alert-success");
+					alert.innerHTML = text;
+					
+				break;
+				case "error":
+					alert.classList.add("alert-danger");
+					alert.innerHTML = text;
+				break;
+			}
+			alert.style.display = "block";
+		}
 		
-			xhr.open( "POST", "/like/add/id/"+imgid, true );
-			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhr.onloadend = () => {
-				if ( xhr.status != 200 ) {
-					console.log( `Error: ${xhr.status}, ${xhr.statusText}` )
-				} else {
-					const result = JSON.parse( xhr.response );
-					
-					if ( result.success == "false" ) {
-						if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
-						else { console.log( `An error has occurenced: ${data.msg}`); }
-					} else {
-						const srcBtnLike = document.getElementById( id ).src;
-						const countLikes = parseInt( document.getElementById("countLikes-"+imgid).innerHTML );
-
-						if ( srcBtnLike.includes( "icone-like-inactive.png" ) ) {
-							document.getElementById("countLikes-"+imgid).innerHTML = countLikes + 1,
-							document.getElementById( id ).setAttribute("src", "/public/images/icone-like-active.png");
-						} else {
-							document.getElementById("countLikes-"+imgid).innerHTML = countLikes - 1,
-							document.getElementById( id ).setAttribute("src", "/public/images/icone-like-inactive.png");
-						}
-					}
-				}
-			}
-			xhr.send();
+		const			HideAlert = () => {
+			setTimeout(() => {
+				alert.classList.remove("alert-success");
+				alert.classList.remove("alert-danger");
+				alert.style.display = "none";
+				alert.innerHTML = "";
+			}, 3000);
 		}
-
-		const createComment = ( data ) => {
-			let div = document.createElement('div');
-			let Subdiv1 = document.createElement('div');
-			let Subdiv2 = document.createElement('div');
-
-			div.id = "comment-"+data.id;
-			div.classList.add("row");
-			div.style.cssText = "height: auto; margin-bottom: 5px;"
-			Subdiv1.classList.add("col-lg-1");
-			Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
-			Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
-			Subdiv2.classList.add("col-lg-11");
-			Subdiv2.innerHTML = "<div><span style='font-weight: bold; font-size: 13pt; color: rgb(78, 78, 78)'>"+data.username+"</span></br><div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span></div>";
-			div.append(Subdiv1);
-			div.append(Subdiv2);
-			commentsImg.scrollTop = commentsImg.scrollHeight - commentsImg.clientHeight;
-			commentsImg.appendChild( div );
-		}
-
-		const addComment = () => {
-			const xhr = new XMLHttpRequest();
-			const btnSend = document.querySelector('[id^="btn-send-comment-img-"]');
-			const imgid = btnSend.id.split('-')[4];
-			const commentContent = document.getElementById('commentInput');
-			const url = "/comment/add/id/" + imgid;
-			const params = 'comment=' + commentContent.value;
-
-			xhr.open("POST", url);
-			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhr.onloadend = () => {
-				if ( xhr.readyState === 4 && xhr.status === 200 ) {
-					const result = JSON.parse( xhr.response );
-					
-					if ( result.success == "false" ) {
-						if ( result.msg == "You need to login first !" ) {
-							location.href = "/signin";
-						} else {
-							msgErrorComment.innerHTML = `An error has occurenced: ${result.msg}`;
-							hideErrorComments();
-						}
-					} else {
-						createComment( result.data );
-					}
-				} else {
-					console.log( `Error: ${xhr.status}, ${xhr.statusText}` )
-				}
-			}
-			xhr.send( params );
-		}
-
-		const getComments = ( id ) => {
-			const areaCountComments = document.getElementById("count-comments");
-			let imgid = id.split('-')[2];
-			const xhr = new XMLHttpRequest();
-
-			modelBG.classList.add('active-model');
-			btnSendComment.id = "btn-send-comment-img-" + imgid;
-			xhr.open("GET", "/comment/commentsImg/id/" + imgid, true);
-			xhr.onloadend = () => {
-				if ( xhr.status != 200 ) {
-					msgErrorComment.innerHTML = `Something wrong while load comments (Error: ${ xhr.statusText })`;
-					hideErrorComments();
-				} else {
-					const data = JSON.parse( xhr.response );
-
-					if ( data.success == "false" ) {
-						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-						else {
-							msgErrorComment.innerHTML = `An error has occurenced: ${data.msg}`;
-							hideErrorComments();
-						}
-					} else {
-						const comments = data.data;
-
-						if ( comments.length != 0 ) {
-							commentsImg.innerHTML = "";
-							areaCountComments.innerHTML = comments.length;
-							for ( let i = 0; i < comments.length; i++ ) {
-								createComment( comments[i] );
-							}
-						} else {
-							commentsImg.innerHTML = "No comments yet !"
-							areaCountComments.innerHTML = 0;
-						}
-					}
-				}
-			}
-			xhr.send();
-		}
-
-		document.addEventListener("click", ( event ) => {
-			const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
-
-			[].forEach.call( listMenusDetails, ( node ) => {
-				const imgid = node.id.split('-')[2];
-				let btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
-				let btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
-				let menuDetailsIsClicked = node.contains( event.target );
-
-				if ( !btnBurgerIsClicked && !menuDetailsIsClicked && node.style.display == "block" ) {
-					node.style.display = "none"
-				}
-			});
-		});
 
 		const		closeModel = () => {
 			let btnSend = document.querySelector('[id^=btn-send-comment]');
@@ -341,15 +202,171 @@
 			else menuDetailsImg.style.display = "none";
 		}
 
-		const		hideErrorComments = () => {
-			setTimeout(() => {
-				msgErrorComment.innerHTML = "";
-			}, 3500);
+		document.addEventListener("click", ( event ) => {
+			const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
+
+			[].forEach.call( listMenusDetails, ( node ) => {
+				const imgid = node.id.split('-')[2];
+				let btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
+				let btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
+				let menuDetailsIsClicked = node.contains( event.target );
+
+				if ( !btnBurgerIsClicked && !menuDetailsIsClicked && node.style.display == "block" ) {
+					node.style.display = "none"
+				}
+			});
+		});
+
+		const			like = ( id ) => {
+			const xhr = new XMLHttpRequest();
+			const imgid = id.split('-')[2];
+			const srcBtnLike = document.getElementById( id ).src;
+			const countLikes = parseInt( document.getElementById("countLikes-" + imgid).innerHTML );
+		
+			xhr.open( "POST", "/like/add/id/"+imgid, true );
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.onloadend = () => {
+				if ( xhr.readyState === 4 && xhr.status === 200 ) {
+					const result = JSON.parse( xhr.response );
+					
+					if ( result.success == "false" ) {
+						if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
+						else { alertMessage( result.msg, "error" ); }
+					} else {
+						if ( srcBtnLike.includes( "icone-like-inactive.png" ) ) {
+							document.getElementById("countLikes-"+imgid).innerHTML = countLikes + 1,
+							document.getElementById( id ).setAttribute("src", "/public/images/icone-like-active.png");
+							alertMessage( "Liked successfully !", "success" );
+						} else {
+							document.getElementById("countLikes-"+imgid).innerHTML = countLikes - 1,
+							document.getElementById( id ).setAttribute("src", "/public/images/icone-like-inactive.png");
+							alertMessage( "Disliked successfully !", "success" );
+						}
+					}
+				} else {
+					alertMessage( `An error has occurenced ${xhr.status}, ${xhr.statusText}`, "error" );
+				} 
+				HideAlert();
+			}
+			xhr.send();
 		}
 
-		setTimeout(() => {
-			if ( alert ) alert.remove();
-		}, 3000);
+		const createComment = ( data, connectedUserId ) => {
+			let div = document.createElement('div');
+			let Subdiv1 = document.createElement('div');
+			let Subdiv2 = document.createElement('div');
+			let htmlDiv2 = "";
+
+			div.id = "comment-"+data.id;
+			div.classList.add("row");
+			div.style.cssText = "height: auto; margin-bottom: 5px;"
+			Subdiv1.classList.add("col-lg-1");
+			Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
+			Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
+			Subdiv2.classList.add("col-lg-11");
+			htmlDiv2 += "<div>";
+			if ( connectedUserId.toString() == data.userid ) {
+				htmlDiv2 += "<span id='btn-delete-com-" + data.id + "' style='float: right; color: red; cursor: pointer;' onclick='deleteComment( "+data.imgid+", "+data.id+", "+connectedUserId+" )'>x</span>";
+			}
+			htmlDiv2 += "<span style='font-weight: bold; font-size: 13pt; color: rgb(78, 78, 78)'>"+data.username+"</span></br>";
+			htmlDiv2 += "<div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span>";
+			htmlDiv2 += "</div>";
+			Subdiv2.innerHTML = htmlDiv2;
+			div.append(Subdiv1);
+			div.append(Subdiv2);
+			commentsImg.scrollTop = commentsImg.scrollHeight - commentsImg.clientHeight;
+			commentsImg.appendChild( div );
+		}
+
+		const addComment = ( connectedUserid ) => {
+			const xhr = new XMLHttpRequest();
+			const btnSend = document.querySelector('[id^="btn-send-comment-img-"]');
+			const imgid = btnSend.id.split('-')[4];
+			const commentContent = document.getElementById('commentInput');
+			const countComment = parseInt( document.getElementById('countComments-'+imgid).innerHTML );
+			const url = "/comment/add/id/" + imgid;
+			const params = 'comment=' + commentContent.value;
+
+			xhr.open("POST", url);
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.onloadend = () => {
+				if ( xhr.readyState === 4 && xhr.status === 200 ) {
+					const result = JSON.parse( xhr.response );
+					
+					if ( result.success == "false" ) {
+						if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
+						else { alertMessage( result.msg, "error" ); }
+					} else {
+						getComments( "comments-img-" + imgid, connectedUserid );
+						document.getElementById('countComments-'+imgid).innerHTML = countComment + 1;
+						alertMessage( result.msg, "success" );
+					}
+				} else {
+					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}` , "error" );
+				}
+			}
+			xhr.send( params );
+		}
+
+		const getComments = ( id, connectedUserId ) => {
+			const xhr = new XMLHttpRequest();
+			const areaCountComments = document.getElementById("count-comments");
+			let imgid = id.split('-')[2];
+			
+			modelBG.classList.add('active-model');
+			btnSendComment.id = "btn-send-comment-img-" + imgid;
+			xhr.open("GET", "/comment/commentsImg/id/" + imgid, true);
+			xhr.onloadend = () => {
+				if ( xhr.readyState === 4 && xhr.status === 200 ) {
+					const data = JSON.parse( xhr.response );
+
+					if ( data.success == "false" ) {
+						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+						else { alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}`, "error" ); }
+					} else {
+						const comments = data.data;
+
+						if ( comments.length != 0 ) {
+							commentsImg.innerHTML = "";
+							areaCountComments.innerHTML = comments.length;
+							for ( let i = 0; i < comments.length; i++ ) { createComment( comments[i], connectedUserId ); }
+						} else {
+							commentsImg.innerHTML = "No comments yet !"
+							areaCountComments.innerHTML = 0;
+						}
+					}
+				} else {
+					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})` )
+				}
+				HideAlert();
+			}
+			xhr.send();
+		}
+
+		const deleteComment = ( imgid, comid, connectedUserid ) => {
+			const xhr = new XMLHttpRequest();
+			const countComment = parseInt( document.getElementById('countComments-'+imgid).innerHTML );
+
+			xhr.open("POST", "/comment/delete/id/" + comid, true);
+			xhr.onloadend = () => {
+				if ( xhr.readyState === 4 && xhr.status === 200 ) {
+					const data = JSON.parse( xhr.response );
+
+					if ( data.success == "false" ) {
+						if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+						else { alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}`, "error" ); }
+					} else {
+						getComments( "comments-img-" + imgid, connectedUserid );
+						document.getElementById('countComments-'+imgid).innerHTML = countComment - 1;
+						alertMessage( data.msg, "success" );
+					}
+				} else {
+					alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})` )
+				}
+				HideAlert();
+			}
+			xhr.send();
+		}
 
 	</script>
 </html>
