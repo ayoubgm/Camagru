@@ -1,3 +1,16 @@
+div#alert-msg {
+	width: auto;
+	height: auto;
+	padding: 10px 50px;
+	text-align: center;
+	font-weight: bold;
+	position: absolute;
+	top: 75px;
+	left: 10px;
+	z-index: 1;
+	display: none;
+}
+
 nav {
 	height: 65px;
 	padding-top: 10px;

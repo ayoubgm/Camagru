@@ -13,12 +13,6 @@ body {
 	flex-direction: column;
 }
 
-#alert-msg {
-	width: 100%;
-	font-size: 12pt;
-	font-weight: bold;
-}
-
 #gallery {
 	margin-top: 15px;
 	margin-left: 7%;
@@ -188,7 +182,6 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-color: rgba(141, 191, 255, 0.363);
 	display: flex;
 	justify-content: center;
 	align-items: center;
