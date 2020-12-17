@@ -5,8 +5,9 @@
 		if ( isset( $this->view_data['data'] ) ) {
 			$data = $this->view_data['data'];
 			$gallery = $data['gallery'];
-			$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;;
-			$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;;
+			$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
+			$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;
+			$countUnreadNotifs = $data["countUnreadNotifs"];
 		}
 ?>
 		<!DOCTYPE html>

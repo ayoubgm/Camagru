@@ -25,8 +25,8 @@
 				<a href="/signup" id="btn-signup">Signup</a>
 			<?php } else { ?>
 				<div id="area-notifications">
-					<img src="/public/images/notification.png"? id="notif-img">
-					<span id="countNotifs"><?php echo $data["countUnreadNotifs"]; ?></span>
+			 		<img src="/public/images/notification.png"? id="notif-img">
+				 	<span id="countNotifs"><?php echo $countUnreadNotifs; ?></span>
 					<div id="notifications" style="display: none;">
 						<div id="title"><span id="title">Notifications</span></div>
 						<hr>
@@ -35,7 +35,9 @@
 							<span id="delete-all" class="float-right">delete all</span>
 						</div>
 						<hr>
-						<div id="notifications-user"></div>
+						<div id="notifications-user">
+							
+						</div>
 					</div>
 				</div>
 				<div id="area-user">

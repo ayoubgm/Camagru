@@ -5,6 +5,7 @@
 		$data = $this->view_data['data'];
 		$userData = $data['userData'];
 		$userGallery = $data['userGallery'];
+		$countUnreadNotifs = $data["countUnreadNotifs"];
 ?>
 	<!DOCTYPE html>
 	<html lang="en">

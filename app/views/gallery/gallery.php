@@ -7,7 +7,7 @@
 	$gallery = $data['gallery'];
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$userGallery = ( isset ( $data['userGallery'] ) ) ? $data['userGallery'] : null;
-	// var_dump( $data["countUnreadNotifs"] );
+	$countUnreadNotifs = $data["countUnreadNotifs"];
 	
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
@@ -19,17 +19,17 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="/public/images/logo.png">
-	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="/public/css/_header.css"/>
-	<link rel="stylesheet" href="/public/css/gallery.css"/>
-	<link rel="stylesheet" href="/public/css/_footer.css"/>
-	<title>Gallery</title>
-</head>
-	<body>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" href="/public/images/logo.png">
+		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="/public/css/_header.css"/>
+		<link rel="stylesheet" href="/public/css/gallery.css"/>
+		<link rel="stylesheet" href="/public/css/_footer.css"/>
+		<title>Gallery</title>
+	</head>
+	<body onload="getNotifications();">
 		<?php require_once(VIEWS . "_header.php");?>
 		<div class="row col-12" id="gallery">
 			<?php if ( count($gallery ) === 0 ) { ?>
@@ -161,42 +161,16 @@
 		</div>
 		<?php require_once(VIEWS . "_footer.php");?>
 	</body>
-	<script src="/public/js/_header.js"></script>
+	<script src="/public/js/_app.js"></script>
 	<script>
 		const btn_profile = document.querySelector("nav .btn-auth #profile-img");
 		const btn_like = document.getElementById('btn-like');
-		const alert = document.getElementById('alert-msg');
 		const modelBG = document.querySelector('.model-bg');
 		const btnDelete = document.getElementById("btn-delete");
 		const btnCancel = document.getElementById("btn-cancel");
 		const modelClose = document.querySelector('#icon-cancel');
 		const commentsImg = document.getElementById('comments-img');
 		const btnSendComment = document.getElementById('btn-send-comment');
-		const msgErrorComment = document.getElementById('area-error-msg');
-
-		const			alertMessage = ( text, type ) => {
-			switch ( type ) {
-				case "success":
-					alert.classList.add("alert-success");
-					alert.innerHTML = text;
-					
-				break;
-				case "error":
-					alert.classList.add("alert-danger");
-					alert.innerHTML = text;
-				break;
-			}
-			alert.style.display = "block";
-		}
-		
-		const			HideAlert = () => {
-			setTimeout(() => {
-				alert.classList.remove("alert-success");
-				alert.classList.remove("alert-danger");
-				alert.style.display = "none";
-				alert.innerHTML = "";
-			}, 3000);
-		}
 
 		const		closeModel = () => {
 			let btnSend = document.querySelector('[id^=btn-send-comment]');
@@ -297,7 +271,7 @@
 			const url = "/comment/add/id/" + imgid;
 			const params = 'comment=' + commentContent.value;
 
-			xhr.open("POST", url);
+			xhr.open("POST", url, true);
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			xhr.onloadend = () => {
 				if ( xhr.readyState === 4 && xhr.status === 200 ) {

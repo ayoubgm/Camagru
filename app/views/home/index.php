@@ -3,7 +3,8 @@
 		$data = $this->view_data['data'];
 		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 		$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;
-	}
+		$countUnreadNotifs = $data["countUnreadNotifs"];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
