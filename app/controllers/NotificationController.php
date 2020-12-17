@@ -7,7 +7,7 @@
 	class notificationController extends Controller {
 		
 		private $viewData;
-		private $commentModel;
+		private $notificationModel;
 		private $helper;
 
 		public function 				__construct()
@@ -38,15 +38,41 @@
 		}
 		
 		// Read all notifactions of a user
-		public function					read ( $data )
+		public function					readallnotifsuser ()
 		{
-
+			if ( !isset( $_SESSION['userid'] ) ) {
+				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
+			} else {
+				try {
+					if ( !$this->notificationModel->readUserNotifications( $_SESSION['userid'] ) ) {
+						$this->viewData = [ "success" => "false", "msg" => "Failed to read your notifications !" ];
+					} else {
+						$this->viewData = [ "success" => "true", "msg" => "Read all your notifications successfully !" ];
+					}
+				} catch ( Exception $e ) {
+					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while read your notifications !" ];
+				}
+			}
+			die( json_encode( $this->viewData ) );
 		}
 		
 		// Delete all notifications of a user
-		public function					delete ( $data )
+		public function					deleteallnotifsuser ()
 		{
-
+			if ( !isset( $_SESSION['userid'] ) ) {
+				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
+			} else {
+				try {
+					if ( !$this->notificationModel->deleteUserNotifications( $_SESSION['userid'] ) ) {
+						$this->viewData = [ "success" => "false", "msg" => "Failed to delete your notifications !" ];
+					} else {
+						$this->viewData = [ "success" => "true", "msg" => "Your notifications was deleted successfully !" ];
+					}
+				} catch ( Exception $e ) {
+					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while delete your notifications !" ];
+				}
+			}
+			die( json_encode( $this->viewData ) );
 		}
 		
 	}
