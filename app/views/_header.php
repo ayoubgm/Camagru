@@ -31,13 +31,13 @@
 						<div id="title"><span id="title">Notifications</span></div>
 						<hr>
 						<div id="manage-notifications">
-							<span id="see-all" class="float-left">read all</span>
-							<span id="delete-all" class="float-right">delete all</span>
+							<?php if ( $countUnreadNotifs != 0 ) { ?>
+								<span id="see-all" class="float-left" onclick="readAllUserNotifs();">read all</span>
+								<span id="delete-all" class="float-right" onclick="deleteAllUserNotifs();">delete all</span>
+							<?php } ?>
 						</div>
 						<hr>
-						<div id="notifications-user">
-							
-						</div>
+						<div id="notifications-user"></div>
 					</div>
 				</div>
 				<div id="area-user">

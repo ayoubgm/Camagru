@@ -62,7 +62,6 @@
 												<a
 													href="http://www.facebook.com/sharer.php?u=<?php echo $image['src']; ?>"
 													target="_blank"
-													style="text-decoration: none; color: black;"
 												>
 													Share on facebook
 												</a>
@@ -71,10 +70,13 @@
 												<a
 													href="http://twitter.com/share?text=<?php echo $image['description']; ?>&amp;url=<?php echo $image['src']; ?>"
 													target="_blank"
-													style="text-decoration: none; color: black;"
 												>
 													Share on twitter
 												</a>
+											</li>
+											<hr style="margin: 0;"/>
+											<li>
+												<a href="<?php echo $image['src']; ?>" download> Download </a>
 											</li>
 										</ul>
 									</div>
@@ -374,6 +376,10 @@
 				HideAlert();
 			}
 			xhr.send();
+		}
+
+		const downloadImage = ( srcImage ) => {
+
 		}
 
 	</script>
