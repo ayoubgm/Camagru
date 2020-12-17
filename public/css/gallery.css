@@ -63,7 +63,7 @@ body {
 
 [id^=details-img-] {
 	width: 160px;
-	height: 100px;
+	height: 130px;
 	position: absolute;
 	top: 35px;
 	right: 10px;
@@ -85,8 +85,13 @@ body {
 	cursor: pointer;
 }
 
+[id^=details-img-] ul#details-imgList li a {
+	text-decoration: none;
+	color: black;
+}
+
 [id^=details-img-] ul#details-imgList li:hover {
-	background-color: rgb(163, 172, 251);
+	background-color: #cefff3;
 }
 
 .card .card-title #area-description {

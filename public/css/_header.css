@@ -62,7 +62,7 @@ nav ul.nav-links li a {
 nav ul.nav-links li:hover:not(:nth-last-child(-n+2)) {
 	border-radius: 50px;
 	color: #edf0f1;
-	background-color: #0088a9;
+	background-color: #9fecff;
 }
 
 nav ul.nav-links a#btn-signin,
@@ -93,7 +93,7 @@ nav .btn-auth #area-notifications #countNotifs {
 	font-size: 10pt;
 	border-radius: 100%;
 	color: white;
-	background-color: #0088a9;
+	background-color: #00a3cc;
 }
 
 nav .btn-auth #area-notifications #notifications {
@@ -134,7 +134,8 @@ nav .btn-auth #area-notifications #notifications #manage-notifications #see-all,
 nav .btn-auth #area-notifications #notifications #manage-notifications #delete-all  {
 	text-transform: uppercase;
 	font-size: 9pt;
-	color: #00728f;
+	color: #cbf5ff;
+	cursor: pointer;
 }
 
 nav .btn-auth #area-notifications #notifications #manage-notifications #delete-all {
@@ -142,7 +143,12 @@ nav .btn-auth #area-notifications #notifications #manage-notifications #delete-a
 }
 
 nav .btn-auth #area-notifications #notifications #notifications-user {
+	height: 220px;
 	overflow-y: scroll;
+}
+
+nav .btn-auth #area-notifications #notifications #notifications-user [id^=notif-]:hover {
+	background-color: rgb(231, 231, 231);
 }
 
 nav .btn-auth #area-user {
