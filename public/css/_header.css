@@ -141,6 +141,10 @@ nav .btn-auth #area-notifications #notifications #manage-notifications #delete-a
 	float: right;
 }
 
+nav .btn-auth #area-notifications #notifications #notifications-user {
+	overflow-y: scroll;
+}
+
 nav .btn-auth #area-user {
 	position: relative;
 	float: left;
