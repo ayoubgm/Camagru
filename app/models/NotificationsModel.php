@@ -31,7 +31,7 @@
 		}
 
 		// Read all user notications
-		public function				readUserNotifactions ( $id )
+		public function				readUserNotifications ( $id )
 		{
 			$query = 'UPDATE `notifications` SET seen = true WHERE userid = ?';
 			$stt = $this->connect()->prepare( $query );
