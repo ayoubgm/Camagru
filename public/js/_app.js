@@ -46,15 +46,23 @@ document.addEventListener('click', (event) => {
 
 const					createNotification = ( data ) => {
 	let div = document.createElement('div');
-	htmldiv = "";
-
+	let hr = document.createElement('hr');
+	let htmldiv = "";
+	let cssdiv = "";
+	
 	div.id = "notif-" + data.id;
 	div.classList.add("w-100");
-	div.style.cssText = "height: auto; padding: 5px;";
+	cssdiv += "height: 32px; padding: 5px; cursor: pointer;";
+	div.style.cssText = "height: 32px; padding: 5px; cursor: pointer;";
+	if ( data.seen == "0" ) { div.style.cssText += "background-color: #e2f9ff"; }
 	htmldiv += "<span class='float-left' style='color: #00a3cc;'>"+ data.content +"</span>";
 	htmldiv += "<span class='float-right' style='font-size: 10pt'>"+ data.moments +"</span>"
+	div.addEventListener('click', () => {
+		window.location.href = "/gallery?image=" + data.id; 
+	});
 	div.innerHTML = htmldiv;
 	notificationsArea.appendChild( div );
+	notificationsArea.appendChild( hr );
 }
 
 // Display all user notifications
@@ -82,6 +90,50 @@ const					getNotifications = () => {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
 		}
 		HideAlert();
+	}
+	xhr.send();
+}
+
+const					readAllUserNotifs = () => {
+	const xhr = new XMLHttpRequest();
+
+	xhr.open("POST", "/notification/readallnotifsuser", true);
+	xhr.onloadend = () => {
+		if ( xhr.readyState === 4 && xhr.status ) {
+			const result = JSON.parse( xhr.response );
+
+			if ( result.success == "false" ) {
+				if ( result.msg != "You need to login first !" ) { alertMessage( result.msg, "error" ); }
+			} else {
+				document.getElementById('countNotifs').innerHTML = 0;
+				getNotifications();
+				alertMessage( result.msg, "success" );
+			}
+		} else {
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
+		}
+	}
+	xhr.send();
+}
+
+const					deleteAllUserNotifs = () => {
+	const xhr = new XMLHttpRequest();
+
+	xhr.open("POST", "/notification/deleteallnotifsuser", true);
+	xhr.onloadend = () => {
+		if ( xhr.readyState === 4 && xhr.status ) {
+			const result = JSON.parse( xhr.response );
+
+			if ( result.success == "false" ) {
+				if ( result.msg != "You need to login first !" ) { alertMessage( result.msg, "error" ); }
+			} else {
+				document.getElementById('countNotifs').innerHTML = 0;
+				getNotifications();
+				alertMessage( result.msg, "success" );
+			}
+		} else {
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
+		}
 	}
 	xhr.send();
 }
