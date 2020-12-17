@@ -19,6 +19,11 @@
 		{
 			if ( file_exists( MIDDLEWARES . $middleware . '.php') ) { return new $middleware(); }
 		}
+
+		static protected function				call_helper ()
+		{
+			if ( file_exists( HELPERS . "helper.php" ) ) { return new helper(); }
+		}
 		
 	}
 ?>

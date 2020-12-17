@@ -17,6 +17,7 @@
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->userModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
+			$this->notificationsModel = self::call_model('NotificationsModel');
 		}
 
 		public function 				profile( $data )
@@ -28,11 +29,14 @@
 			} else {
 				$redirect = "profile";
 				try {
-					$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
+					$this->viewData["data"] = [
+						"gallery" => $this->galleryModel->getAllEditedImages(),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
+					];
 					if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
 						$this->viewData["data"] += [
 							"userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ),
-							"userGallery" => $this->galleryModel->userGallery( strtolower( $data[1] ) )
+							"userGallery" => $this->galleryModel->userGallery( strtolower( $data[1] ) ),
 						];
 					} else {
 						$this->viewData["data"] += [
@@ -56,7 +60,8 @@
 					$this->viewData["data"] = [
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					$oldData = $this->userModel->findUserById( $_SESSION["userid"] );
 					switch( $_SERVER["REQUEST_METHOD"] ) {
@@ -99,7 +104,8 @@
 						"success" => "true",
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
 						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
-						"gallery" => $this->galleryModel->getAllEditedImages()
+						"gallery" => $this->galleryModel->getAllEditedImages(),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 				} catch ( Exception $e ) {
 					$this->viewData["success"] = "false";
@@ -118,7 +124,8 @@
 					$this->viewData["data"] = [
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					switch( $_SERVER["REQUEST_METHOD"] ) {
 						case "GET":
@@ -156,7 +163,8 @@
 					$this->viewData["data"] = [
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
 						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
-						"gallery" => $this->galleryModel->getAllEditedImages()
+						"gallery" => $this->galleryModel->getAllEditedImages(),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					if ( isset( $data[0] ) && isset( $data[1] ) && ( isset( $data[0] ) && $data[0] === "notificationsemail" ) && ( isset( $data[1] ) && ( $data[1] === "1" || $data[1] === "0" ) ) ) {
 						switch( $_SERVER["REQUEST_METHOD"] ) {
@@ -223,7 +231,8 @@
 					$this->viewData["data"] = [
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
+						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					switch( $_SERVER["REQUEST_METHOD"] ) {
 						case "GET":

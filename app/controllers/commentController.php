@@ -10,6 +10,7 @@
 		private $commentModel;
 		private $galleryMiddleware;
 		private $commentMiddleware;
+		private $helper;
 		
 		public function				__construct()
 		{
@@ -18,6 +19,7 @@
 			$this->commentModel = $this->call_model('CommentsModel');
 			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
 			$this->commentMiddleware = $this->call_middleware('CommentMiddleware');
+			$this->helper = $this->call_helper();
 		}
 
 		static public function		validateData( $obj, $data )
@@ -33,30 +35,6 @@
 			}
 		}
 
-		static public function			getMomentOfDate( $date )
-		{
-			$gmtTimezone = new DateTimeZone('GMT+1');
-			$creatDate = new DateTime( $date, $gmtTimezone );
-			$currDate = new DateTime("now", $gmtTimezone);
-			$interval = date_diff( $currDate, $creatDate );
-			$string = "";
-
-			if ( $interval->format('%Y') > 0 ) {
-				$string = $interval->format('%Y').", ".$interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
-			} else if ( $interval->format('%m') > 0 && $interval->format('%m') > 7 ) {
-				$string = $interval->format('%d')." ".strtolower( $interval->format('%F') )." at ".$interval->format('%H:%m');
-			} else if ( $interval->format('%d') >= 1 ) {
-				$string = $interval->format('%d')." d";
-			} else if ( $interval->format('%H') >= 1 && $interval->format('%H') <= 24 ) {
-				$string = $interval->format('%h')." h";
-			} else if ( $interval->format('%i') >= 1 && $interval->format('%i') <= 60 ) {
-				$string = $interval->format('%i')." min";
-			} else if ( $interval->format('%s') >= 1 && $interval->format('%s') <= 60 ) {
-				$string = $interval->format('%s')." sec";
-			}
-			return $string;
-		}
-
 		public function				add( $data )
 		{
 			try{
@@ -67,11 +45,7 @@
 						case "POST":
 							if ( $error = $this->commentMiddleware->add( $_POST['comment'] ) ) {
 								$this->viewData = [ "success" => "false", "msg" => $error ];
-							} else if ( $id = $this->commentModel->save([
-								"content" => $_POST['comment'],
-								"userid" => $_SESSION['userid'],
-								"imgid" => $data[1]
-							]) ) {
+							} else if ( $id = $this->commentModel->save([ "content" => $_POST['comment'], "userid" => $_SESSION['userid'], "imgid" => $data[1] ]) ) {
 								$this->viewData = [
 									"success" => "true",
 									"msg" => "Added successfully !",
@@ -92,11 +66,13 @@
 		public function				commentsImg( $data )
 		{
 			try {
-				if ( $error = $this->validateData( $this, $data ) ) {
-					$this->viewData = [ "success" => "false", "msg" => $error ];
+				if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
+					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while validate the image !" ];
+				} else if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
+					$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
 				} else {
 					$comments = $this->commentModel->getCommentsOfImg( $data[1] );
-					foreach( $comments as $k => $v ) { $comments[ $k ] += [ "momments" => self::getMomentOfDate( $v["createdat"] ) ]; }
+					foreach( $comments as $k => $v ) { $comments[ $k ] += [ "momments" => $this->helper->getMomentOfDate( $v["createdat"] ) ]; }
 					$this->viewData = [ "success" => "true", "data" => $comments ];
 				}
 			} catch ( Exception $e ) {

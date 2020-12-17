@@ -8,12 +8,14 @@
 		
 		private $viewData;
 		private $commentModel;
+		private $helper;
 
 		public function 				__construct()
 		{
 			session_start();
 			$this->viewData = array();
 			$this->notificationModel = self::call_model("NotificationsModel");
+			$this->helper = self::call_helper();
 		}
 
 		// Get notfications of a user
@@ -23,7 +25,11 @@
 				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
 			} else {
 				try {
-					$this->viewData = [ "success" => "true", "data" => $this->notificationModel->getUserNotifications( $_SESSION ) ];
+					$notifs = $this->notificationModel->getUserNotifications( $_SESSION['userid'] );
+					foreach ( $notifs as $key => $value ) {
+						$notifs[ $key ] += [ "moments" => $this->helper->getMomentOfDate( $value["createdat"] ) ]; 
+					}
+					$this->viewData = [ "success" => "true", "data" => $notifs ];
 				} catch ( Exception $e ) {
 					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while load your notifications !" ];
 				}

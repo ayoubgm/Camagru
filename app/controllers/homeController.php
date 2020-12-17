@@ -9,7 +9,7 @@
 		private $userMiddleware;
 		private $userModel;
 		private $galleryModel;
-		private $notificationModel;
+		private $notificationsModel;
 
 		public function 				__construct()
 		{
@@ -17,7 +17,7 @@
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->userModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
-			$this->notificationModel = self::call_model('NotificationsModel');
+			$this->notificationsModel = self::call_model('NotificationsModel');
 		}
 
 		// private function 	sendMail ( $subject, $to )
@@ -42,7 +42,7 @@
 					$this->viewData["data"] += [
 						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
 						"userGallery" => $this->galleryModel->userGallery( $_SESSION['username'] ),
-						"userNotifications" => $this->notificationModel->getUserNotifications( $_SESSION['userid'] )
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 				}
 				$this->viewData["success"] = "true";
@@ -155,16 +155,9 @@
 					switch ( $_SERVER["REQUEST_METHOD"] ) {
 						case "GET":
 							if ( $error = $this->userMiddleware->validateRecoveryToken( $data[1] ) ) {
-								$this->viewData = [
-									"success" => "false",
-									"msg" => $error,
-									"data" => [ "token" => $data[1] ]
-								];
+								$this->viewData = [ "success" => "false", "msg" => $error, "data" => [ "token" => $data[1] ] ];
 							} else {
-								$this->viewData = [
-									"success" => "true",
-									"data" => [ "token" => $data[1] ]
-								];
+								$this->viewData = [ "success" => "true", "data" => [ "token" => $data[1] ] ];
 							}
 						break;
 						case "POST":
@@ -172,23 +165,12 @@
 								unset( $_POST["btn-submit"] );
 								$_POST["token"] = $data[1];
 								if ( $error = $this->userMiddleware->new_password( $_POST ) ) {
-									$this->viewData = [
-										"success" => "false",
-										"msg" => $error,
-										"data" => [ "token" => $data[1] ]
+									$this->viewData = [ "success" => "false", "msg" => $error, "data" => [ "token" => $data[1] ]
 									];
 								} else if ( $this->userModel->newpassword( array( "newpassword" => password_hash($_POST["newpassword"], PASSWORD_ARGON2I), "token" => $data[1] ) ) ) {
-									$this->viewData = [
-										"success" => "true",
-										"msg" => "Your password has been changed successfully !",
-										"data" => [ "token" => $data[1] ]
-									];
+									$this->viewData = [ "success" => "true", "msg" => "Your password has been changed successfully !", "data" => [ "token" => $data[1] ] ];
 								} else {
-									$this->viewData = [
-										"success" => "false",
-										"msg" => "Failed to change your password !",
-										"data" => [ "token" => $data[1] ]
-									];
+									$this->viewData = [ "success" => "false", "msg" => "Failed to change your password !", "data" => [ "token" => $data[1] ] ];
 								}
 							}
 						break;
