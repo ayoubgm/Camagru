@@ -23,14 +23,11 @@
 		// Get all count unread notifications
 		public function				getCountUnreadNotifications ( $id )
 		{
-			$query = '
-				SELECT count(*) FROM `notifications`
-				WHERE userid = ?
-				AND seen = false
-			';
+			$query = 'SELECT count(*) AS `count` FROM `notifications` WHERE userid = ? AND seen = false ';
 			$stt = $this->connect()->prepare( $query );
 			$stt->execute([ $id ]);
-			return $stt->rowCount();
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
+			return $data['count'];
 		}
 
 		// Read all user notications
