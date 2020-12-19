@@ -7,7 +7,7 @@
 	{
 
 		// Middleware for validating sign in data
-		public function      signin ( $data )
+		public function					signin ( $data )
 		{
 			if ( !$data['username'] || !$data['password'] ) {
 				return "Invalid data provided !";
@@ -21,7 +21,7 @@
 		}
 
 		// Middleware for validating register data
-		public function      signup ( $data )
+		public function					signup ( $data )
 		{
 			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email'] || !$data['gender']  || !$data['password'] || !$data['confirmation_password'] ) {
 				return "Invalid data provided !";
@@ -46,7 +46,7 @@
 			}
 		}
 
-		public function		reset_password ( $email )
+		public function					reset_password ( $email )
 		{
 			if ( !$email ) {
 				return "the email can't be empty !";
@@ -57,7 +57,7 @@
 			}
 		}
 
-		public function		validateRecoveryToken ( $token ) {
+		public function					validateRecoveryToken ( $token ) {
 			if ( !$token ) {
 				return "No token found !";
 			} else if ( !$this->isRecoveryTokenValid( $token ) ) {
@@ -65,7 +65,7 @@
 			}
 		}
 
-		public function		validateActivationToken ( $token ) {
+		public function					validateActivationToken ( $token ) {
 			if ( !$token ) {
 				return "No token found !";
 			} else if ( !$this->isActivationTokenValid( $token ) ) {
@@ -73,7 +73,7 @@
 			}
 		}
 
-		public function		new_password ( $data )
+		public function					new_password ( $data )
 		{
 			if ( !$data['newpassword'] || !$data['confirmation_password'] || !$data['token'] ) {
 				return "Invalid data provided !";
@@ -87,7 +87,7 @@
 		}
 		
 		// Middleware for validating edited data
-		public function      edit ( $userID, $data )
+		public function					edit ( $userID, $data )
 		{
 			if ( !$data['firstname'] || !$data['lastname'] || !$data['username'] || !$data['email']  || !$data['gender'] ) {
 				return "Invalid data provided !";
@@ -107,7 +107,7 @@
 			}
 		}
 
-		public function		change_password ( $id, $data )
+		public function					change_password ( $id, $data )
 		{
 			if (
 				( $error = $this->validateNewPassword( $data['oldpassword'] ) ) ||
@@ -121,10 +121,15 @@
 			}
 		}
 
-		public function		validateDescription ( $description )
+		public function					validateDescription ( $description )
 		{
 			return $this->validateImageDescription( $description );
-		} 
+		}
+
+		public function					isSignin ( $session )
+		{
+			return ( isset( $session['userid'] ) && isset( $session['username'] ) ) ? true : false; 
+		}
 
 	}
 ?>
