@@ -1,10 +1,7 @@
 <?php
-	if ( !isset($_SESSION['userid']) ) {
-		header("Location: /home");
-	} else {
-		$data = $this->view_data['data'];
-		$userData = $data['userData'];
-		$userGallery = $data['userGallery'];
+	$data = $this->view_data['data'];
+	$userData = $data['userData'];
+	$countUnreadNotifs = $data["countUnreadNotifs"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,11 +11,11 @@
 	<title>Change password</title>
 	<link rel="icon" href="/public/images/logo.png">
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="/public/css/change_password.css"/>
+	<link rel="stylesheet" href="/public/css/user/change_password.css"/>
 	<link rel="stylesheet" href="/public/css/_header.css"/>
 	<link rel="stylesheet" href="/public/css/_footer.css"/>
 </head>
-<body>
+<body onload="getNotifications();">
 	<?php require_once(VIEWS . "_header.php");?>
 	<div class="container">
 		<div class="card offset-lg-2 col-lg-8">
@@ -31,7 +28,7 @@
 				</div>
 				<hr/>
 				<div class="col-md-12 px-5 py-4">
-					<form action="<?php echo SERVER; ?>/user/change_password" method="POST" onsubmit="return validateData();">
+					<form action="/user/change_password" method="POST" onsubmit="return validateData();">
 						<div class="form-group row m-0 mb-1">
 							<label class="col-lg-4" for="inputOldPass">Old password :</label>
 							<div class="col-lg-8">
@@ -87,7 +84,7 @@
 						<div class="form-row">
 							<input
 								type="submit"
-								class="offset-2 col-8 btn btn-outline-danger w-50"
+								class="offset-2 col-8 btn btn-outline-danger w-50 mt-5"
 								value="Submit"
 								id="btn-submit"
 								name="btn-submit"
@@ -100,49 +97,6 @@
 	</div>
 	<?php require_once(VIEWS . "_footer.php"); ?>
 </body>
-<script src="/public/js/_menu.js"></script>
-<script src="/public/js/_userMenu.js"></script>
-<script>
-	const buttonSubmit = document.querySelector('#btn-submit');
-	const msg = document.getElementById("msg");
-	const btn_profile = document.querySelector("nav .btn-auth #profile-img");
-	const oldpassword = document.getElementById('inputOldPass');
-	const newpassword = document.getElementById('inputNewPass');
-	const confirmationPassword = document.getElementById('inputConfirmationPass');
-
-	const 			setError = ( target, msgerror ) => {
-		target.style.border = "1px solid red";
-		msg.classList.add("text-danger");
-		msg.classList.remove("text-success");
-		msg.innerHTML = msgerror;
-	}
-	const 			setSuccess = ( target ) => {
-		msg.innerHTML = "";
-		msg.classList.remove("text-danger");
-		msg.classList.add("text-success");
-		target.style.border = "1px solid green";
-	}
-	const 			validatePassword = ( password ) => {
-		if ( !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/.test( password.value ) ) {
-			setError(password, "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !");
-			return false;
-		} else {
-			setSuccess(password);
-			return true;
-		}
-	}
-	const			validateConfPass = ( ) => {
-		if ( newpassword.value !== confirmationPassword.value ) {
-			setError(confirmationPassword, "Passwords doesn't match");
-			return false;
-		} else {
-			setSuccess(confirmationPassword);
-			return true;
-		}
-	}
-	
-</script>
+<script type="text/javascript" src="/public/js/_header.js"></script>
+<script type="text/javascript" src="/public/js/user/changepassword.js"></script>
 </html>
-<?php
-	}
-?>

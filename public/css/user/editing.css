@@ -6,7 +6,7 @@
 }
 
 body {
-    background: url('../images/background-img12.jpg') no-repeat center center fixed; 
+    background: url('/public/images/background-img12.jpg') no-repeat center center fixed; 
 	background-size: cover;
 }
 
