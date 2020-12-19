@@ -12,7 +12,7 @@
 		<title>Account confirmation</title>
 		<link rel="icon" href="/public/images/logo.png">
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/public/css/account_confirmation.css"/>
+		<link rel="stylesheet" href="/public/css/home/account_confirmation.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 	</head>
 	<body>
@@ -33,7 +33,8 @@
 					</div>
 				</div>
 				<div class="card-footer w-100">
-					<a href="/home" id="link-home" class="text-muted">Home</a>
+					<a href="/home" id="link-home" class="text-muted float-left">Home</a>
+					<a href="/signin" id="link-signin" class="text-muted float-right">Sign in</a>
 				</div>
 			</div>
 		</div>

@@ -6,7 +6,7 @@
 }
 
 body {
-    background: url('../images/background-img6.jpg') no-repeat center center fixed; 
+    background: url('/public/images/background-img6.jpg') no-repeat center center fixed; 
 	background-size: cover;
 }
 
@@ -15,7 +15,8 @@ body {
 }
 
 .card {
-    margin-top: 180px;
+    position: relative;
+    top: 200px;
 }
 
 .card-body p{
@@ -38,12 +39,6 @@ body {
 #area-msg {
     height: 50px;
 }
-
-/* #area-msg #msg {
-    position: relative;
-    left: 70px;
-}*/
-
 
 .reset-pass {
     font-size: 10pt;

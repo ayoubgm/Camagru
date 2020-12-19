@@ -10,7 +10,7 @@
 		<title>Registration</title>
 		<link rel="icon" href="/public/images/logo.png">
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/public/css/signup.css"/>
+		<link rel="stylesheet" href="/public/css/home/signup.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 	</head>
 	<body>
@@ -148,7 +148,7 @@
 						</div>
 						<div class="card-footer text-muted w-100">
 							<a href="/">Home</a>
-							<a href="/signin" id="link-signin">Log in</a>
+							<a href="/signin" id="link-signin">Sign in</a>
 						</div>
 					</div>
 				</div>

@@ -1,25 +1,21 @@
 * {
+	margin: 0;
+	padding: 0;
 	font-family: 'Arial';
 }
 
 body {
-	background: url('../images/background-img2.jpg') no-repeat center center fixed; 
+	background: url('/public/images/background-img2.jpg') no-repeat center center fixed; 
 	background-size: cover;
 }
 html, body {
 	height: 100%;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .container .card {
 	width: 100%;
-	margin: 0 auto;
-	float: none;
+	position: relative;
+	top: 200px;
 }
 
 .card div div img {

@@ -10,7 +10,7 @@
 		<title>Reset password</title>
 		<link rel="icon" href="/public/images/logo.png">
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/public/css/reset_password.css"/>
+		<link rel="stylesheet" href="/public/css/home/reset_password.css"/>
 		<link rel="stylesheet" href="/public/css/_header.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 	</head>

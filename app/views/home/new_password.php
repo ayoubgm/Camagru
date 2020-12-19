@@ -12,7 +12,7 @@
 		<title>New password</title>
 		<link rel="icon" href="/public/images/logo.png">
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/public/css/new_password.css"/>
+		<link rel="stylesheet" href="/public/css/home/new_password.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 	</head>
 	<body>
