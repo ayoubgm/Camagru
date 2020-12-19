@@ -23,44 +23,43 @@
 		public function 				profile( $data )
 		{
 			$redirect = null;
-
-			if ( !isset( $_SESSION["userid"] ) || empty( $_SESSION["userid"] ) ) {
-				$redirect = "signin";
-			} else {
-				$redirect = "profile";
-				try {
-					$this->viewData["data"] = [
-						"gallery" => $this->galleryModel->getAllEditedImages(),
-						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
-					];
-					if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
-						$this->viewData["data"] += [
-							"userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ),
-							"userGallery" => $this->galleryModel->userGallery( strtolower( $data[1] ) ),
-						];
-					} else {
-						$this->viewData["data"] += [
-							"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-							"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] )
-						];
+			
+			switch( $_SERVER["REQUEST_METHOD"] ) {
+				case "GET":
+					try {
+						if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+							$redirect = "signin";
+						} else {
+							$redirect = "profile";
+							$this->viewData["data"] = [
+								"gallery" => $this->galleryModel->getAllEditedImages(),
+								"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
+							];
+							if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
+								$this->viewData["data"] += [ "userData" => $this->userModel->findUserByUsername( strtolower( $data[1] ) ) ];
+							} else {
+								$this->viewData["data"] += [ "userData" => $this->userModel->findUserById( $_SESSION["userid"] ) ];
+							}
+						}
+					} catch ( Exception $e ) {
+						$this->viewData["success"] = "false";
+						$this->viewData["msg"] = "Something goes wrong, try later !";
 					}
-				} catch ( Exception $e ) {
-					$this->viewData["success"] = "false";
-					$this->viewData["msg"] = "Something goes wrong, try later !";
-				}
+					if ( $redirect == "signin" ) { $this->call_view( "home" . DIRECTORY_SEPARATOR ."signin" )->render(); }
+					else { $this->call_view( "user" . DIRECTORY_SEPARATOR ."profile", $this->viewData )->render(); }
+				break;
 			}
-			if ( $redirect == "signin" ) { $this->call_view( "home" . DIRECTORY_SEPARATOR ."signin" )->render(); }
-			else { $this->call_view( "user" . DIRECTORY_SEPARATOR ."profile", $this->viewData )->render(); }
 		}
 		
 		public function 				edit()
 		{
-			if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
-				try {
+			try {
+				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+					header("Location: /");
+				} else {
 					$this->viewData["data"] = [
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
 						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					$oldData = $this->userModel->findUserById( $_SESSION["userid"] );
@@ -86,45 +85,47 @@
 							}
 						break;
 					}
-				} catch ( Exception $e ) {
-					$this->viewData["success"] = "false";
-					$this->viewData["msg"] = "Something goes wrong while editing your informations, try later !";
 				}
-				$this->call_view( "user" . DIRECTORY_SEPARATOR ."edit_infos", $this->viewData )->render();
-			} else {
-				header("Location: /home");
+			} catch ( Exception $e ) {
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something goes wrong while editing your informations, try later !";
 			}
+			$this->call_view( "user" . DIRECTORY_SEPARATOR ."edit_infos", $this->viewData )->render();
 		}
 
 		public function 				settings ()
 		{
-			if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
-				try {
-					$this->viewData["data"] = [
-						"success" => "true",
-						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
-						"gallery" => $this->galleryModel->getAllEditedImages(),
-						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
-					];
-				} catch ( Exception $e ) {
-					$this->viewData["success"] = "false";
-					$this->viewData["msg"] = "Something goes wrong, try later !";
-				}
-				$this->call_view( "user" . DIRECTORY_SEPARATOR ."settings", $this->viewData )->render();
-			} else {
-				header("Location: /home");
+			switch( $_SERVER["REQUEST_METHOD"] ) {
+				case "GET":
+					try {
+						if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+							header("Location: /");
+						} else {
+							$this->viewData["data"] = [
+								"success" => "true",
+								"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
+								"gallery" => $this->galleryModel->getAllEditedImages(),
+								"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
+							];
+						}
+					} catch ( Exception $e ) {
+						$this->viewData["success"] = "false";
+						$this->viewData["msg"] = "Something goes wrong, try later !";
+					}
+					$this->call_view( "user" . DIRECTORY_SEPARATOR ."settings", $this->viewData )->render();
+				break;
 			}
 		}
 
 		public function 				change_password ()
 		{
-			if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
-				try {
+			try {
+				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+					header("Location: /");
+				} else {
 					$this->viewData["data"] = [
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
 						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					switch( $_SERVER["REQUEST_METHOD"] ) {
@@ -146,23 +147,22 @@
 							}
 						break;
 					}
-				} catch ( Exception $e ) {
-					$this->viewData["success"] = "false";
-					$this->viewData["msg"] = "Something goes wrong while changing your password !";
+					$this->call_view( "user" . DIRECTORY_SEPARATOR ."change_password", $this->viewData )->render();
 				}
-				$this->call_view( "user" . DIRECTORY_SEPARATOR ."change_password", $this->viewData )->render();
-			} else {
-				header("Location: /home");
+			} catch ( Exception $e ) {
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something goes wrong while changing your password !";
 			}
 		}
 
 		public function 				notifications_preferences ( $data )
 		{
-			if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
-				try {
+			try {
+				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+					header("Location: /home");
+				} else {
 					$this->viewData["data"] = [
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
@@ -188,13 +188,11 @@
 						$this->viewData["success"] = "false";
 						$this->viewData["msg"] = "Something is wrong !";
 					}
-				} catch ( Exception $e ) {
-					$this->viewData["success"] = "false";
-					$this->viewData["msg"] = "Something is wrong, try later !";
+					$this->call_view( "user" . DIRECTORY_SEPARATOR . "notifications_preferences", $this->viewData)->render();
 				}
-				$this->call_view( "user" . DIRECTORY_SEPARATOR . "notifications_preferences", $this->viewData)->render();
-			} else {
-				header("Location: /home");
+			} catch ( Exception $e ) {
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something is wrong, try later !";
 			}
 		}
 
@@ -226,8 +224,10 @@
 
 		public function 				editing ()
 		{
-			if ( isset( $_SESSION["userid"] ) ) {
-				try {
+			try {
+				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+					header("Location: /signin");			
+				} else {
 					$this->viewData["data"] = [
 						"gallery" => $this->galleryModel->getAllEditedImages(),
 						"userData" => $this->userModel->findUserById( $_SESSION["userid"] ),
@@ -275,14 +275,12 @@
 							}
 						break;
 					}
-				} catch ( Exception $e ) {
-					if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
-					$this->viewData["success"] = "false";
-					$this->viewData["msg"] = "Something goes wrong, try later !";
+					$this->call_view( "user" . DIRECTORY_SEPARATOR ."editing", $this->viewData )->render();
 				}
-				$this->call_view( "user" . DIRECTORY_SEPARATOR ."editing", $this->viewData )->render();
-			} else {
-				header("Location: /signin");
+			} catch ( Exception $e ) {
+				if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something goes wrong, try later !";
 			}
 		}
 
