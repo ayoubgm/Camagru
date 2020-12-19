@@ -35,21 +35,25 @@
 
 		public function 				index()
 		{
-			try {
-				session_start();
-				$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
-				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
-					$this->viewData["data"] += [
-						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
-						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
-					];
-				}
-				$this->viewData["success"] = "true";
-			} catch ( Exception $e ) {
-				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong, try later !";
+			switch ( $_SERVER["REQUEST_METHOD"] ) {
+				case "GET":
+					try {
+						session_start();
+						$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
+						if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
+							$this->viewData["data"] += [
+								"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+								"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
+							];
+						}
+						$this->viewData["success"] = "true";
+					} catch ( Exception $e ) {
+						$this->viewData["success"] = "false";
+						$this->viewData["msg"] = "Something goes wrong, try later !";
+					}
+					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $this->viewData )->render();
+				break;
 			}
-			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $this->viewData )->render();
 		}
 
 		public function 				signin()
@@ -60,6 +64,9 @@
 					header("Location: /");
 				} else {
 					switch ( $_SERVER["REQUEST_METHOD"] ) {
+						case "GET":
+							$this->viewData = [ "success" => "true" ];			
+						break;
 						case "POST":
 							if ( isset( $_POST["btn-signin"] ) ) {
 								unset( $_POST["btn-signin"] );
@@ -73,11 +80,11 @@
 							}
 						break;
 					}
-					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', $this->viewData )->render();
 				}
 			} catch ( Exception $e ) {
 				$this->viewData = [ "success" => "false", "msg" => "Couldn't login, try later !" ];
 			}
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', $this->viewData )->render();
 		}
 		
 		public function 				signup()
@@ -88,6 +95,9 @@
 					header("Location: /");
 				} else {
 					switch( $_SERVER["REQUEST_METHOD"] ) {
+						case "GET":
+							$this->viewData = [ "success" => "true" ];			
+						break;
 						case "POST":
 							if ( isset($_POST["btn-signup"]) ) {
 								unset( $_POST["btn-signup"] );
@@ -119,6 +129,9 @@
 					header("Location: /");
 				} else {
 					switch ( $_SERVER["REQUEST_METHOD"] ) {
+						case "GET":
+							$this->viewData = [ "success" => "true" ];			
+						break;
 						case "POST":
 							if ( isset( $_POST["btn-reset"] ) ) {
 								if ( $error = $this->userMiddleware->reset_password($_POST["email"]) ) {
@@ -152,7 +165,7 @@
 		{
 			try {
 				session_start();
-				if ( isset( $_SESSION["userid"] ) ) {
+				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					header("Location: /");
 				} else if ( $error = $this->validateToken( $data ) ) {
 					$this->viewData = [ "success" => "false", "msg" => $error ];
@@ -182,8 +195,7 @@
 					}
 				}
 			} catch ( Exception $e ) {
-				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong, try later !";
+				$this->viewData = ["success" => "false", "msg" => "Something goes wrong, try later !"];
 			}
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'new_password', $this->viewData)->render();
 		}
@@ -191,26 +203,29 @@
 		public function 				account_confirmation ( $data )
 		{
 			try {
-				session_start();
-				if ( isset( $_SESSION['userid'] ) ) {
-					header("Location: /");
-				} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
-					$this->viewData = [ "success" => "false", "msg" => $error ];
-				} else {
-					$this->viewData[ "data" ] = [ "token" => $data[1] ];
-					if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
-						$this->viewData += [ "success" => "false", "msg" => $error ];
-					} else {
-						if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
-							$this->viewData += [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
+				switch ( $_SERVER["REQUEST_METHOD"] ) {
+					case "GET":
+						session_start();
+						if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
+							header("Location: /");
+						} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
+							$this->viewData = [ "success" => "false", "msg" => $error ];
 						} else {
-							$this->viewData += [ "success" => "false", "msg" => "Failed to activate your account !" ];
+							$this->viewData[ "data" ] = [ "token" => $data[1] ];
+							if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
+								$this->viewData += [ "success" => "false", "msg" => $error ];
+							} else {
+								if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
+									$this->viewData += [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
+								} else {
+									$this->viewData += [ "success" => "false", "msg" => "Failed to activate your account !" ];
+								}
+							}
 						}
-					}
+					break;
 				}
 			} catch ( Exception $e ) {
-				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong while activating your account, try later !";
+				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while activating your account, try later !"];
 			}
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'account_confirmation', $this->viewData)->render();
 		}
