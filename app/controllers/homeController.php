@@ -232,7 +232,7 @@
 
 		public function 				notfound()
 		{
-			$this->call_view('notfound')->render();
+			$this->call_view('home' . DIRECTORY_SEPARATOR .'notfound')->render();
 		}
 
 	}
