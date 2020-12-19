@@ -163,7 +163,7 @@
 		</div>
 		<?php require_once(VIEWS . "_footer.php");?>
 	</body>
-	<script src="/public/js/_app.js"></script>
+	<script src="/public/js/_header.js"></script>
 	<script>
 		const btn_profile = document.querySelector("nav .btn-auth #profile-img");
 		const btn_like = document.getElementById('btn-like');
@@ -376,10 +376,6 @@
 				HideAlert();
 			}
 			xhr.send();
-		}
-
-		const downloadImage = ( srcImage ) => {
-
 		}
 
 	</script>

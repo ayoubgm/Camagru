@@ -2,7 +2,7 @@
 	<div id="alert-msg" class="alert"></div>
 	<nav>
 		<div class="logo-area">
-			<a href="/"><img class="logo" src="/public/images/logo.png" alt="logo-camagru"/></a>
+			<a href="/"><img class="logo" src="/public/images/logo-app.png" alt="logo-camagru"/></a>
 		</div>
 		<ul class="nav-links">
 			<li class="active-link"><a href="/">Home</a></li>
