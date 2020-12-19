@@ -63,5 +63,5 @@
 		</div>
 		<?php require_once(VIEWS . "_footer.php"); ?>
 	</body>
-	<script type="text/javascript" src="/public/js/resetpassword.js"></script>
+	<script type="text/javascript" src="/public/js/home/resetpassword.js"></script>
 </html>

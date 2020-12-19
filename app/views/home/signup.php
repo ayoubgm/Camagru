@@ -156,5 +156,5 @@
 		</div>
 		<?php require_once(VIEWS . "_footer.php"); ?>
 	</body>
-	<script type="text/javascript" src="/public/js/signup.js"></script>
+	<script type="text/javascript" src="/public/js/home/signup.js"></script>
 </html>

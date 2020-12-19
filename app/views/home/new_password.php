@@ -80,5 +80,5 @@
 		</div>
 		<?php require_once(VIEWS . "_footer.php"); ?>
 	</body>
-	<script type="text/javascript" src="/public/js/newpassword.js"></script>
+	<script type="text/javascript" src="/public/js/home/newpassword.js"></script>
 </html>
