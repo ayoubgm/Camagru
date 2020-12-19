@@ -26,7 +26,7 @@
 						<img src="/public/images/change-password.png"/></br>
 					</div>
 					<hr/>
-					<div class="col-md-12 px-5 py-4">
+					<div class="col-md-12 px-2 py-4">
 						<form action="/home/new_password/token/<?php echo $token; ?>" method="POST" onsubmit="return validateData();">
 							<div class="form-group row m-0 mb-1">
 								<label class="col-lg-4" for="inputNewPass">New password :</label>
