@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 	`id`				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`content`			VARCHAR (255) NOT NULL,
 	`userid`			INT NOT NULL,
+	`imgid`				INT NOT NULL,
 	`likeid`			INT,
 	`commentid`			INT,
 	`seen`				BOOLEAN DEFAULT 0,
@@ -80,6 +81,7 @@ ADD CONSTRAINT fk_imgid_comment FOREIGN KEY ( imgid ) REFERENCES gallery( id ) O
 
 ALTER TABLE `notifications`
 ADD CONSTRAINT fk_userid_notif FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT fk_imgid_notif FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT fk_likeid_notif FOREIGN KEY ( likeid ) REFERENCES likes( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT fk_commentid_notif FOREIGN KEY ( commentid ) REFERENCES comments( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -111,8 +113,8 @@ BEGIN
 	FROM gallery
 	WHERE id = NEW.imgid;
     IF ( NEW.userid <> @author_id ) THEN
-    	INSERT INTO notifications (content, userid, likeid)
-    	VALUES ("New like on your picture !", @author_id, NEW.id);
+    	INSERT INTO notifications (content, userid, likeid, imgid)
+    	VALUES ("New like on your picture !", @author_id, NEW.id, NEW.imgid);
 	END IF;
 END//
 
@@ -163,8 +165,8 @@ BEGIN
 	FROM gallery
 	WHERE id = NEW.imgid;
     IF ( NEW.userid <> @author_id ) THEN
-    	INSERT INTO notifications (content, userid, commentid)
-    	VALUES ("New comment on your picture !", @author_id, NEW.id);
+    	INSERT INTO notifications (content, userid, commentid, imgid)
+    	VALUES ("New comment on your picture !", @author_id, NEW.id, NEW.imgid);
 	END IF;
 END//
 
