@@ -6,6 +6,7 @@
 	class likeController extends Controller {
 		
 		private $viewData;
+		private $userMiddleware;
 		private $galleryMiddleware;
 		private $likesModel;
 
@@ -14,39 +15,36 @@
 			session_start();
 			$this->viewData = array();
 			$this->likesModel = self::call_model('LikesModel');
+			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
 		}
 		
 		/* Like an image */
-		public function 				add ( $data ) {
-			if ( isset( $_SESSION['userid'] ) ) {
-				if ( isset( $data ) && ( isset( $data[0] ) && $data[0] == "id" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
-					try {
-						if ( $this->galleryMiddleware->isImageExist( $data[1] ) ) {
-							if ( !$this->likesModel->isLikeExists( $data[1], $_SESSION['userid'] ) ) {
-								if ( !$this->likesModel->likeImage( $data[1], $_SESSION['userid'] ) ) {
-									$this->viewData = [ "success" => "false", "msg" => "Failed to like the image !" ];
-								} else {
-									$this->viewData = [ "success" => "true" ];
-								}
+		public function 				add () {
+			if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+				$this->viewData = [ "success"=> "false", "msg" => "You need to login first !" ];
+			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+				try {
+					if ( $this->galleryMiddleware->isImageExist( $_POST["id"] ) ) {
+						if ( !$this->likesModel->isLikeExists( $_POST["id"], $_SESSION['userid'] ) ) {
+							if ( !$this->likesModel->likeImage( $_POST["id"], $_SESSION['userid'] ) ) {
+								$this->viewData = [ "success" => "false", "msg" => "Failed to like the image !" ];
 							} else {
-								if ( !$this->likesModel->unlikeImage( $data[1], $_SESSION['userid'] ) ) {
-									$this->viewData = [ "success" => "false", "msg" => "Failed to unlike the image !" ];
-								} else {
-									$this->viewData = [ "success" => "true" ];
-								}
+								$this->viewData = [ "success" => "true" ];
 							}
 						} else {
-							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
+							if ( !$this->likesModel->unlikeImage( $_POST["id"], $_SESSION['userid'] ) ) {
+								$this->viewData = [ "success" => "false", "msg" => "Failed to unlike the image !" ];
+							} else {
+								$this->viewData = [ "success" => "true" ];
+							}
 						}
-					} catch ( Exception $e ) {
-						$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while like the image !" ];
+					} else {
+						$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
 					}
-				} else {
-					$this->viewData = [ "success"=> "false", "msg" => "Something went wrong while validate the image !" ];
-				}	
-			} else {
-				$this->viewData = [ "success"=> "false", "msg" => "You need to login first !" ];
+				} catch ( Exception $e ) {
+					$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while like the image !" ];
+				}
 			}
 			die( json_encode($this->viewData, JSON_FORCE_OBJECT) );
 		}

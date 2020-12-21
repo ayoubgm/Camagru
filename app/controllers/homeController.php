@@ -35,25 +35,21 @@
 
 		public function 				index()
 		{
-			switch ( $_SERVER["REQUEST_METHOD"] ) {
-				case "GET":
-					try {
-						session_start();
-						$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
-						if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
-							$this->viewData["data"] += [
-								"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
-								"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
-							];
-						}
-						$this->viewData["success"] = "true";
-					} catch ( Exception $e ) {
-						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Something goes wrong, try later !";
-					}
-					$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $this->viewData )->render();
-				break;
+			try {
+				session_start();
+				$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
+				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
+					$this->viewData["data"] += [
+						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
+						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
+					];
+				}
+				$this->viewData["success"] = "true";
+			} catch ( Exception $e ) {
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something goes wrong, try later !";
 			}
+			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'index', $this->viewData )->render();
 		}
 
 		public function 				signin()
@@ -187,8 +183,7 @@
 								unset( $_POST["btn-submit"] );
 								$_POST["token"] = $data[1];
 								if ( $error = $this->userMiddleware->new_password( $_POST ) ) {
-									$this->viewData = [ "success" => "false", "msg" => $error, "data" => [ "token" => $data[1] ]
-									];
+									$this->viewData = [ "success" => "false", "msg" => $error, "data" => [ "token" => $data[1] ] ];
 								} else if ( $this->userModel->newpassword( array( "newpassword" => password_hash($_POST["newpassword"], PASSWORD_ARGON2I), "token" => $data[1] ) ) ) {
 									$this->viewData = [ "success" => "true", "msg" => "Your password has been changed successfully !", "data" => [ "token" => $data[1] ] ];
 								} else {

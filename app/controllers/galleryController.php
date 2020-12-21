@@ -6,6 +6,7 @@
 	class galleryController extends Controller {
 
 		private $viewData;
+		private $userMiddleware;
 		private $galleryMiddleware;
 		private $usersModel;
 		private $galleryModel;
@@ -19,6 +20,7 @@
 			session_start();
 			$this->viewData = array();
 			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
+			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->usersModel = self::call_model('UsersModel');
 			$this->galleryModel = self::call_model('GalleryModel');
 			$this->likesModel = self::call_model('LikesModel');
@@ -39,7 +41,6 @@
 				if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
 					$this->viewData[ "data" ] += [
 						"userData" => $this->usersModel->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->galleryModel->userGallery( $_SESSION["username"] ),
 						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 				}
@@ -65,19 +66,19 @@
 		}
 		
 		/* Delete an image by author of image */
-		public function 				delete ( $data )
+		public function 				delete ()
 		{
 			try {
-				if ( !isset( $_SESSION['userid'] ) ) {
+				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
-				} else if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
-					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while validate the comment !" ];	
-				} else if ( ! $this->galleryMiddleware->isImageOwnerExist( $_SESSION['userid'], $data[1] ) ) {
-					$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
-				} else if ( $this->galleryModel->deleteImage( $data[1], $_SESSION['userid'] ) ) {
-					$this->viewData = [ "success" => "true", "msg" => "Your image has been deleted successfully !" ];
-				} else {
-					$this->viewData = [ "success" => "true", "msg" => "Failed to delete your image !" ];
+				} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+					if ( ! $this->galleryMiddleware->isImageOwnerExist( $_SESSION['userid'], $_POST['id'] ) ) {
+						$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
+					} else if ( $this->galleryModel->deleteImage( $_POST['id'], $_SESSION['userid'] ) ) {
+						$this->viewData = [ "success" => "true", "msg" => "Your image has been deleted successfully !" ];
+					} else {
+						$this->viewData = [ "success" => "true", "msg" => "Failed to delete your image !" ];
+					}
 				}
 			} catch ( Exception $e ) {
 				$this->viewData = [ "success" => "false", "msg" => "Something went wrong while delete the image  !" ];

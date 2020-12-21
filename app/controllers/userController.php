@@ -254,7 +254,11 @@
 							$this->viewData["success"] = true;
 						break;
 						case "POST":
-							if ( isset( $_POST["btn-save"] ) ) {
+							if (
+								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+								$this->userMiddleware->validateUserToken( $_POST["token"] ) &&
+								( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
+							) {
 								if ( $error = $this->userMiddleware->validateDescription( $_POST["description"] ) ) {
 									$this->viewData["success"] = "false";
 									$this->viewData["msg"] = $error;
@@ -301,7 +305,17 @@
 
 		public function					logout()
 		{
-			$this->call_view( "user" . DIRECTORY_SEPARATOR ."logout" )->render();
+			try {
+				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+					header("Location: /signin");			
+				} else {
+					session_destroy();
+					$this->viewData["success"] = "true";
+				}
+			} catch ( Exception $e ) {
+				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
+			}
+			die( json_encode( $this->viewData ) );
 		}
 
 	}
