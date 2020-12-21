@@ -21,7 +21,7 @@ const					createNotification = ( data ) => {
 	htmldiv += "<span class='float-left' style='color: #00a3cc;'>"+ data.content +"</span>";
 	htmldiv += "<span class='float-right' style='font-size: 10pt'>"+ data.moments +"</span>"
 	div.addEventListener('click', () => {
-		window.location.href = "/gallery?image=" + data.id; 
+		window.location.href = "/gallery?image=" + data.imgid;
 	});
 	div.innerHTML = htmldiv;
 	notificationsArea.appendChild( div );
