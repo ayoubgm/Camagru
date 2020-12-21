@@ -61,8 +61,7 @@ nav ul.nav-links li a {
 
 nav ul.nav-links li:hover:not(:nth-last-child(-n+2)) {
 	border-radius: 50px;
-	color: #edf0f1;
-	background-color: #9fecff;
+	background-color: #00a3cc;
 }
 
 nav ul.nav-links a#btn-signin,
