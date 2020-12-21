@@ -54,10 +54,8 @@
 					$this->viewData["data"]["gallery"][ $key ] += [ "usersWhoLike" => $this->likesModel->getUsersLikeImage( $value["id"] ) ];
 					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentsOfImg( $value["id"] ) ];
 				}
-				$this->viewData["data"] += [
-					"totalImages" => $this->galleryModel->getCountImages(),
-					"page" => $page
-				];
+				$this->viewData["data"]["totalImages"] = intval( $this->galleryModel->getCountImages() );
+				$this->viewData["data"]["page"] = intval( $page );
 			} catch ( Exception $e ) {
 				$viewData['success'] = "false";
 				$viewData['msg'] = "Something goes wrong !";
