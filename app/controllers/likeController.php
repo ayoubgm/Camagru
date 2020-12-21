@@ -20,7 +20,8 @@
 		}
 		
 		/* Like an image */
-		public function 				add () {
+		public function 				add ()
+		{
 			if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
 				$this->viewData = [ "success"=> "false", "msg" => "You need to login first !" ];
 			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
@@ -48,6 +49,19 @@
 			}
 			die( json_encode($this->viewData, JSON_FORCE_OBJECT) );
 		}
+
+		public function					userswholikes ()
+		{
+			var_dump( $_GET );
+			// try {
+			// 	if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
+			// 		$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
+			// 	}
+			// } catch ( Exception $e ) {
+			// 	$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while get users who liked the image !" ];
+			// }
+		}
+		
 
 	}
 ?>

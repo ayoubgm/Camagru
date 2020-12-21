@@ -7,20 +7,22 @@
 	{
 
 		private $viewData;
-		private $commentModel;
 		private $userMiddleware;
 		private $galleryMiddleware;
 		private $commentMiddleware;
+		private $commentModel;
+		private $likeModel;
 		private $helper;
 		
 		public function				__construct()
 		{
 			session_start();
 			$this->viewData = array();
-			$this->commentModel = $this->call_model('CommentsModel');
 			$this->userMiddleware = self::call_middleware('UserMiddleware');
 			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
 			$this->commentMiddleware = $this->call_middleware('CommentMiddleware');
+			$this->commentModel = $this->call_model('CommentsModel');
+			$this->likeModel = $this->call_model('likesModel');
 			$this->helper = $this->call_helper();
 		}
 
@@ -71,7 +73,11 @@
 				} else {
 					$comments = $this->commentModel->getCommentsOfImg( $data[1] );
 					foreach( $comments as $k => $v ) { $comments[ $k ] += [ "momments" => $this->helper->getMomentOfDate( $v["createdat"] ) ]; }
-					$this->viewData = [ "success" => "true", "data" => $comments ];
+					$this->viewData = [
+						"success" => "true",
+						"data" => $comments,
+						"countlikes" => $this->likeModel->getCountLikes( $data[1] )
+					];
 				}
 			} catch ( Exception $e ) {
 				$this->viewData = ["success" => "false", "msg" => "Something is wrong while load comments of the image !"];

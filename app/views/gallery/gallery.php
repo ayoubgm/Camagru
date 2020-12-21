@@ -1,12 +1,12 @@
 <?php
 	$data = $this->view_data["data"];
+	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
+	$countUnreadNotifs = $data["countUnreadNotifs"];
 	$totalImages = $data['totalImages'];
 	$imagePerPage = 5;
 	$currentPage = $data['page'];
 	$totalPages = ceil( $totalImages / $imagePerPage );
 	$gallery = $data['gallery'];
-	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
-	$countUnreadNotifs = $data["countUnreadNotifs"];
 
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
@@ -27,6 +27,7 @@
 		<link rel="stylesheet" href="/public/css/gallery/gallery.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 		<title>Gallery</title>
+		<script> const connectedUser = <?php if ( isset( $userData ) ) { echo $userData["id"]; } ?>;</script>
 	</head>
 	<body onload="getNotifications();">
 		<?php require_once(VIEWS . "_header.php");?>
@@ -129,6 +130,9 @@
 				<div class="row" id="model-header" >
 					<div class="col-8" id="title">
 						<h5>Comments (<span id="count-comments"></span>)</h5>
+						<div id="likes-img" onclick="getUsersWhoLikedImg( this.id );">
+							<img src="/public/images/icone-like-active.png" /> Likes (<span id="count-likes"></span>)
+						</div>
 					</div>
 					<div class="col-4" id="close">
 						<img id="icon-cancel" src="/public/images/cancel.png" onclick="closeModel()"/>
@@ -143,6 +147,7 @@
 								class="w-100 form-control"
 								name="comment"
 								placeholder="Write a comment..."
+								autocomplete="off"
 							/>
 						</div>
 						<div class="col-1">
@@ -159,6 +164,9 @@
 					<div id="area-error-msg"></div>
 				</div>
 			</div>
+		</div>
+		<div class="model" id="model-likes">
+			
 		</div>
 		<nav id="nav-pagination" class="bg-dark">
 			<ul class="pagination pagination-sm justify-content-end">

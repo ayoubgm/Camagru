@@ -179,7 +179,7 @@ body {
 	cursor: pointer;
 }
 
-/* comments model */
+/* Comments model */
 .model-bg {
 	width: 100%;
 	height: 100vh;
@@ -200,7 +200,7 @@ body {
 	opacity: 1;
 }
 
-.model {
+.model-bg .model {
 	width: 80%;
 	height: 60%;
 	background-color: white;
@@ -209,25 +209,35 @@ body {
 	position: relative;
 }
 
-.model #model-header {
+.model-bg .model #model-header {
 	padding: 10px 0px 0px 10px;
 }
-.model #model-header div#title {
+.model-bg .model #model-header #title {
 	font-size: 14pt;
 	text-align: left;
 }
 
-.model #model-header div#close img {
-	margin-right: 20px;
-}
-
-.model #model-header div h6 {
+.model-bg .model #model-header #title h5 {
 	letter-spacing: 3px;
-	font-size: 11pt;
+	font-size: 16pt;
 	font-weight: bold;
 	color: rgb(54, 54, 54);
 }
-.model #model-header div #icon-cancel {
+
+.model-bg .model #model-header #title [id^=likes-img] {
+	font-size: 12pt;
+	cursor: pointer;
+}
+.model-bg .model #model-header #title [id^=likes-img] img {
+	width: 20px;
+	height: 20px;
+}
+
+.model-bg .model #model-header #close img {
+	margin-right: 20px;
+}
+
+.model-bg .model #model-header #close #icon-cancel {
 	width: 50px;
 	height: 50px;
 	position: absolute;
@@ -237,22 +247,39 @@ body {
 	border-radius: 100%;
 }
 
-.model .area-comments {
+
+.model-bg .model .area-comments {
 	width: 100%;
 	height: 80%;
 }
 
-.model .area-comments .comments {
+.model-bg .model .area-comments .comments {
 	height: 90%;
 	background-color: #ebebeb;
 	border-radius: 8px;
 	overflow-y: scroll;
 }
 
-.model .area-comments #area-error-msg {
+.model-bg .model .area-comments #area-error-msg {
 	width: 100%;
 	font-weight: bold;
 	color: rgb(190, 0, 0);
+}
+
+/* Likes model */
+
+#model-likes {
+	width: 400px;
+	height: 500px;
+	background-color: white;
+	position: absolute;
+	top: 200px;
+	left: 40%;
+	border-radius: 8px;
+	padding: 8px;
+	z-index: 1;
+	visibility: hidden;
+	opacity: 0;
 }
 
 .area-write-coment div #user-img {
