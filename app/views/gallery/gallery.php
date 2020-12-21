@@ -4,6 +4,7 @@
 	$imagePerPage = 5;
 	$currentPage = $data['page'];
 	$totalPages = ceil( $totalImages / $imagePerPage );
+	echo ( $totalPages );
 	$gallery = $data['gallery'];
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$countUnreadNotifs = $data["countUnreadNotifs"];
