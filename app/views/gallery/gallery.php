@@ -160,6 +160,13 @@
 				</div>
 			</div>
 		</div>
+		<nav id="nav-pagination" class="bg-dark">
+			<ul class="pagination pagination-sm justify-content-end">
+				<li class="page-item"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+			</ul>
+		</nav>
 		<?php require_once(VIEWS . "_footer.php");?>
 	</body>
 	<script type="text/javascript" src="/public/js/_header.js"></script>
