@@ -3,8 +3,7 @@
 	/**
 	 * 	user middlewares class
 	 */
-	class UserMiddleware extends Middleware
-	{
+	class UserMiddleware extends Middleware {
 
 		// Middleware for validating sign in data
 		public function					signin ( $data )
@@ -129,6 +128,11 @@
 		public function					isSignin ( $session )
 		{
 			return ( isset( $session['userid'] ) && isset( $session['username'] ) ) ? true : false; 
+		}
+
+		public function					validateUserToken ( $token )
+		{
+			return $this->isUserTokenValid( $token );
 		}
 
 	}

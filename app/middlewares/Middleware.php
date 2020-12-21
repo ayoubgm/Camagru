@@ -173,5 +173,10 @@
 			return ( $data ) ? $data : null;
 		}
 
+		public function						isUserTokenValid ( $token )
+		{
+			return ( hash_equals( $_SESSION["token"], $token ) ) ? true : false; 
+		}
+
 	}
 ?>
