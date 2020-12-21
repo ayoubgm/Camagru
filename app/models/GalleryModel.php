@@ -33,10 +33,11 @@
 
 		public function         getCountImages ()
 		{
-			$query = 'SELECT count(*) FROM `gallery`';
+			$query = 'SELECT count(*) AS `count` FROM `gallery`';
 			$stt = $this->connect()->prepare($query);
 			$stt->execute();
-			return $stt->rowCount();
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
+			return $data['count'];
 		}
 
 		public function         getAllEditedImages ( $depart = 0, $imagePerPage = 5 )
