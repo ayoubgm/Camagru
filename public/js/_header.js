@@ -9,45 +9,6 @@ const menuNotifs = document.getElementById("notifications");
 const btnMenuNotifs = document.getElementById("notif-img");
 const notificationsArea = document.getElementById("notifications-user");
 
-const					alertMessage = ( text, type ) => {
-	switch ( type ) {
-		case "success":
-			alert.classList.add("alert-success");
-			alert.innerHTML = text;
-			
-		break;
-		case "error":
-			alert.classList.add("alert-danger");
-			alert.innerHTML = text;
-		break;
-	}
-	alert.style.display = "block";
-}
-
-const					HideAlert = () => {
-	setTimeout(() => {
-		alert.classList.remove("alert-success");
-		alert.classList.remove("alert-danger");
-		alert.style.display = "none";
-		alert.innerHTML = "";
-	}, 3000);
-}
-
-const					showOrHideMenu = ( menu, btnMenu, e ) => {
-	if ( menu && btnMenu ) {
-		var isClickedInsideMenu = menu.contains( e.target );
-		var isClickedInsidBtnMenu = btnMenu.contains( e.target );
-
-		if ( isClickedInsidBtnMenu && menu.style.display == "none" ) { menu.style.display = "block"; }
-		else if ( !isClickedInsideMenu ) { menu.style.display = "none"; }
-	}
-}
-
-document.addEventListener('click', (event) => {
-	showOrHideMenu( userMenu, btnProfilePic, event );
-	showOrHideMenu( menuNotifs, btnMenuNotifs, event );
-});
-
 const					createNotification = ( data ) => {
 	let div = document.createElement('div');
 	let hr = document.createElement('hr');
@@ -98,8 +59,11 @@ const					getNotifications = () => {
 
 const					readAllUserNotifs = () => {
 	const xhr = new XMLHttpRequest();
+	const url = "/notification/readallnotifsuser";
+	const params = "token="+localStorage.getItem( "token" );
 
-	xhr.open("POST", "/notification/readallnotifsuser", true);
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const result = JSON.parse( xhr.response );
@@ -115,13 +79,16 @@ const					readAllUserNotifs = () => {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
 		}
 	}
-	xhr.send();
+	xhr.send( params );
 }
 
 const					deleteAllUserNotifs = () => {
 	const xhr = new XMLHttpRequest();
+	const url = "/notification/deleteallnotifsuser";
+	const params = "token="+localStorage.getItem( "token" );
 
-	xhr.open("POST", "/notification/deleteallnotifsuser", true);
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const result = JSON.parse( xhr.response );
@@ -138,7 +105,7 @@ const					deleteAllUserNotifs = () => {
 		}
 		HideAlert();
 	}
-	xhr.send();
+	xhr.send( params );
 }
 
 const					logout = () => {
@@ -161,6 +128,45 @@ const					logout = () => {
 	}
 	xhr.send();
 }
+
+const					alertMessage = ( text, type ) => {
+	switch ( type ) {
+		case "success":
+			alert.classList.add("alert-success");
+			alert.innerHTML = text;
+			
+		break;
+		case "error":
+			alert.classList.add("alert-danger");
+			alert.innerHTML = text;
+		break;
+	}
+	alert.style.display = "block";
+}
+
+const					HideAlert = () => {
+	setTimeout(() => {
+		alert.classList.remove("alert-success");
+		alert.classList.remove("alert-danger");
+		alert.style.display = "none";
+		alert.innerHTML = "";
+	}, 3000);
+}
+
+const					showOrHideMenu = ( menu, btnMenu, e ) => {
+	if ( menu && btnMenu ) {
+		var isClickedInsideMenu = menu.contains( e.target );
+		var isClickedInsidBtnMenu = btnMenu.contains( e.target );
+
+		if ( isClickedInsidBtnMenu && menu.style.display == "none" ) { menu.style.display = "block"; }
+		else if ( !isClickedInsideMenu ) { menu.style.display = "none"; }
+	}
+}
+
+document.addEventListener('click', (event) => {
+	showOrHideMenu( userMenu, btnProfilePic, event );
+	showOrHideMenu( menuNotifs, btnMenuNotifs, event );
+});
 
 const					navSlide = () => {
 	const burger = document.querySelector('.burger');
