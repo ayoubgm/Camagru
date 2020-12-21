@@ -3,6 +3,8 @@
 		$data = $this->view_data['data'];
 		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 		$countUnreadNotifs = ( isset( $data["countUnreadNotifs"] ) ) ? $data["countUnreadNotifs"] : 0 ;
+		$token = ( isset( $_SESSION["token"] ) && !empty( $_SESSION["token"] ) ) ? $_SESSION["token"] : null;
+		$logged = ( isset( $userData ) ) ? true : false;
 	}
 ?>
 <!DOCTYPE html>
@@ -16,6 +18,10 @@
 		<link rel="stylesheet" href="/public/css/home/index.css"/>
 		<link rel="stylesheet" href="/public/css/_header.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
+		<script>
+			const userToken = "<?php echo $token; ?>";
+			const logged = <?php echo ( $logged ) ? "true" : "false"; ?>;
+		</script>
 	</head>
 	<body onload="getNotifications();">
 		<?php require_once(VIEWS . "_header.php"); ?>

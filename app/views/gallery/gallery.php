@@ -7,7 +7,7 @@
 	$gallery = $data['gallery'];
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$countUnreadNotifs = $data["countUnreadNotifs"];
-	
+
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
 			if ( $value["id"] == $userid ) { return true; }

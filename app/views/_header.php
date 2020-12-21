@@ -16,7 +16,7 @@
 			<?php } else { ?>
 				<li><a href="/user/profile" id="profile">Profile</a></li>
 				<li><a href="/user/settings" id="settings">Settings</a></li>
-				<li><a href="/user/logout" id="logout">Logout</a></li>
+				<li><a href="#" id="logout" onclick="logout();">Logout</a></li>
 			<?php } ?>
 		</ul>
 		<div class="btn-auth m-0">
@@ -46,7 +46,7 @@
 						<ul>
 							<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] == "female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
 							<li><a href="/user/settings"> <img src="/public/images/settings.png" id="settings"/>Settings</a></li>
-							<li><a href="/user/logout"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
+							<li><a href="#" onclick="logout();"> <img src="/public/images/logout.png" id="logout"/>Logout</a></li>
 						</ul>
 					</div>
 				</div>

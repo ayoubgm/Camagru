@@ -36,13 +36,6 @@
 						<img src="/public/images/user-profile.png"/></br>
 						</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
 						<hr/>
-						<a
-							id="link-gallery"
-							href="<?php echo "/gallery/user/username/".$userData['username'];?>"
-							class="btn btn-outline-dark w-50"
-						>
-							<img src="/public/images/gallery.png">Link to gallery
-						</a>
 					</div>
 					<div class="user-infos">
 						<span id="field">Full name : </span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?></br>

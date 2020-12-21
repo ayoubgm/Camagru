@@ -87,7 +87,7 @@
 				</div>
 			</div>
 			<div class="model-bg">
-				<div class="model row col-md-6">
+				<div class="model row col-md-10 col-lg-8">
 					<div id="canvas-area">
 						<div class="row" id="model-header" >
 							<h4>Save it to the gallery</h4>
@@ -103,6 +103,7 @@
 							<input id="description" name="description" class="col-lg-10 w-100" autocomplete="off" required />
 						</div>
 						<div class="row d-flex justify-content-between px-5 py-1">
+							<input type="hidden" name="token" value="<?php echo $_SESSION["token"] ?>"/>
 							<input type="submit" name="btn-save" id="btn-save" class="btn btn-dark w-25" value="Save" />
 							<input type="button" name="btn-cancel" id="btn-cancel" class="btn btn-warning w-25" value="Cancel" onclick="closeModel()"/>
 						</div>

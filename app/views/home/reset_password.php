@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="card offset-lg-2 col-lg-8">
+			<div class="card offset-lg-1 col-lg-10">
 				<div class="card-body">
 					<p class="card-title">
 						<span>Reset password</span>
