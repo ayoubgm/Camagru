@@ -31,6 +31,7 @@
 						<form method="POST" action="/user/notifications_preferences/notificationsemail/<?php echo ( $userData['notifEmail'] == '1' ) ? '0' : '1';?>">
 							<div class="text-center">
 								<div class="form-row edit">
+									<input type="hidden" name="token" value="<?php echo $_SESSION["token"] ?>"/>
 									<input
 										type="submit"
 										class="offset-2 col-8 btn btn-outline-primary w-50 mt-5"
