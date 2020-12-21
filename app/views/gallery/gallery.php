@@ -4,7 +4,6 @@
 	$imagePerPage = 5;
 	$currentPage = $data['page'];
 	$totalPages = ceil( $totalImages / $imagePerPage );
-	echo ( $totalPages );
 	$gallery = $data['gallery'];
 	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
 	$countUnreadNotifs = $data["countUnreadNotifs"];
@@ -163,9 +162,19 @@
 		</div>
 		<nav id="nav-pagination" class="bg-dark">
 			<ul class="pagination pagination-sm justify-content-end">
-				<li class="page-item"><a class="page-link" href="#">1</a></li>
-				<li class="page-item"><a class="page-link" href="#">2</a></li>
-				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<?php if ( $currentPage - 1 != 0 ) { ?>
+					<li class="page-item"><a class="page-link" href="/gallery/index/page/<?php echo $currentPage - 1; ?>">Previous</a></li>
+					<?php } else { ?>
+					<li class="page-item disabled"><a class="page-link disabled" href="">Previous</a></li>
+				<?php } ?>
+				<?php for ( $i = 1; $i <= $totalPages; $i++ ) { ?>
+					<li class="page-item"><a class="page-link" href="/gallery/index/page/<?php echo $i ?>"><?php echo $i ?></a></li>	
+				<?php } ?>
+				<?php if ( $currentPage != $totalPages ) { ?>
+					<li class="page-item"><a class="page-link" href="/gallery/index/page/<?php echo $currentPage + 1; ?>">Next</a></li>
+				<?php } else { ?>
+					<li class="page-item disabled"><a class="page-link disabled" href="">Next</a></li>
+				<?php } ?>
 			</ul>
 		</nav>
 		<?php require_once(VIEWS . "_footer.php");?>

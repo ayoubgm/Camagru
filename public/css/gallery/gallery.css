@@ -16,6 +16,7 @@ body {
 #gallery {
 	margin-top: 15px;
 	margin-left: 7%;
+	margin-bottom: 100px;
 }
 
 .card {
@@ -35,6 +36,7 @@ body {
 .card .card-title #area-user img#user-img {
 	border-radius: 100%;
 	width: 55px;
+	height: 55px;
 	cursor: pointer;
 }
 
@@ -264,11 +266,12 @@ body {
 }
 
 nav#nav-pagination {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
+	left: 0;
 }
 
-@media (max-width: 750.98px) {
+@media (max-width: 768.98px) {
 	#gallery {
 		margin-left: 0%;
 	}
