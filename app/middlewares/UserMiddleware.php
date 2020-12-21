@@ -74,14 +74,14 @@
 
 		public function					new_password ( $data )
 		{
-			if ( !$data['newpassword'] || !$data['confirmation_password'] || !$data['token'] ) {
+			if ( !$this->isRecoveryTokenValid( $data['token'] ) ) {
+				return "The recovery token is invalid or has already expired !";
+			} else if ( !$data['newpassword'] || !$data['confirmation_password'] || !$data['token'] ) {
 				return "Invalid data provided !";
 			} else if ( $error = $this->validatePassword( $data['newpassword'] ) ) {
 				return $error;
 			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {
 				return "Passwords doesn't match !";
-			} else if ( !$this->isRecoveryTokenValid( $data['token'] ) ) {
-				return "The recovery token is invalid or has already expired !";
 			}
 		}
 		
