@@ -9,6 +9,7 @@
 		private $userMiddleware;
 		private $userModel;
 		private $galleryModel;
+		private $notificationsModel;
 
 		public function 				__construct ()
 		{
@@ -139,7 +140,11 @@
 							$this->viewData["success"] = "true";
 						break;
 						case "POST":
-							if ( isset($_POST["btn-submit"]) && !empty($_POST["btn-submit"]) ) {
+							if (
+								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+								$this->userMiddleware->validateUserToken( $_POST["token"] ) &&
+								( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) ) 
+							) {
 								unset( $_POST["btn-submit"] );
 								if ( $error = $this->userMiddleware->change_password( $_SESSION["userid"], $_POST ) ) {
 									$this->viewData += [ "success" => "false", "msg" => $error ];
@@ -178,7 +183,11 @@
 								$this->viewData["success"] = "true";
 							break;
 							case "POST":
-								if ( isset( $_POST["btn-change-preference"] ) ) {
+								if (
+									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+									$this->userMiddleware->validateUserToken( $_POST["token"] ) &&
+									( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) ) 
+								) {
 									unset( $_POST["btn-change-preference"] );
 									if ( $this->userModel->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
 										$this->viewData["success"] = "true";
