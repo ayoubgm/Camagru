@@ -1,3 +1,7 @@
+// Set user token in local storage
+if ( typeof logged !== 'undefined' ) {
+	localStorage.setItem(`token`, userToken);
+}
 const alert = document.getElementById('alert-msg');
 const userMenu = document.querySelector("nav .btn-auth .dropdown");
 const btnProfilePic = document.getElementById("profile-img");
@@ -69,7 +73,7 @@ const					getNotifications = () => {
 	
 	xhr.open("GET", "/notification/user", true);
 	xhr.onloadend = () => {
-		if ( xhr.readyState === 4 && xhr.status ) {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const data = JSON.parse( xhr.response );
 
 			if ( data.success == "false" ) {
@@ -97,7 +101,7 @@ const					readAllUserNotifs = () => {
 
 	xhr.open("POST", "/notification/readallnotifsuser", true);
 	xhr.onloadend = () => {
-		if ( xhr.readyState === 4 && xhr.status ) {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const result = JSON.parse( xhr.response );
 
 			if ( result.success == "false" ) {
@@ -119,7 +123,7 @@ const					deleteAllUserNotifs = () => {
 
 	xhr.open("POST", "/notification/deleteallnotifsuser", true);
 	xhr.onloadend = () => {
-		if ( xhr.readyState === 4 && xhr.status ) {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const result = JSON.parse( xhr.response );
 
 			if ( result.success == "false" ) {
@@ -132,6 +136,28 @@ const					deleteAllUserNotifs = () => {
 		} else {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
 		}
+		HideAlert();
+	}
+	xhr.send();
+}
+
+const					logout = () => {
+	const xhr = new XMLHttpRequest();
+
+	xhr.open("GET", "/user/logout", true);
+	xhr.onloadend = () => {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const result = JSON.parse( xhr.response );
+
+			if ( result.success == "false" ) { alertMessage( result.msg, "error" ); }
+			else {
+				localStorage.removeItem( "token" );
+				location.href = "/home";
+			}
+		} else {
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
+		}
+		HideAlert();
 	}
 	xhr.send();
 }
