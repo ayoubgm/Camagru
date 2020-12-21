@@ -2,7 +2,7 @@
 	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
 		$data = $this->view_data['data'];
 		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
-		$countUnreadNotifs = $data["countUnreadNotifs"];
+		$countUnreadNotifs = ( isset( $data["countUnreadNotifs"] ) ) ? $data["countUnreadNotifs"] : 0 ;
 	}
 ?>
 <!DOCTYPE html>

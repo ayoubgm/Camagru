@@ -1,6 +1,7 @@
 <?php
-	$data;
-	if ( isset( $this->view_data ) ) { $data = $this->view_data; }
+	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
+		$data = $this->view_data['data'];
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,8 +40,8 @@
 								/>
 							</div>
 							<div class="row text-center mt-4" style="height: 30px;">
-								<span id="msg" class="w-100 <?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?> ">
-									<?php if ( isset($data['msg']) ) echo $data['msg'];?>
+								<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?> ">
+									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg']; ?>
 								</span>
 							</div>
 							<div class="text-center">

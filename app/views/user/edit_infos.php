@@ -127,6 +127,7 @@
 									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 								</span>
 							</div>
+							<input type="hidden" name="token" value="<?php echo $_SESSION["token"] ?>"/>
 							<div class="form-row edit">
 								<input
 									type="submit"

@@ -1,6 +1,7 @@
 <?php
-	$data;
-	if ( isset( $this->view_data ) ) { $data = $this->view_data; }
+	if ( isset( $this->view_data ) ) {
+		$data = $this->view_data;
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
