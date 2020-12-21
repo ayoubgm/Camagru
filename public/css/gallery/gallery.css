@@ -263,6 +263,11 @@ body {
 	resize: none;
 }
 
+nav#nav-pagination {
+	position: absolute;
+	bottom: 0;
+}
+
 @media (max-width: 750.98px) {
 	#gallery {
 		margin-left: 0%;
