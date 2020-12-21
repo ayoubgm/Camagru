@@ -74,7 +74,11 @@
 									$this->viewData = [ "success" => "false", "msg" => $error ];
 								} else {
 									$userData = $this->userModel->findUserByUsername( $_POST["username"] );
-									$_SESSION = [ "userid" => $userData["id"], "username" => $userData["username"] ];
+									$_SESSION = [
+										"userid" => $userData["id"],
+										"username" => $userData["username"],
+										"token" => bin2hex( random_bytes( 32 ) )
+									];
 									header("Location: /home");
 								}
 							}

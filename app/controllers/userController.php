@@ -68,8 +68,13 @@
 							$this->viewData[ "success" ] = "true";
 						break;
 						case "POST":
-							if ( isset($_POST["btn-edit"]) ) {
-								unset( $_POST["btn-edit"] ); unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
+							if (
+								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+								$this->userMiddleware->validateUserToken( $_POST["token"] ) &&
+								( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) ) 
+							) {
+								unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
+								unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
 								$editedData = array_replace_recursive( $oldData, $_POST );
 								if ( ($error = $this->userMiddleware->edit( $_SESSION["userid"], $editedData )) != null) {
 									$this->viewData += [ "success" => "false", "msg" => $error ];
@@ -87,6 +92,7 @@
 					}
 				}
 			} catch ( Exception $e ) {
+				print $e;
 				$this->viewData["success"] = "false";
 				$this->viewData["msg"] = "Something goes wrong while editing your informations, try later !";
 			}
