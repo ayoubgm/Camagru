@@ -43,17 +43,19 @@
 				$this->method = 'notfound';
 			}
 			// Create or recreate database `db_camagru` on the mysql server 
-			// if ( $this->controller instanceof homeController && $this->method === "index" ) {
-			// 	$objsetup = new Setup();
-			// 	$objsetup->setup();
-			// }
+			if ( $this->controller instanceof homeController && $this->method === "index" ) {
+				$setupObject = new setup;
+				// $setupObject->setup();
+			}
 			$this->params = $url ? array_values( $url ) : [];
-			call_user_func_array([$this->controller, $this->method], [ $this->params ]);
+			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);
 		}
 		
 		protected function 				parseURL()
 		{
-			if ( isset($_GET['url']) ) { return  $url = explode('/', filter_var(rtrim(strtolower($_GET['url']), '/'), FILTER_SANITIZE_URL)); }
+			if ( isset( $_GET['url'] ) ) {
+				return explode('/', filter_var( rtrim( strtolower($_GET['url']), '/' ), FILTER_SANITIZE_URL));
+			}
 		}
 	}
 ?>
