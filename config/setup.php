@@ -1,11 +1,15 @@
 <?php
-	class Setup extends DB {
+	class	setup extends DB {
 		
+		public function			__construct()
+		{
+			parent::__construct();
+		}
+
 		public function 		setup()
 		{
-			$pdo = $this->connect();
 			$queries = file_get_contents(CONFIG . 'queries.sql');
-			$done = $pdo->query($queries);
+			$this->query( $queries );
 		}
 
 	}
