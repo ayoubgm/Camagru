@@ -9,6 +9,30 @@ const menuNotifs = document.getElementById("notifications");
 const btnMenuNotifs = document.getElementById("notif-img");
 const notificationsArea = document.getElementById("notifications-user");
 
+const					readANotification = ( userid, id ) => {
+	const xhr = new XMLHttpRequest();
+	const url = "/notification/readnotifuser";
+	const params = "userid="+userid+"&notifid="+id+"&token="+localStorage.getItem( "token" );
+	
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.onloadend = () => {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg != "You need to login first !" ) {
+					alertMessage( data.msg, "error" ); HideAlert();
+				}
+			} else {
+				getNotifications();
+			}
+		} else {
+			alertMessage( `An error has occurenced : ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
+		}
+	}
+	xhr.send( params );
+}
+
 const					createNotification = ( data ) => {
 	let div = document.createElement('div');
 	let hr = document.createElement('hr');
@@ -21,6 +45,7 @@ const					createNotification = ( data ) => {
 	htmldiv += "<span class='float-left' style='color: #00a3cc;'>"+ data.content +"</span>";
 	htmldiv += "<span class='float-right' style='font-size: 10pt'>"+ data.moments +"</span>"
 	div.addEventListener('click', () => {
+		readANotification( data.userid, data.id )
 		window.location.href = "/gallery?image=" + data.imgid;
 	});
 	div.innerHTML = htmldiv;
@@ -38,7 +63,10 @@ const					getNotifications = () => {
 			const data = JSON.parse( xhr.response );
 
 			if ( data.success == "false" ) {
-				if ( data.msg != "You need to login first !" ) { alertMessage( data.msg, "error" ); }
+				if ( data.msg != "You need to login first !" ) {
+					alertMessage( data.msg, "error" );
+					HideAlert();
+				}
 			} else {
 				const notifs = data.data;
 
@@ -50,9 +78,8 @@ const					getNotifications = () => {
 				}
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
+			alertMessage( `An error has occurenced : ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
-		HideAlert();
 	}
 	xhr.send();
 }
@@ -69,14 +96,17 @@ const					readAllUserNotifs = () => {
 			const result = JSON.parse( xhr.response );
 
 			if ( result.success == "false" ) {
-				if ( result.msg != "You need to login first !" ) { alertMessage( result.msg, "error" ); }
+				if ( result.msg != "You need to login first !" ) {
+					alertMessage( result.msg, "error" ); HideAlert();
+				}
 			} else {
 				document.getElementById('countNotifs').innerHTML = 0;
 				getNotifications();
 				alertMessage( result.msg, "success" );
+				HideAlert();
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
 	}
 	xhr.send( params );
@@ -94,16 +124,20 @@ const					deleteAllUserNotifs = () => {
 			const result = JSON.parse( xhr.response );
 
 			if ( result.success == "false" ) {
-				if ( result.msg != "You need to login first !" ) { alertMessage( result.msg, "error" ); }
+				if ( result.msg == "You need to login first !" ) {
+					location.href = "/signin";
+				} else {
+					alertMessage( result.msg, "error" ); HideAlert();
+				}
 			} else {
 				document.getElementById('countNotifs').innerHTML = 0;
 				getNotifications();
 				alertMessage( result.msg, "success" );
+				HideAlert();
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
-		HideAlert();
 	}
 	xhr.send( params );
 }
@@ -116,15 +150,14 @@ const					logout = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const result = JSON.parse( xhr.response );
 
-			if ( result.success == "false" ) { alertMessage( result.msg, "error" ); }
+			if ( result.success == "false" ) { alertMessage( result.msg, "error" ); HideAlert(); }
 			else {
 				localStorage.removeItem( "token" );
 				location.href = "/home";
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
-		HideAlert();
 	}
 	xhr.send();
 }
