@@ -52,14 +52,19 @@
 
 		public function					userswholikes ()
 		{
-			var_dump( $_GET );
-			// try {
-			// 	if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
-			// 		$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
-			// 	}
-			// } catch ( Exception $e ) {
-			// 	$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while get users who liked the image !" ];
-			// }
+			try {
+				if ( !$this->galleryMiddleware->isImageExist( $_GET["id"] ) ) {
+					$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
+				} else {
+					$this->viewData = [
+						"success" => "true",
+						"users" => $this->likesModel->getUsersLikeImage( $_GET["id"] )
+					];
+				}
+			} catch ( Exception $e ) {
+				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while get users who liked the image !" ];
+			}
+			die( json_encode($this->viewData) );
 		}
 		
 
