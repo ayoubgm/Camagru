@@ -38,8 +38,27 @@
 			}
 			die( json_encode( $this->viewData ) );
 		}
+
+		// Read a notification of a connecter user
+		public function					readnotifuser ()
+		{
+			if ( !isset( $_SESSION['userid'] ) ) {
+				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
+			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+				try {
+					if ( !$this->notificationModel->readANotifUser( $_POST['userid'], $_POST["notifid"] ) ) {
+						$this->viewData = [ "success" => "false", "msg" => "Failed to read your notification !" ];
+					} else {
+						$this->viewData = [ "success" => "true" ];
+					}
+				} catch ( Exception $e ) {
+					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while read your notifications !" ];
+				}
+			}
+			die( json_encode( $this->viewData ) );
+		}
 		
-		// Read all notifactions of a user
+		// Read all notifactions of a connecter user
 		public function					readallnotifsuser ()
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
@@ -60,7 +79,7 @@
 			die( json_encode( $this->viewData ) );
 		}
 		
-		// Delete all notifications of a user
+		// Delete all notifications of a connecter user
 		public function					deleteallnotifsuser ()
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
