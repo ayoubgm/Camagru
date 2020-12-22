@@ -34,7 +34,7 @@
 	 	public function			getUsersLikeImage ( $imgid )
 		{
 			$query = '
-				SELECT u.id, u.username
+				SELECT u.id, u.username, u.firstname, u.lastname
 				FROM `likes` l inner join `users` u
 				ON l.userid = u.id
 				WHERE l.imgid = ?
