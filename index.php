@@ -8,16 +8,14 @@
 	define("VIEWS", APP . 'views' . DIRECTORY_SEPARATOR);
 	define("CONFIG", ROOT . 'config' . DIRECTORY_SEPARATOR);
 	define("PUBLIC_DIR", ROOT . 'public' . DIRECTORY_SEPARATOR);
-	define("CSS", PUBLIC_DIR . 'css' . DIRECTORY_SEPARATOR);
-	define("JS", PUBLIC_DIR . 'js' . DIRECTORY_SEPARATOR);
 	define("IMAGES", PUBLIC_DIR . 'images' . DIRECTORY_SEPARATOR);
 	define("EDITEDPICS", IMAGES . 'editedPics' . DIRECTORY_SEPARATOR);
 	define("STICKERS", IMAGES . 'stickers' . DIRECTORY_SEPARATOR);
 	define("SERVER", 'http://'. $_SERVER['HTTP_HOST'] );
 	define("PUBLIC_FOLDER", 'http://'. $_SERVER['HTTP_HOST']. str_replace( $_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', '/public') ) );
 	
-	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, MIDDLEWARES, CONFIG, PUBLIC_DIR, CSS, JS, IMAGES];
-	set_include_path( get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $modules) );	
+	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, MIDDLEWARES, CONFIG, PUBLIC_DIR, IMAGES];
+	set_include_path( get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $modules) );
 	spl_autoload_register('spl_autoload', false);
 	$router = new Router();
 ?>
