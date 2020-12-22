@@ -30,6 +30,14 @@
 			return $data['count'];
 		}
 
+		// Read a notification
+		public function				readANotifUser ( $userid, $notifid )
+		{
+			$query = 'UPDATE `notifications` SET seen = true WHERE userid = ? AND id = ?';
+			$stt = $this->connect()->prepare( $query );
+			return $stt->execute([ $userid, $notifid ]);
+		}
+
 		// Read all user notications
 		public function				readUserNotifications ( $id )
 		{
