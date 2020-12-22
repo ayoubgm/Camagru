@@ -18,10 +18,10 @@
 		<div class="container col-md-7 p-0 h-100">
 			<div class="card">
 				<div class="row no-gutters">
-					<div class="col-md-4 d-none d-lg-block">
+					<div class="col-lg-4">
 						<img src="/public/images/background-img4.jpg" class="card-img">
 					</div>
-					<div class="col-lg-8">
+					<div class="col-12 col-xl-8">
 						<div class="card-body">
 							<p class="card-title">Registration</p>
 							<form action="/signup" method="POST" onsubmit="validateRegisterData(this)">
