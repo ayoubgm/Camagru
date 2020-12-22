@@ -27,7 +27,7 @@
 		<link rel="stylesheet" href="/public/css/gallery/gallery.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 		<title>Gallery</title>
-		<script> const connectedUser = <?php if ( isset( $userData ) ) { echo $userData["id"]; } ?>;</script>
+		<script> const connectedUser = "<?php if ( isset( $userData ) ) { echo $userData["id"]; } ?>";</script>
 	</head>
 	<body onload="getNotifications();">
 		<?php require_once(VIEWS . "_header.php");?>
@@ -117,7 +117,7 @@
 							<img
 								id="comments-img-<?php echo $image['id']; ?>"
 								src="/public/images/comment-icone.png"
-								onclick="getComments( this.id, <?php echo $_SESSION['userid'] ?> )"
+								onclick="getComments( this.id, <?php echo $_SESSION['userid'] ?> );"
 							/>
 						</div>
 					</div>
@@ -130,8 +130,11 @@
 				<div class="row" id="model-header" >
 					<div class="col-8" id="title">
 						<h5>Comments (<span id="count-comments"></span>)</h5>
-						<div id="likes-img" onclick="getUsersWhoLikedImg( this.id );">
+						<div id="likes-img">
 							<img src="/public/images/icone-like-active.png" /> Likes (<span id="count-likes"></span>)
+							<div class="tooltiptext" id="users-like-img">
+								
+							</div>
 						</div>
 					</div>
 					<div class="col-4" id="close">
@@ -164,9 +167,6 @@
 					<div id="area-error-msg"></div>
 				</div>
 			</div>
-		</div>
-		<div class="model" id="model-likes">
-			
 		</div>
 		<nav id="nav-pagination" class="bg-dark">
 			<ul class="pagination pagination-sm justify-content-end">

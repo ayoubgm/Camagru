@@ -201,12 +201,14 @@ body {
 }
 
 .model-bg .model {
-	width: 80%;
-	height: 60%;
+	width: 80vw;
+	height: 60vh;
 	background-color: white;
 	border-radius: 8px;
 	padding: 8px;
 	position: relative;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .model-bg .model #model-header {
@@ -225,9 +227,30 @@ body {
 }
 
 .model-bg .model #model-header #title [id^=likes-img] {
+	width: 120px;
+	position: relative;
 	font-size: 12pt;
 	cursor: pointer;
 }
+
+.model-bg .model #model-header #title [id^=likes-img] .tooltiptext {
+	position: absolute;
+	width: 190px;
+	height: 180px;
+	padding: 10px;
+	text-align: center;
+	border-radius: 8px;
+	background-color: rgb(246, 246, 246);
+	visibility: hidden;
+	z-index: 1;
+	overflow-y: scroll;
+	cursor: default;
+}
+
+.model-bg .model #model-header #title [id^=likes-img]:hover .tooltiptext {
+	visibility: visible;
+}
+
 .model-bg .model #model-header #title [id^=likes-img] img {
 	width: 20px;
 	height: 20px;
@@ -264,22 +287,6 @@ body {
 	width: 100%;
 	font-weight: bold;
 	color: rgb(190, 0, 0);
-}
-
-/* Likes model */
-
-#model-likes {
-	width: 400px;
-	height: 500px;
-	background-color: white;
-	position: absolute;
-	top: 200px;
-	left: 40%;
-	border-radius: 8px;
-	padding: 8px;
-	z-index: 1;
-	visibility: hidden;
-	opacity: 0;
 }
 
 .area-write-coment div #user-img {
