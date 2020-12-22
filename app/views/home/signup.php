@@ -18,7 +18,7 @@
 		<div class="container col-md-7 p-0 h-100">
 			<div class="card">
 				<div class="row no-gutters">
-					<div class="col-lg-4">
+					<div class="col-lg-4 d-none d-xl-block">
 						<img src="/public/images/background-img4.jpg" class="card-img">
 					</div>
 					<div class="col-12 col-xl-8">

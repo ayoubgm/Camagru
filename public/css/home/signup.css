@@ -57,9 +57,3 @@ html, body {
 .card-footer a#link-signin{
 	float: right;
 }
-
-@media (max-width: 1320px) {
-	.container .card .row .col-lg-4 {
-		display: none;
-	}
-}
