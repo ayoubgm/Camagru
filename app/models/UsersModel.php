@@ -1,15 +1,14 @@
 <?php
 
 	/**
-	 *	users model class
+	 *	Users model class
 	 */
-	class 		UsersModel extends DB
+	class		UsersModel extends DB
 	{
 
-		public function			findUserById ( $userid )
+		public function				findUserById ( $userid )
 		{
-			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE id = ?");
-			$stt->execute([ $userid ]);
+			$stt = $this->query("SELECT * FROM `users` WHERE id = ?", [ $userid ]);
 			return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
 			? array(
 				'id' => $data['id'],
@@ -25,10 +24,9 @@
 			: null;
 		}
 
-		public function			findUserByUsername ( $username )
+		public function				findUserByUsername ( $username )
 		{
-			$stt = $this->connect()->prepare("SELECT * FROM `users` WHERE username = ?");
-			$stt->execute([ $username ]);
+			$stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ $username ]);
 			return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
 			? array(
 				'id' => $data['id'],
@@ -44,7 +42,7 @@
 			: null;
 		}
 
-		public function			save ( $data )
+		public function				save ( $data )
 		{
 			$newUser = array(
 				strtolower($data['firstname']),
@@ -56,52 +54,51 @@
 				password_hash($data['password'], PASSWORD_ARGON2I),
 				base64_encode( strtolower($data['email']) . date("Y-m-d H:i:s") )
 			);
-			$query = 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?)';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute( $newUser );
+			$this->query('
+				INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken)
+				VALUES (?,?,?,?,?,?,?,?)
+			', $newUser);
 		}
 
-		public function			edit ( $userID, $editedData )
+		public function				edit ( $userID, $editedData )
 		{
 			$editedData['id'] = $userID;
-			$query = 'UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute( array_map( 'strtolower', array_values($editedData) ) );
+			$query = '
+				UPDATE `users`
+				SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ?
+				WHERE id = ?
+			';
+			$this->query( $query, array_map( 'strtolower', array_values($editedData) ) );
 		}
 
-		public function			change_password ( $userID, $newPassword )
+		public function				change_password ( $userID, $newPassword )
 		{
 			$query = 'UPDATE users SET `password` = ? WHERE id = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute([ $newPassword, $userID ]);
+			$this->query( $query, [ $newPassword, $userID ] );
 		}
 
-		public function			change_preference_email_notifs ( $userid, $value )
+		public function				change_preference_email_notifs ( $userid, $value )
 		{
 			$query = 'UPDATE users SET notifEmail = ? WHERE id = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute([ $value, $userid ]);
+			$this->query( $query, [ $value, $userid ] );
 		}
 
-		public function			resetpassword ( $email )
+		public function				resetpassword ( $email )
 		{
 			$query = 'UPDATE users SET recoveryToken = ? WHERE email = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute([ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ]);
+			$this->query( $query, [ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ] );
 		}
 
-		public function			newpassword ( $data )
+		public function				newpassword ( $data )
 		{
 			$query = 'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute([ $data['newpassword'], $data['token'] ]);
+			$this->query( $query, [ $data['newpassword'], $data['token'] ] );
 		}
 
-		public function			activateAccount ( $data )
+		public function				activateAccount ( $data )
 		{
 			$query = 'UPDATE users SET activationToken = NULL WHERE activationToken = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute([ $data['token'] ]);
+			$this->query( $query, [ $data['token'] ] );
 		}
 
 	}

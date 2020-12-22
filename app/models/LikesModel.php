@@ -1,37 +1,32 @@
 <?php
 
 	/**
-	 *  likes model class
+	 *  Likes model class
 	 */
-	class 		LikesModel extends DB
+	class		LikesModel extends DB
 	{
-		/* Like an image by a user */
-		public function			likeImage ( $imgid, $userid )
+
+		public function				likeImage ( $imgid, $userid )
 		{
-			$query1 = 'INSERT INTO `likes` (userid, imgid) values (?, ?);';
-			$stt1 = $this->connect()->prepare( $query1 );
-			return $stt1->execute([ $userid, $imgid ]);
+			$query = 'INSERT INTO `likes` (userid, imgid) values (?, ?);';
+			$this->query( $query, [ $userid, $imgid ] );
 		}
 
-		/* unlike an image by a user */
-		public function			unlikeImage ( $imgid, $userid )
+		public function				unlikeImage ( $imgid, $userid )
 		{
 			$query = 'DELETE FROM likes WHERE imgid = ? AND userid = ?;';
-			$stt = $this->connect()->prepare($query);
-			return $stt->execute([ $imgid, $userid ]);
+			$this->query( $query, [ $imgid, $userid ] );
 		}
 
-		public function			getCountLikes ( $imgid )
+		public function				getCountLikes ( $imgid )
 		{
 			$query = 'SELECT count(*) AS `count` FROM `likes` WHERE imgid = ?;';
-			$stt = $this->connect()->prepare($query);
-			$stt->execute([ $imgid ]);
+			$stt = $this->query( $query, [ $imgid ]);
 			$data = $stt->fetch(PDO::FETCH_ASSOC);
 			return $data["count"];
 		}
 
-		/* Get all users who liked a picture */
-	 	public function			getUsersLikeImage ( $imgid )
+	 	public function				getUsersLikeImage ( $imgid )
 		{
 			$query = '
 				SELECT u.id, u.username, u.firstname, u.lastname
@@ -40,19 +35,15 @@
 				WHERE l.imgid = ?
 				ORDER BY l.createdat DESC
 			';
-			$stt = $this->connect()->prepare($query);
-			$stt->execute([ $imgid ]);
+			$stt = $this->query( $query, [ $imgid ] );
 			return $stt->fetchAll(PDO::FETCH_ASSOC);
 		}
 
-		/* is like exists of an image by a user */
-		public function 		isLikeExists ( $imgid, $userid )
+		public function				isLikeExists ( $imgid, $userid )
 		{
-			$query0 = 'SELECT count(*) AS `count` FROM `likes` WHERE imgid = ? AND userid = ?';
-			$stt0 = $this->connect()->prepare( $query0 );
-			$stt0->execute([ $imgid, $userid ]);
-			$data = $stt0->fetch(PDO::FETCH_ASSOC);
-			
+			$query = 'SELECT count(*) AS `count` FROM `likes` WHERE imgid = ? AND userid = ?';
+			$stt = $this->query( $query, [ $imgid, $userid ] );
+			$data = $stt->fetch(PDO::FETCH_ASSOC);
 			return ( $data['count'] == 0 ) ? false : true;
 		}
 

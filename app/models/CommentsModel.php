@@ -1,12 +1,12 @@
 <?php
 
 	/**
-	 *	comments model class
+	 *	Comments model class
 	 */
 	class 		CommentsModel extends DB
 	{
-		/* Get all comments of an image */
-		public function 		getCommentsOfImg ( $imgid )
+
+		public function				getCommentsOfImg ( $imgid )
 		{
 			$query = '
 				SELECT c.*, u.firstname, u.lastname, u.username, u.email, u.gender
@@ -15,46 +15,38 @@
 				WHERE c.imgid = ?
 				ORDER BY c.createdat ASC
 			';
-			$stt = $this->connect()->prepare($query);
-			$stt->execute([ $imgid ]);
+			$stt = $this->query( $query, [ $imgid ]);
 			return $stt->fetchAll(PDO::FETCH_ASSOC);
 		}
 
-		public function			getComment ( $id )
+		public function				getComment ( $id )
 		{
 			$query = '
 				SELECT c.*, u.firstname, u.lastname, u.username, u.email, u.gender
 				FROM `comments` c INNER JOIN `users` u
 				ON c.id = ?
 			';
-			$stt = $this->connect()->prepare($query);
-			$stt->execute([ $id ]);
+			$stt = $this->query( $query, [ $id ] );
 			return $stt->fetch(PDO::FETCH_ASSOC);
 		}
 
-		/* Save a comment */
-		public function 		save ( $data )
+		public function				save ( $data )
 		{
 			$query = 'INSERT INTO `comments` (content, userid, imgid) values (?, ?, ?)';
-			$db = $this->connect();
-			$stt = $db->prepare($query);
-			if ( $stt->execute( array_values( $data ) ) ) { return $db->lastInsertId(); }
-			else { return NULL; }
+			$this->query( $query, array_values( $data ) );
+			return $this->pdo->lastInsertId();
 		}
 
-		/* Save a comment */
-		public function 		edit ( $data )
+		public function				edit ( $data )
 		{
 			$query = 'UPDATE `comments` SET content = ? WHERE userid = ? AND imgid = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute( array_values( $data ) );
+			$this->query( $query, array_values( $data ) );
 		}
 
-		public function			delete ( $id )
+		public function				delete ( $id )
 		{
 			$query = 'DELETE FROM `comments` WHERE id = ?';
-			$stt = $this->connect()->prepare( $query );
-			return $stt->execute([ $id ]);
+			$this->query( $query, [ $id ] );
 		}
 
 	}
