@@ -14,12 +14,12 @@ const 			setSuccess = ( target ) => {
     msg.classList.add("text-success");
     target.style.border = "1px solid green";
 }
-const 			validatePassword = ( password ) => {
-    if ( !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/.test( password.value ) ) {
-        setError(password, "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !");
+const 			validatePassword = ( ) => {
+    if ( !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*_-]).{8,}$/.test( newpassword.value ) ) {
+        setError(newpassword, "The password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !");
         return false;
     } else {
-        setSuccess(password); return true;
+        setSuccess(newpassword); return true;
     }
 }
 const			validateConfPass = ( ) => {
