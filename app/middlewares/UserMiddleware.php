@@ -108,10 +108,9 @@
 
 		public function					change_password ( $id, $data )
 		{
-			if (
-				( $error = $this->validateNewPassword( $data['oldpassword'] ) ) ||
-				( $error = $this->validateOldPassword( $data['newpassword'] ) )
-			) {
+			if ( !$data["oldpassword"] || !$data["newpassword"] || !$data["confirmation_password"] ) {
+				return "Invalid data provided !";
+			} else if ( ( $error = $this->validateOldPassword( $data['oldpassword'] ) ) || ( $error = $this->validateNewPassword( $data['newpassword'] ) ) ) {
 				return $error;
 			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {
 				return "Passwords doesn't match !";

@@ -71,76 +71,85 @@
 
 		public function				isFullnameExists ( $firstname, $lastname )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE firstname = ? AND lastname = ?", [ strtolower($firstname), strtolower($lastname) ]);
-			return( $stt->fetch() );
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE firstname = ? AND lastname = ?", [ strtolower($firstname), strtolower($lastname) ]) ) {
+				return $stt->fetch();
+			}
 		}
 
 		public function				isUsernameExists ( $username )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]);
-			return( $stt->fetch() );
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]) ) {
+				return $stt->fetch();
+			}
 		}
 
 		public function				isEmailExists ( $email )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE email = ?", [ strtolower( $email ) ]);
-			return( $stt->fetch() );
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE email = ?", [ strtolower( $email ) ]) ) {
+				return $stt->fetch();
+			}
 		}
 
 		public function				isActiveAccount ( $username )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]);
-			$data = $stt->fetch();
-			return ( empty($data['activationToken']) );
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]) ) {
+				$data = $stt->fetch();
+				return ( empty($data['activationToken']) );
+			}
 		}
 
-		public function				isThePasswordIsValid( $id, $username, $password )
+		public function				isThePasswordIsValid ( $id, $username, $password )
 		{
-			$stt = ( $id )
-			? $this->query("SELECT * FROM `users` WHERE id = ?", [ $id ])
-			: $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]);
-			$data = $stt->fetch();
-			return ( password_verify($password, $data['password']) );
+			if ( ( $stt = ( $id ) ? $this->query("SELECT * FROM `users` WHERE id = ?", [ $id ]) : $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]) ) ) {
+				$data = $stt->fetch();
+				return ( password_verify($password, $data['password']) );
+			}
 		}
 
 		public function				isUsernameEditedExists ( $userid, $username )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE username = ? AND id <> ?", [ strtolower( $username ), $userid ]);
-			return( $stt->fetch() );
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ? AND id <> ?", [ strtolower( $username ), $userid ]) ) {
+				return $stt->fetch();
+			}
 		}
 
 		public function				isEmailEditedExists ( $userid, $email )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE email = ? AND id <> ?", [ strtolower( $email ), $userid ]);
-			return( $stt->fetch() );
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE email = ? AND id <> ?", [ strtolower( $email ), $userid ]) ) {
+				return $stt->fetch();
+			}
 		}
 
 		public function				isRecoveryTokenValid ( $token )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE recoveryToken = ?", [ $token ]);
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return ( $data ) ? array( 'id' => $data['id'] ) : null;
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE recoveryToken = ?", [ $token ]) ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return ( $data ) ? array( 'id' => $data['id'] ) : null;
+			}
 		}
 
 		public function				isActivationTokenValid ( $token )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE activationToken = ?", [ $token ]);
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return ( $data ) ? array( 'id' => $data['id'] ) : null;
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE activationToken = ?", [ $token ]) ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return ( $data ) ? array( 'id' => $data['id'] ) : null;
+			}
 		}
 
 		public function				isImageOwnerExists ( $userid, $imgid )
 		{
-			$stt = $this->query("SELECT * FROM `gallery` WHERE id = ? AND userid = ?", [ $imgid, $userid ]);
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return ( $data ) ? $data : null;
+			if ( $stt = $this->query("SELECT * FROM `gallery` WHERE id = ? AND userid = ?", [ $imgid, $userid ]) ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return ( $data ) ? $data : null;
+			}
 		}
 
 		public function				isImageExists ( $imgid )
 		{
-			$stt = $this->query("SELECT * FROM `gallery` WHERE id = ?", [ $imgid ]);
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return ( $data ) ? $data : null;
+			if ( $stt = $this->query("SELECT * FROM `gallery` WHERE id = ?", [ $imgid ]) ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return ( $data ) ? $data : null;
+			}
 		}
 
 		public function				validateImageDescription ( $descr )
@@ -152,9 +161,10 @@
 
 		public function				isCommentExists ( $id )
 		{
-			$stt = $this->query("SELECT * FROM `comments` WHERE id = ?", [ $id ]);
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return ( $data ) ? $data : null;
+			if ( $stt = $this->query("SELECT * FROM `comments` WHERE id = ?", [ $id ]) ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return ( $data ) ? $data : null;
+			}
 		}
 
 		public function				isUserTokenValid ( $token )
