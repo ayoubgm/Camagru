@@ -27,7 +27,7 @@
 					</div>
 					<hr/>
 					<div class="col-md-12 px-2 py-4">
-						<form action="/home/new_password/token/<?php echo $token; ?>" method="POST" onsubmit="return validateData();">
+						<form action="/home/new_password/token/<?php echo $token; ?>" method="POST" >
 							<div class="form-group row m-0 mb-1">
 								<label class="col-lg-4" for="inputNewPass">New password :</label>
 								<div class="col-lg-8">
@@ -38,7 +38,7 @@
 										name="newpassword"
 										placeholder="new password"
 										autocomplete="off"
-										oninput="validatePassword(this)"
+										oninput="validatePassword()"
 									/>
 								</div>
 							</div>

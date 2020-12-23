@@ -28,7 +28,7 @@
 				</div>
 				<hr/>
 				<div class="col-md-12 px-5 py-4">
-					<form action="/user/change_password" method="POST" onsubmit="return validateData();">
+					<form action="/user/change_password" method="POST">
 						<div class="form-group row m-0 mb-1">
 							<label class="col-lg-4" for="inputOldPass">Old password :</label>
 							<div class="col-lg-8">

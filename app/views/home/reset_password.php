@@ -52,7 +52,7 @@
 										value="Reset password"
 										name="btn-reset"
 									/>
-								</div>
+								</div> 
 							</div>
 						</form>
 					</div>
