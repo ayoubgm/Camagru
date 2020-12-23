@@ -31,8 +31,7 @@
 			try
 			{
 				$stt = $this->pdo->prepare( $query );
-				$stt->execute( $params );
-				return $stt;
+				return ( $stt->execute( $params ) ) ? $stt : NULL;
 			} catch ( PDOException $e ) {
 				echo 'Something went wrong while execute the query ('.$e->getMessage().')';
 			}
