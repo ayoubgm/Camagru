@@ -54,52 +54,50 @@
 				password_hash($data['password'], PASSWORD_ARGON2I),
 				base64_encode( strtolower($data['email']) . date("Y-m-d H:i:s") )
 			);
-			$this->query('
+			return $this->query('
 				INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken)
 				VALUES (?,?,?,?,?,?,?,?)
 			', $newUser);
 		}
 
+		public function				resetpassword ( $email )
+		{
+			return $this->query(
+				'UPDATE users SET recoveryToken = ? WHERE email = ?',
+				[ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ]
+			);
+		}
+		
+		public function				newpassword ( $data )
+		{
+			return $this->query(
+				'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?',
+				[ $data['newpassword'], $data['token'] ]
+			);
+		}
+
 		public function				edit ( $userID, $editedData )
 		{
 			$editedData['id'] = $userID;
-			$query = '
-				UPDATE `users`
-				SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ?
-				WHERE id = ?
-			';
-			$this->query( $query, array_map( 'strtolower', array_values($editedData) ) );
-		}
-
-		public function				change_password ( $userID, $newPassword )
-		{
-			$query = 'UPDATE users SET `password` = ? WHERE id = ?';
-			$this->query( $query, [ $newPassword, $userID ] );
+			return $this->query(
+				'
+					UPDATE `users`
+					SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ?
+					WHERE id = ?
+				',
+				array_map( 'strtolower', array_values($editedData) )
+			);
 		}
 
 		public function				change_preference_email_notifs ( $userid, $value )
 		{
-			$query = 'UPDATE users SET notifEmail = ? WHERE id = ?';
-			$this->query( $query, [ $value, $userid ] );
-		}
-
-		public function				resetpassword ( $email )
-		{
-			$query = 'UPDATE users SET recoveryToken = ? WHERE email = ?';
-			$this->query( $query, [ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ] );
-		}
-
-		public function				newpassword ( $data )
-		{
-			$query = 'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?';
-			$this->query( $query, [ $data['newpassword'], $data['token'] ] );
+			return $this->query( 'UPDATE users SET notifEmail = ? WHERE id = ?', [ $value, $userid ] );
 		}
 
 		public function				activateAccount ( $data )
 		{
-			$query = 'UPDATE users SET activationToken = NULL WHERE activationToken = ?';
-			$this->query( $query, [ $data['token'] ] );
+			return $this->query( 'UPDATE users SET activationToken = NULL WHERE activationToken = ?', [ $data['token'] ] );
 		}
-
+		
 	}
 ?>
