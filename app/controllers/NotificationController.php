@@ -15,12 +15,11 @@
 		{
 			session_start();
 			$this->viewData = array();
-			$this->notificationModel = self::call_model("NotificationsModel");
-			$this->userMiddleware = self::call_middleware('UserMiddleware');
-			$this->helper = self::call_helper();
+			$this->notificationModel = $this->call_model("NotificationsModel");
+			$this->userMiddleware = $this->call_middleware('UserMiddleware');
+			$this->helper = $this->call_helper();
 		}
 
-		// Get notfications of a user
 		public function					user()
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
@@ -39,7 +38,6 @@
 			die( json_encode( $this->viewData ) );
 		}
 
-		// Read a notification of a connecter user
 		public function					readnotifuser ()
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
@@ -58,7 +56,6 @@
 			die( json_encode( $this->viewData ) );
 		}
 		
-		// Read all notifactions of a connecter user
 		public function					readallnotifsuser ()
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
@@ -79,7 +76,6 @@
 			die( json_encode( $this->viewData ) );
 		}
 		
-		// Delete all notifications of a connecter user
 		public function					deleteallnotifsuser ()
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {

@@ -14,8 +14,8 @@
 		public function 				__construct()
 		{
 			$this->viewData = array();
-			$this->userModel = $this->call_model('UsersModel');
 			$this->userMiddleware = $this->call_middleware('UserMiddleware');
+			$this->userModel = $this->call_model('UsersModel');
 			$this->galleryModel = $this->call_model('GalleryModel');
 			$this->notificationsModel = $this->call_model('NotificationsModel');
 		}
@@ -103,10 +103,11 @@
 								unset( $_POST["btn-signup"] );
 								if ( $error = $this->userMiddleware->signup($_POST) ) {
 									$this->viewData = [ "success" => "false", "msg" => $error ];
-								} else {
-									$this->userModel->save( $_POST );
+								} else if ( $this->userModel->save( $_POST ) ) {
 									// $this->sendMail("Confirmation mail", strtolower($_POST["email"]));
 									$this->viewData = [ "success" => "true", "msg" => "Successful registration, you will receive an email for activation account !" ];
+								} else {
+									$this->viewData = [ "success" => "false", "msg" => "Failed to create your account !" ];
 								}
 							}
 						break;
@@ -133,10 +134,11 @@
 							if ( isset( $_POST["btn-reset"] ) ) {
 								if ( $error = $this->userMiddleware->reset_password($_POST["email"]) ) {
 									$this->viewData = [ "success" => "false", "msg" => $error ];
-								} else {
-									$this->userModel->resetpassword($_POST["email"]);
+								} else if ( $this->userModel->resetpassword( $_POST["email"] ) ) {
 									// $this->sendMail("Reset password", strtolower($_POST["email"]));
 									$this->viewData = [ "success" => "true", "msg" => "A direct link for reset password has been sent successfully !" ];
+								} else {
+									$this->viewData = [ "success" => "false", "msg" => "failed to reset your password !" ];
 								}
 							}
 						break;
@@ -177,9 +179,10 @@
 								unset( $_POST["btn-submit"] ); $_POST["token"] = $data[1];
 								if ( $error = $this->userMiddleware->new_password( $_POST ) ) {
 									$this->viewData = [ "success" => "false", "msg" => $error, "data" => [ "token" => $data[1] ] ];
-								} else {
-									$this->userModel->newpassword( array( "newpassword" => password_hash($_POST["newpassword"], PASSWORD_ARGON2I), "token" => $data[1] ) );
+								} else if ( $this->userModel->newpassword( array( "newpassword" => password_hash($_POST["newpassword"], PASSWORD_ARGON2I), "token" => $data[1] ) ) ) {
 									$this->viewData = [ "success" => "true", "msg" => "Your password has been changed successfully !", "data" => [ "token" => $data[1] ] ];
+								} else {
+									$this->viewData = [ "success" => "false", "msg" => "Failed to change your password !", "data" => [ "token" => $data[1] ] ];
 								}
 							}
 						break;
@@ -205,9 +208,10 @@
 							$this->viewData[ "data" ] = [ "token" => $data[1] ];
 							if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
 								$this->viewData += [ "success" => "false", "msg" => $error ];
-							} else {
-								$this->userModel->activateAccount( array( 'token' => $data[1] ) );
+							} else if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
 								$this->viewData += [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
+							} else {
+								$this->viewData += [ "success" => "false", "msg" => "Failed to activate your account !" ];
 							}
 						}
 					break;

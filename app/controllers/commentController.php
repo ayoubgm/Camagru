@@ -18,7 +18,7 @@
 		{
 			session_start();
 			$this->viewData = array();
-			$this->userMiddleware = self::call_middleware('UserMiddleware');
+			$this->userMiddleware = $this->call_middleware('UserMiddleware');
 			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
 			$this->commentMiddleware = $this->call_middleware('CommentMiddleware');
 			$this->commentModel = $this->call_model('CommentsModel');

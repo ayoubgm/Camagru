@@ -14,12 +14,11 @@
 		{
 			session_start();
 			$this->viewData = array();
-			$this->likesModel = self::call_model('LikesModel');
-			$this->userMiddleware = self::call_middleware('UserMiddleware');
-			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
+			$this->likesModel = $this->call_model('LikesModel');
+			$this->userMiddleware = $this->call_middleware('UserMiddleware');
+			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
 		}
 		
-		/* Like an image */
 		public function 				add ()
 		{
 			if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {

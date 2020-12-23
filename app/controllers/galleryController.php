@@ -19,17 +19,16 @@
 		{
 			session_start();
 			$this->viewData = array();
-			$this->galleryMiddleware = self::call_middleware('GalleryMiddleware');
-			$this->userMiddleware = self::call_middleware('UserMiddleware');
-			$this->usersModel = self::call_model('UsersModel');
-			$this->galleryModel = self::call_model('GalleryModel');
-			$this->likesModel = self::call_model('LikesModel');
-			$this->commentsModel = self::call_model('CommentsModel');
-			$this->notificationsModel = self::call_model('NotificationsModel');
-			$this->helper = self::call_helper();
+			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
+			$this->userMiddleware = $this->call_middleware('UserMiddleware');
+			$this->usersModel = $this->call_model('UsersModel');
+			$this->galleryModel = $this->call_model('GalleryModel');
+			$this->likesModel = $this->call_model('LikesModel');
+			$this->commentsModel = $this->call_model('CommentsModel');
+			$this->notificationsModel = $this->call_model('NotificationsModel');
+			$this->helper = $this->call_helper();
 		}
 
-		/* Load all images edited by users  */
 		public function 				index ( $data )
 		{
 			$page = 1;
@@ -63,7 +62,6 @@
 			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $this->viewData )->render();
 		}
 		
-		/* Delete an image by author of image */
 		public function 				delete ()
 		{
 			try {
