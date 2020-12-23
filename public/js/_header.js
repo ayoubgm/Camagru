@@ -1,37 +1,10 @@
-// Set user token in local storage
-if ( typeof logged !== 'undefined' ) {
-	localStorage.setItem(`token`, userToken);
-}
+if ( typeof logged !== 'undefined' ) { localStorage.setItem(`token`, userToken); }
 const alert = document.getElementById('alert-msg');
 const userMenu = document.querySelector("nav .btn-auth .dropdown");
 const btnProfilePic = document.getElementById("profile-img");
 const menuNotifs = document.getElementById("notifications");
 const btnMenuNotifs = document.getElementById("notif-img");
 const notificationsArea = document.getElementById("notifications-user");
-
-const					readANotification = ( userid, id ) => {
-	const xhr = new XMLHttpRequest();
-	const url = "/notification/readnotifuser";
-	const params = "userid="+userid+"&notifid="+id+"&token="+localStorage.getItem( "token" );
-	
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhr.onloadend = () => {
-		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const data = JSON.parse( xhr.response );
-			if ( data.success == "false" ) {
-				if ( data.msg != "You need to login first !" ) {
-					alertMessage( data.msg, "error" ); HideAlert();
-				}
-			} else {
-				getNotifications();
-			}
-		} else {
-			alertMessage( `An error has occurenced : ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
-		}
-	}
-	xhr.send( params );
-}
 
 const					createNotification = ( data ) => {
 	let div = document.createElement('div');
@@ -82,6 +55,30 @@ const					getNotifications = () => {
 		}
 	}
 	xhr.send();
+}
+
+const					readANotification = ( userid, id ) => {
+	const xhr = new XMLHttpRequest();
+	const url = "/notification/readnotifuser";
+	const params = "userid="+userid+"&notifid="+id+"&token="+localStorage.getItem( "token" );
+	
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.onloadend = () => {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg != "You need to login first !" ) {
+					alertMessage( data.msg, "error" ); HideAlert();
+				}
+			} else {
+				getNotifications();
+			}
+		} else {
+			alertMessage( `An error has occurenced : ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
+		}
+	}
+	xhr.send( params );
 }
 
 const					readAllUserNotifs = () => {
@@ -213,7 +210,7 @@ const					navSlide = () => {
 		// Animate nav links
 		navLinks.forEach((link, index) => {
 			if ( link.style.animation ) { link.style.animation = ""; }
-			else { link.style.animation = `navLinkFade 0.5s ease forwards ${index / 4 + 0.5}s`; }
+			else { link.style.animation = `navLinkFade 0.5s ease forwards ${index / 6 + 0.4}s`; }
 		});
 
 		// Burger animation

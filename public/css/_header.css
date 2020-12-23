@@ -36,9 +36,9 @@ nav .logo-area .logo{
 }
 
 nav ul.nav-links li {
-	text-align: center;
 	list-style: none;
 	display: inline;
+	text-align: center;
 	padding: 6px 10px;
 }
 
@@ -236,20 +236,18 @@ a#btn-signup {
 		display: none;
 	}
 	.nav-links {
-		position: absolute;
 		width: 100%;
 		height: 100vh;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		right: 0;
+		position: absolute;
 		top: 65px;
-		transform: translateX(100%);
-		transition: transform 0.2s ease;
+		display: block;
+		transition: transform 0.1s ease;
 		background-color: rgba(0, 136, 169, 1);
 		z-index: 1;
+		display: none;
 	}
-	ul.nav-links li {
+	nav ul.nav-links li  {
+		display: block;
 		opacity: 0;
 	}
 	nav ul.nav-links li a#profile,
@@ -268,17 +266,16 @@ a#btn-signup {
 }
 
 .nav-active {
-	transform: translateX(0%);
+	display: block;
+	/* transform: translateX(0%); */
 }
 
 @keyframes navLinkFade{
 	from {
 		opacity: 0;
-		transform: translateX(50px);
 	}
 	to {
 		opacity: 1;
-		transform: translateX(0px);
 	}
 }
 
