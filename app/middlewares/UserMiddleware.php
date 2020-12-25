@@ -10,12 +10,10 @@
 		{
 			if ( !$data['username'] || !$data['password'] ) {
 				return "Invalid data provided !";
-			} else if ( !$this->isUsernameExists( $data['username']) ) {
-				return "The account does't exists !";
+			} else if ( !$this->isUsernameExists( $data['username']) || !$this->isThePasswordIsValid( null, $data['username' ], $data['password'] ) ) {
+				return "The email or password is incorrect !";
 			} else if ( !$this->isActiveAccount( $data['username' ]) ) {
 				return "You must activate your account first !";
-			} else if ( !$this->isThePasswordIsValid( null, $data['username' ], $data['password'] ) ) {
-				return "Incorrect password !";
 			}
 		}
 

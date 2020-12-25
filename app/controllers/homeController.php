@@ -13,6 +13,7 @@
 
 		public function 				__construct()
 		{
+			session_start();
 			$this->viewData = array();
 			$this->userMiddleware = $this->call_middleware('UserMiddleware');
 			$this->userModel = $this->call_model('UsersModel');
@@ -36,7 +37,6 @@
 		public function 				index()
 		{
 			try {
-				session_start();
 				$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
 				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					$this->viewData["data"] += [
@@ -55,7 +55,6 @@
 		public function 				signin()
 		{
 			try {
-				session_start();
 				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					header("Location: /");
 				} else {
@@ -90,7 +89,6 @@
 		public function 				signup()
 		{
 			try {
-				session_start();
 				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					header("Location: /");
 				} else {
@@ -122,7 +120,6 @@
 		public function 				reset_password()
 		{
 			try {
-				session_start();
 				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					header("Location: /");
 				} else {
@@ -160,7 +157,6 @@
 		public function 				new_password( $data )
 		{
 			try {
-				session_start();
 				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					header("Location: /");
 				} else if ( $error = $this->validateToken( $data ) ) {
@@ -197,24 +193,25 @@
 		public function 				account_confirmation ( $data )
 		{
 			try {
-				switch ( $_SERVER["REQUEST_METHOD"] ) {
-					case "GET":
-						session_start();
-						if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
-							header("Location: /");
-						} else if ( ( $error = $this->validateToken( $data ) ) != null ) {
-							$this->viewData = [ "success" => "false", "msg" => $error ];
-						} else {
-							$this->viewData[ "data" ] = [ "token" => $data[1] ];
-							if ( ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) != null ) {
-								$this->viewData += [ "success" => "false", "msg" => $error ];
-							} else if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
-								$this->viewData += [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
+				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
+					header("Location: /");
+				} else {
+					switch ( $_SERVER["REQUEST_METHOD"] ) {
+						case "GET":
+							if ( $error = $this->validateToken( $data ) ) {
+								$this->viewData = [ "success" => "false", "msg" => $error ];
 							} else {
-								$this->viewData += [ "success" => "false", "msg" => "Failed to activate your account !" ];
+								$this->viewData[ "data" ] = [ "token" => $data[1] ];
+								if ( $error = $this->userMiddleware->validateActivationToken( $data[1] ) ) {
+									$this->viewData += [ "success" => "false", "msg" => $error ];
+								} else if ( $this->userModel->activateAccount( array( 'token' => $data[1] ) ) ) {
+									$this->viewData += [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
+								} else {
+									$this->viewData += [ "success" => "false", "msg" => "Failed to activate your account !" ];
+								}
 							}
-						}
-					break;
+						break;
+					}
 				}
 			} catch ( Exception $e ) {
 				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while activating your account, try later !"];
