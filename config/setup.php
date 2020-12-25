@@ -9,7 +9,7 @@
 		public function 		setup()
 		{
 			$queries = file_get_contents(CONFIG . 'queries.sql');
-			$this->query( $queries );
+			return $this->query( $queries );
 		}
 
 	}

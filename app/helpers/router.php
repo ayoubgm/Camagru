@@ -45,7 +45,9 @@
 			// Create or recreate database `db_camagru` on the mysql server 
 			if ( $this->controller instanceof homeController && $this->method === "index" ) {
 				$setupObject = new setup;
-				// $setupObject->setup();
+				if ( !$setupObject->setup() ) {
+					echo "Failed to create or recreate the database !";
+				}
 			}
 			$this->params = $url ? array_values( $url ) : [];
 			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);
