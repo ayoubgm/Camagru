@@ -27,6 +27,11 @@
 		<?php require_once(VIEWS . "_header.php"); ?>
 		<div class="jumbotron">
 			<div class="container col-lg-10">
+				<?php if ( isset( $this->view_data["success"] ) && $this->view_data["success"] == "false" ) { ?>
+					<div class="alert alert-danger">
+						<?php echo $this->view_data["msg"]; ?>
+					</div>
+				<?php } ?>
 				<h1 class="display-4">
 					<?php echo ( isset($_SESSION['userid']) ) ? "Welcome ".$userData["username"] : "Welcome"; ?>
 				</h1>
