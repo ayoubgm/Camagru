@@ -37,8 +37,7 @@ const					getNotifications = () => {
 
 			if ( data.success == "false" ) {
 				if ( data.msg != "You need to login first !" ) {
-					alertMessage( data.msg, "error" );
-					HideAlert();
+					alertMessage( data.msg, "error" ); HideAlert();
 				}
 			} else {
 				const notifs = data.data;
