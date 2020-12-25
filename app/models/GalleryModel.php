@@ -13,10 +13,18 @@
 			    ON g.userid = u.id
 				ORDER BY g.createdat DESC
 				LIMIT '.$depart.','.$imagePerPage;
-			$stt = $this->query( $query );
-			return $stt->fetchAll(PDO::FETCH_ASSOC);
+			if ( $stt = $this->query( $query ) ) {
+				return $stt->fetchAll( PDO::FETCH_ASSOC );
+			}
 		}
 
+		public function				getCountImages ()
+		{
+			if ( $stt = $this->query("SELECT count(*) AS `count` FROM `gallery`") ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return $data['count'];
+			}
+		}
 
 		public function				userGallery ( $username, $depart = 0, $imagePerPage = 6 )
 		{
@@ -27,31 +35,22 @@
 				WHERE u.username = ?
 				ORDER BY g.createdat DESC
 				LIMIT '.$depart.','.$imagePerPage;
-			$stt = $this->query( $query, [ strtolower( $username ) ] );
-			return $stt->fetchAll(PDO::FETCH_ASSOC);
+			if ( $stt = $this->query( $query, [ strtolower( $username ) ] ) ) {
+				return $stt->fetchAll(PDO::FETCH_ASSOC);
+			}
 		}
 
 		public function				addImage ( $data )
 		{
-			$query = "INSERT INTO gallery (userid, src, `description`) VALUES (?, ?, ?)";
-			$this->query($query, [ $data['id'], $data['src'], $data['description'] ]);
+			$this->query(
+				"INSERT INTO gallery (userid, src, `description`) VALUES (?, ?, ?)",
+				[ $data['id'], $data['src'], $data['description'] ]
+			);
 		}
-
-
-		public function				getCountImages ()
-		{
-			$query = 'SELECT count(*) AS `count` FROM `gallery`';
-			$stt = $this->query($query);
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return $data['count'];
-		}
-
-		
 
 		public function				deleteImage ( $imgid, $userid )
 		{
-			$query = "DELETE FROM `gallery` WHERE id = ? AND userid = ?";
-			$this->query( $query, [ $imgid, $userid ]);
+			$this->query( "DELETE FROM `gallery` WHERE id = ? AND userid = ?", [ $imgid, $userid ] );
 		}
 
 	}

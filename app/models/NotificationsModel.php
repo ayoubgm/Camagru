@@ -9,39 +9,37 @@
 
 		public function				getUserNotifications ( $id )
 		{
-			$query = '
+			$query = "
 				SELECT * FROM `notifications`
 				WHERE userid = ?
 				ORDER BY createdat DESC
-			';
-			$stt = $this->query( $query, [ $id ] );
-			return $stt->fetchAll( PDO::FETCH_ASSOC );
+			";
+			if ( $stt = $this->query( $query, [ $id ] ) ) {
+				return $stt->fetchAll( PDO::FETCH_ASSOC );
+			}
 		}
 
 		public function				getCountUnreadNotifications ( $id )
 		{
-			$query = 'SELECT count(*) AS `count` FROM `notifications` WHERE userid = ? AND seen = false ';
-			$stt = $this->query( $query, [ $id ] );
-			$data = $stt->fetch(PDO::FETCH_ASSOC);
-			return $data['count'];
+			if ( $stt = $this->query( "SELECT count(*) AS `count` FROM `notifications` WHERE userid = ? AND seen = false ", [ $id ] ) ) {
+				$data = $stt->fetch(PDO::FETCH_ASSOC);
+				return $data['count'];
+			}
 		}
 
 		public function				readANotifUser ( $userid, $notifid )
 		{
-			$query = 'UPDATE `notifications` SET seen = true WHERE userid = ? AND id = ?';
-			$this->query( $query, [ $userid, $notifid ] );
+			return $this->query( "UPDATE `notifications` SET seen = true WHERE userid = ? AND id = ?", [ $userid, $notifid ] );
 		}
 
 		public function				readUserNotifications ( $id )
 		{
-			$query = 'UPDATE `notifications` SET seen = true WHERE userid = ?';
-			$this->query( $query, [ $id ] );
+			return $this->query( "UPDATE `notifications` SET seen = true WHERE userid = ?", [ $id ] );
 		}
 
 		public function				deleteUserNotifications ( $id )
 		{
-			$query = 'DELETE FROM `notifications` WHERE userid = ?';
-			$this->query( $query, [ $id ] );
+			return $this->query( "DELETE FROM `notifications` WHERE userid = ?", [ $id ] );
 		}
 
 	}

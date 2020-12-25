@@ -8,38 +8,40 @@
 
 		public function				findUserById ( $userid )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE id = ?", [ $userid ]);
-			return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
-			? array(
-				'id' => $data['id'],
-				'firstname' => $data['firstname'],
-				'lastname' => $data['lastname'],
-				'username' => $data['username'],
-				'email' => $data['email'],
-				'gender' => $data['gender'],
-				'address' => $data['address'],
-				'notifEmail' => $data['notifEmail'],
-				'createdat' => $data['createdat']
-			)
-			: null;
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE id = ?", [ $userid ]) ) {
+				return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
+				? array(
+					'id' => $data['id'],
+					'firstname' => $data['firstname'],
+					'lastname' => $data['lastname'],
+					'username' => $data['username'],
+					'email' => $data['email'],
+					'gender' => $data['gender'],
+					'address' => $data['address'],
+					'notifEmail' => $data['notifEmail'],
+					'createdat' => $data['createdat']
+				)
+				: null;
+			}
 		}
 
 		public function				findUserByUsername ( $username )
 		{
-			$stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ $username ]);
-			return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
-			? array(
-				'id' => $data['id'],
-				'firstname' => $data['firstname'],
-				'lastname' => $data['lastname'],
-				'username' => $data['username'],
-				'email' => $data['email'],
-				'gender' => $data['gender'],
-				'address' => $data['address'],
-				'notifEmail' => $data['notifEmail'],
-				'createdat' => $data['createdat']
-			)
-			: null;
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ $username ]) ) {
+				return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
+				? array(
+					'id' => $data['id'],
+					'firstname' => $data['firstname'],
+					'lastname' => $data['lastname'],
+					'username' => $data['username'],
+					'email' => $data['email'],
+					'gender' => $data['gender'],
+					'address' => $data['address'],
+					'notifEmail' => $data['notifEmail'],
+					'createdat' => $data['createdat']
+				)
+				: null;
+			}
 		}
 
 		public function				save ( $data )
@@ -54,10 +56,7 @@
 				password_hash($data['password'], PASSWORD_ARGON2I),
 				base64_encode( strtolower($data['email']) . date("Y-m-d H:i:s") )
 			);
-			return $this->query('
-				INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken)
-				VALUES (?,?,?,?,?,?,?,?)
-			', $newUser);
+			return $this->query( 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?) ', $newUser );
 		}
 
 		public function				resetpassword ( $email )
@@ -80,11 +79,7 @@
 		{
 			$editedData['id'] = $userID;
 			return $this->query(
-				'
-					UPDATE `users`
-					SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ?
-					WHERE id = ?
-				',
+				' UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?',
 				array_map( 'strtolower', array_values($editedData) )
 			);
 		}
