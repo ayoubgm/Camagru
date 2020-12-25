@@ -44,7 +44,7 @@
 						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 				}
-				$this->viewData["success"] = "true";
+				$this->viewData += [ "success" => "true" ];
 			} catch ( Exception $e ) {
 				$this->viewData["success"] = "false";
 				$this->viewData["msg"] = "Something goes wrong, try later !";
