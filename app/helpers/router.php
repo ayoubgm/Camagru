@@ -12,6 +12,9 @@
 		public function 				__construct()
 		{
 			require(CONFIG . 'config.php');
+			$setupObject = new setup;
+			$setupObject->connect();
+
 			$url = $this->parseURL();
 			$this->controller = new homeController();
 			if ( isset( $url[0] ) && !empty( $url[0] ) ) {
@@ -42,12 +45,12 @@
 			} else if ( !method_exists($this->controller, $this->method ) ) {
 				$this->method = 'notfound';
 			}
+
 			// Create or recreate database `db_camagru` on the mysql server 
 			if ( $this->controller instanceof homeController && $this->method === "index" ) {
-				$setupObject = new setup;
-				// if ( !$setupObject->setup() ) {
-				// 	echo "Failed to create or recreate the database !";
-				// }
+				if ( !$setupObject->setup() ) {
+					echo "Failed to create or recreate the database !";
+				}
 			}
 			$this->params = $url ? array_values( $url ) : [];
 			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);

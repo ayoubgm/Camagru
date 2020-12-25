@@ -4,16 +4,11 @@
 	 */
 	class		DB {
 
-		private static $HOST = "localhost";
+		private static $HOST = "192.168.99.158";
 		private static $USER = "root";
-		private static $PASSWORD = "root";
+		private static $PASSWORD = "tiger";
 		private static $DB_NAME = "db_camagru";
 		protected $pdo;
-
-		public function						__construct()
-		{
-			$this->connect();
-		}
 
 		public function						connect()
 		{
@@ -28,8 +23,14 @@
 
 		protected function					query( $query, $params = [] )
 		{
-			$stt = $this->pdo->prepare( $query );
-			return ( $stt->execute( $params ) ) ? $stt : NULL;
+			try {
+				if ( $this->pdo ) {
+					$stt = $this->pdo->prepare( $query );
+					return ( $stt->execute( $params ) ) ? $stt : NULL;
+				}
+			} catch( PDOException $e ) {
+				echo "Something went wrong while execute the query (".$e->getMessage().")";
+			}
 		}
 		
 	}
