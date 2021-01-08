@@ -2,11 +2,11 @@
 	/**
 	 *  Database configuration class
 	 */
-	class		DB {
+	class		database {
 
-		private static $HOST = "192.168.99.158";
+		private static $HOST = "localhost";
 		private static $USER = "root";
-		private static $PASSWORD = "tiger";
+		private static $PASSWORD = "root";
 		private static $DB_NAME = "db_camagru";
 		protected $pdo;
 
