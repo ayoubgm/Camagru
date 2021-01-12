@@ -1,7 +1,7 @@
 <?php
-	class	setup extends DB {
+	class	setup extends database {
 
-		public function 		setup()
+		public function 		setupDatabase()
 		{
 			$queries = file_get_contents(CONFIG . 'queries.sql');
 			return $this->query( $queries );
