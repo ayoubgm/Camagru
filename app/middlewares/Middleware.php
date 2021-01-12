@@ -3,7 +3,12 @@
 	/**
 	 *  middleware class
 	 */
-	class Middleware extends DB {
+	class Middleware extends database {
+
+		public function			__construct()
+		{
+			$this->connect();
+		}
 
 		public function				validateFirstname ( $firstname )
 		{
