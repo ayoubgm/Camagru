@@ -25,7 +25,7 @@
 		public function 				index()
 		{
 			try {
-				$this->viewData["data"] = [ "gallery" => $this->galleryModel->getAllEditedImages() ];
+				$this->viewData["data"][ "gallery"] = $this->galleryModel->getAllEditedImages();
 				if ( $this->userMiddleware->isSignin( $_SESSION ) ) {
 					$this->viewData["data"] += [
 						"userData" => $this->userModel->findUserById( $_SESSION['userid'] ),
