@@ -11,10 +11,16 @@
 			$message = '<html><body>';
 			switch ( $subject ) {
 				case "Confirmation mail":
-					$message =  "<span>Hello, </span>"."\n".
-								"<p>almost done, we're happy you're here, to complete the signup process let's get your email address verified </p>"."\r\n".
-								'<p>Click on the direct link: <a href="' . SERVER . '/account_confirmation/token/' . $token.'">Confirm your account</a></p>';
+					$message = "<span>Hello, </span></br>";
+					$message .= "<p>almost done, we're happy you're here, to complete the signup process let's get your email address verified </p></br>";
+					$message .= "<p>Click on the direct link: <a href='" . SERVER . "/account_confirmation/token/" . $token."'>Confirm your account</a></p>";
 				break;
+				case "Reset password":
+					$message =  "<span>Hello, </span></br>";
+					$message .= "<p>Its seems that your request a reset password link, you can change your password with the link below: </p></br>";
+					$message .= "<p><a href='" . SERVER . "/new_password/token/" . $token."'>Change your password</a></p>";
+				break;
+
 			}
 			$message .= '</body></html>';
 			mail($to, $subject, $message, $headers);
