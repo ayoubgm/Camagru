@@ -3,7 +3,7 @@
 	/**
 	 *	Users model class
 	 */
-	class		UsersModel extends DB
+	class		UsersModel extends Model
 	{
 
 		public function				findUserById ( $userid )
@@ -46,6 +46,7 @@
 
 		public function				save ( $data )
 		{
+			$aToken = base64_encode( strtolower($data['email']) . date("Y-m-d H:i:s") );
 			$newUser = array(
 				strtolower($data['firstname']),
 				strtolower($data['lastname']),
@@ -53,10 +54,12 @@
 				strtolower($data['email']),
 				strtolower($data['gender']),
 				strtolower($data['address']),
-				password_hash($data['password'], PASSWORD_ARGON2I),
-				base64_encode( strtolower($data['email']) . date("Y-m-d H:i:s") )
+				password_hash($data['password'], PASSWORD_BCRYPT),
+				$aToken
 			);
-			return $this->query( 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?) ', $newUser );
+			if ( $this->query( 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?) ', $newUser ) ) {
+				return $aToken;
+			}
 		}
 
 		public function				resetpassword ( $email )
