@@ -5,6 +5,23 @@
 	 */
 	class Controller {
 		
+		protected $viewData;
+		protected $user_middleware;
+		protected $user_model;
+		protected $gallery_model;
+		protected $notifications_model;
+		protected $helper;
+
+		protected function				__construct()
+		{
+			$this->viewData = array();
+			$this->user_middleware = $this->call_middleware('UserMiddleware');
+			$this->user_model = $this->call_model('UsersModel');
+			$this->gallery_model = $this->call_model('GalleryModel');
+			$this->notifications_model = $this->call_model('NotificationsModel');
+			$this->helper = $this->call_helper();
+		}
+
 		protected function				call_model ( $model )
 		{
 			if ( file_exists( MODELS . $model . '.php') ) { return new $model(); }
