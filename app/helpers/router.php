@@ -17,10 +17,18 @@
 			$this->url = $this->parseURL();
 			$setup = new setup;
 			$setup->connect();
-			$this->redirect();
+			$this->setControllerAndMethod();
+			// Create or recreate database `db_camagru` on the mysql server 
+			// if ( $this->controller instanceof homeController && $this->method === "index" ) {
+			// 	if ( !$setup->setupDatabase() ) {
+			// 		echo "Failed to create or recreate the database !";
+			// 	}
+			// }
+			$this->params = $this->url ? array_values( $this->url ) : [];
+			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);
 		}
 		
-		protected function				redirect()
+		protected function				setControllerAndMethod()
 		{
 			$this->controller = new homeController();
 			if ( isset( $this->url[0] ) && !empty( $this->url[0] ) ) {
@@ -51,20 +59,18 @@
 			} else if ( !method_exists($this->controller, $this->method ) ) {
 				$this->method = 'notfound';
 			}
-			// Create or recreate database `db_camagru` on the mysql server 
-			// if ( $this->controller instanceof homeController && $this->method === "index" ) {
-			// 	if ( !$setup->setupDatabase() ) {
-			// 		echo "Failed to create or recreate the database !";
-			// 	}
-			// }
-			$this->params = $this->url ? array_values( $this->url ) : [];
-			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);
 		}
 		
 		protected function 				parseURL()
 		{
 			if ( isset( $_GET['url'] ) ) {
-				return explode('/', filter_var( rtrim( strtolower($_GET['url']), '/' ), FILTER_SANITIZE_URL));
+				return explode(
+					'/',
+					filter_var(
+						rtrim( strtolower( $_GET['url'] ), '/' ),
+						FILTER_SANITIZE_URL
+					)
+				);
 			}
 		}
 	}
