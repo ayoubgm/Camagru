@@ -8,7 +8,7 @@
 		private $DSN;
 		private $USER;
 		private $PASSWORD;
-		protected $pdo;
+		public $pdo;
 
 		public function						__construct()
 		{
