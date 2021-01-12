@@ -19,20 +19,8 @@
 			$this->userModel = $this->call_model('UsersModel');
 			$this->galleryModel = $this->call_model('GalleryModel');
 			$this->notificationsModel = $this->call_model('NotificationsModel');
+			$this->helper = $this->call_helper();
 		}
-
-		// private function 	sendMail ( $subject, $to )
-		// {
-		// 	switch ( $subject ) {
-		// 		case "Confirmation mail":
-		// 			$headers = 'From: ' .$to . "\r\n".'Reply-To: ' . $to. "\r\n".'X-Mailer: PHP/' . phpversion();
-		// 			if ( mail($to, $subject, "HELLO", $headers) )
-		// 				echo "Send successfull";
-		// 			else
-		// 				echo "not send";
-		// 		break;
-		// 	}
-		// }
 
 		public function 				index()
 		{
@@ -101,18 +89,27 @@
 								unset( $_POST["btn-signup"] );
 								if ( $error = $this->userMiddleware->signup($_POST) ) {
 									$this->viewData = [ "success" => "false", "msg" => $error ];
-								} else if ( $this->userModel->save( $_POST ) ) {
-									// $this->sendMail("Confirmation mail", strtolower($_POST["email"]));
-									$this->viewData = [ "success" => "true", "msg" => "Successful registration, you will receive an email for activation account !" ];
+								} else if ( $atoken = $this->userModel->save( $_POST ) ) {
+									$this->helper->sendMail("Confirmation mail", strtolower($_POST["email"]), $atoken);
+									$this->viewData = [
+										"success" => "true",
+										"msg" => "Successful registration, you will receive an email for activation account !"
+									];
 								} else {
-									$this->viewData = [ "success" => "false", "msg" => "Failed to create your account !" ];
+									$this->viewData = [
+										"success" => "false",
+										"msg" => "Failed to create your account !"
+									];
 								}
 							}
 						break;
 					}
 				}
 			} catch ( Exception $e ) {
-				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
+				$this->viewData = [
+					"success" => "false",
+					"msg" => "Something goes wrong, try later !"
+				];
 			}
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', $this->viewData)->render();
 		}
