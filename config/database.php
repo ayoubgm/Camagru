@@ -4,10 +4,10 @@
 	 */
 	class		database {
 
+		private $DB_NAME;
 		private $DSN;
 		private $USER;
 		private $PASSWORD;
-		private $DB_NAME;
 		protected $pdo;
 
 		public function						__construct()
