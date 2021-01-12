@@ -2,6 +2,24 @@
 
 	class helper {
 
+		public function 	sendMail ( $subject, $to, $token )
+		{
+			$headers = 'Content-type: text/html;';
+			$headers .= 'From: admin'."\r\n".
+						'Reply-To: admin'."\r\n" .
+						'X-Mailer: PHP/' . phpversion();
+			$message = '<html><body>';
+			switch ( $subject ) {
+				case "Confirmation mail":
+					$message =  "<span>Hello, </span>"."\n".
+								"<p>almost done, we're happy you're here, to complete the signup process let's get your email address verified </p>"."\r\n".
+								'<p>Click on the direct link: <a href="' . SERVER . '/account_confirmation/token/' . $token.'">Confirm your account</a></p>';
+				break;
+			}
+			$message .= '</body></html>';
+			mail($to, $subject, $message, $headers);
+		}
+
 		public function			getMomentOfDate ( $date )
 		{
 			$gmtTimezone = new DateTimeZone('GMT+1');
