@@ -34,11 +34,11 @@
 				return $error;
 			} else if ( $data['password'] != $data['confirmation_password'] ) {
 				return "Passwords doesn't match !";
-			} else if ( $this->isFullnameExists( strtolower( $data['firstname'] ), strtolower( $data['lastname'] ) ) ) {
+			} else if ( $this->isFullnameExists( $data['firstname'], $data['lastname'] ) ) {
 				return "The fullname is already exists !";
-			} else if ( $this->isUsernameExists( strtolower( $data['username']) ) ) {
+			} else if ( $this->isUsernameExists( $data['username']) ) {
 				return "The username is already exists !";
-			} else if ( $this->isEmailExists( strtolower( $data['email']) ) ) {
+			} else if ( $this->isEmailExists( $data['email']) ) {
 				return "The email is already exists !";
 			}
 		}
@@ -49,7 +49,7 @@
 				return "the email can't be empty !";
 			} else if ( $error = $this->validateEmail( $email ) ) {
 				return $error;
-			} else if ( !$this->isEmailExists( strtolower( $email ) ) ) {
+			} else if ( !$this->isEmailExists( $email ) ) {
 				return "The email is not found !";
 			}
 		}
@@ -108,18 +108,16 @@
 		{
 			if ( !$data["oldpassword"] || !$data["newpassword"] || !$data["confirmation_password"] ) {
 				return "Invalid data provided !";
-			} else if ( ( $error = $this->validateOldPassword( $data['oldpassword'] ) ) || ( $error = $this->validateNewPassword( $data['newpassword'] ) ) ) {
+			} else if (
+				( $error = $this->validateOldPassword( $data['oldpassword'] ) ) ||
+				( $error = $this->validateNewPassword( $data['newpassword'] ) )
+			) {
 				return $error;
 			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {
 				return "Passwords doesn't match !";
 			} else if ( !$this->isThePasswordIsValid( $id, null, $data['oldpassword'] ) ) {
 				return "The old password is Incorrect !";
 			}
-		}
-
-		public function					validateDescription ( $description )
-		{
-			return $this->validateImageDescription( $description );
 		}
 
 		public function					isSignin ( $session )
@@ -129,7 +127,7 @@
 
 		public function					validateUserToken ( $token )
 		{
-			return $this->isUserTokenValid( $token );
+			return ( hash_equals( $_SESSION['token'], $token ) ) ? true : false;
 		}
 
 	}

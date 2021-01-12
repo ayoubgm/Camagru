@@ -100,7 +100,7 @@
 		{
 			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]) ) {
 				$data = $stt->fetch();
-				return ( empty($data['activationToken']) );
+				return ( empty( $data['activationToken'] ) );
 			}
 		}
 
@@ -171,11 +171,6 @@
 				$data = $stt->fetch(PDO::FETCH_ASSOC);
 				return ( $data ) ? $data : null;
 			}
-		}
-
-		public function				isUserTokenValid ( $token )
-		{
-			return ( hash_equals( $_SESSION["token"], $token ) ) ? true : false; 
 		}
 
 	}

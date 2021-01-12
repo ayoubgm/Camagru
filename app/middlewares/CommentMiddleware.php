@@ -6,7 +6,7 @@
 	class CommentMiddleware extends Middleware
 	{
 
-		public function         add ( $comment )
+		public function         	add ( $comment )
 		{
 			if ( empty( $comment ) ) { return "Should not be empty !"; }
 			else if ( strlen( $comment ) > 255 ) { return "The comment is too long !"; }
@@ -14,7 +14,7 @@
 			else { return NULL; }
 		}
 
-		public function			delete ( $id )
+		public function				delete ( $id )
 		{
 			return ( ! $this->isCommentExists( $id ) )
 			? "The comment is not found !"

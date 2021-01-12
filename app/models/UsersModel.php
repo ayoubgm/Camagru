@@ -62,20 +62,22 @@
 			}
 		}
 
+		public function				activateAccount ( $data )
+		{
+			return $this->query( 'UPDATE users SET activationToken = NULL WHERE activationToken = ?', [ $data['token'] ] );
+		}
+
 		public function				resetpassword ( $email )
 		{
-			return $this->query(
-				'UPDATE users SET recoveryToken = ? WHERE email = ?',
-				[ base64_encode( strtolower($email) . date("Y-m-d H:i:s") ), $email ]
-			);
+			$rToken = base64_encode( strtolower($email) . date("Y-m-d H:i:s") );
+			if ( $this->query( 'UPDATE users SET recoveryToken = ? WHERE email = ?', [ $rToken, $email ] ) ) {
+				return $rToken;
+			}
 		}
 		
 		public function				newpassword ( $data )
 		{
-			return $this->query(
-				'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?',
-				[ $data['newpassword'], $data['token'] ]
-			);
+			return $this->query( 'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?', $data );
 		}
 
 		public function				edit ( $userID, $editedData )
@@ -90,11 +92,6 @@
 		public function				change_preference_email_notifs ( $userid, $value )
 		{
 			return $this->query( 'UPDATE users SET notifEmail = ? WHERE id = ?', [ $value, $userid ] );
-		}
-
-		public function				activateAccount ( $data )
-		{
-			return $this->query( 'UPDATE users SET activationToken = NULL WHERE activationToken = ?', [ $data['token'] ] );
 		}
 		
 	}
