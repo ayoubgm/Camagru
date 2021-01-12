@@ -4,7 +4,7 @@
 	 * Notifications model class
 	 */
 
-	class           NotificationsModel extends DB
+	class           NotificationsModel extends Model
 	{
 
 		public function				getUserNotifications ( $id )

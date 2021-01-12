@@ -3,7 +3,7 @@
 	/**
 	 *	Comments model class
 	 */
-	class 		CommentsModel extends DB
+	class 		CommentsModel extends database
 	{
 
 		public function				getCommentsOfImg ( $imgid )

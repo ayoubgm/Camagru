@@ -3,7 +3,7 @@
 	/**
 	 *  Gallery model class
 	 */
-	class		GalleryModel extends DB
+	class		GalleryModel extends Model
 	{
 		public function				getAllEditedImages ( $depart = 0, $imagePerPage = 5 )
 		{
