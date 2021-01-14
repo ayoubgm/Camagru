@@ -7,7 +7,7 @@
 		<ul class="nav-links">
 			<li class="active-link"><a href="/">Home</a></li>
 			<li><a href="/user/editing">Editing</a></li>
-			<?php if ( $data['gallery'] ) { ?><li><a href="/gallery">Gallery</a></li><?php } ?>
+			<?php if ( $gallery ) { ?><li><a href="/gallery">Gallery</a></li><?php } ?>
 			<li><a href="/help">Help</a></li>
 			<li><a href="/aboutus">About us</a></li>
 			<?php if ( !isset($_SESSION['userid']) ) { ?>
@@ -41,7 +41,7 @@
 					</div>
 				</div>
 				<div id="area-user">
-					<img src="<?php echo ( $userData['gender'] === "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img"/>
+					<img src="<?php echo ( $userData['gender'] == "female" ) ? "/public/images/user-female.png" : "/public/images/user-male.png"; ?> " id="profile-img"/>
 					<div class="dropdown" style="display: none;">
 						<ul>
 							<li><a href="/user/profile"><img src="<?php echo ( $userData['gender'] == "female" ) ? "/public/images/profile-female.png" : "/public/images/profile-male.png"; ?>" id="profile"/>Profile</a></li>
