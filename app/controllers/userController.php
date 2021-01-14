@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * 	user controller class
+	 * 	User controller class
 	 */
 	class userController extends Controller {
 

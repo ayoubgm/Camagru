@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * 	controller class
+	 * 	Controller class
 	 */
 	class Controller {
 		

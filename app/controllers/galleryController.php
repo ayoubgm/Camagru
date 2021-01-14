@@ -1,32 +1,14 @@
 <?php
 
 	/**
-	 * 	gallery controller class
+	 * 	Gallery controller class
 	 */
 	class galleryController extends Controller {
 
-		private $viewData;
-		private $userMiddleware;
-		private $galleryMiddleware;
-		private $usersModel;
-		private $galleryModel;
-		private $likesModel;
-		private $commentsModel;
-		private $notificationsModel;
-		private $helper;
-
 		public function 				__construct()
 		{
+			parent::__construct();
 			session_start();
-			$this->viewData = array();
-			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
-			$this->userMiddleware = $this->call_middleware('UserMiddleware');
-			$this->usersModel = $this->call_model('UsersModel');
-			$this->galleryModel = $this->call_model('GalleryModel');
-			$this->likesModel = $this->call_model('LikesModel');
-			$this->commentsModel = $this->call_model('CommentsModel');
-			$this->notificationsModel = $this->call_model('NotificationsModel');
-			$this->helper = $this->call_helper();
 		}
 
 		public function 				index ( $data )
@@ -39,21 +21,21 @@
 
 				if ( isset( $_SESSION["userid"] ) && !empty( $_SESSION["userid"] ) ) {
 					$this->viewData[ "data" ] += [
-						"userData" => $this->usersModel->findUserById( $_SESSION["userid"] ),
-						"countUnreadNotifs" => $this->notificationsModel->getCountUnreadNotifications( $_SESSION['userid'] )
+						"userData" => $this->user_model->findUserById( $_SESSION["userid"] ),
+						"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 				}
 				if ( isset( $data[0] ) && $data[0] === "page" && !empty( $data[1] ) && $data[1] > 0 ) {
 					$page = intval( $data[1] );
 				}
 				$depart = ( $page - 1 ) * $imagePerPage;
-				$this->viewData["data"] += [ "gallery" => $this->galleryModel->getAllEditedImages( $depart, $imagePerPage ) ];
+				$this->viewData["data"] += [ "gallery" => $this->gallery_model->getAllEditedImages( $depart, $imagePerPage ) ];
 				foreach ( $this->viewData["data"]["gallery"] as $key => $value ) {
 					$this->viewData["data"]["gallery"][ $key ] += [ "moments" => $this->helper->getMomentOfDate( $value["createdat"] ) ];
-					$this->viewData["data"]["gallery"][ $key ] += [ "usersWhoLike" => $this->likesModel->getUsersLikeImage( $value["id"] ) ];
-					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->commentsModel->getCommentsOfImg( $value["id"] ) ];
+					$this->viewData["data"]["gallery"][ $key ] += [ "usersWhoLike" => $this->like_model->getUsersLikeImage( $value["id"] ) ];
+					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->comment_model->getCommentsOfImg( $value["id"] ) ];
 				}
-				$this->viewData["data"]["totalImages"] = intval( $this->galleryModel->getCountImages() );
+				$this->viewData["data"]["totalImages"] = intval( $this->gallery_model->getCountImages() );
 				$this->viewData["data"]["page"] = intval( $page );
 			} catch ( Exception $e ) {
 				$viewData['success'] = "false";
@@ -65,12 +47,12 @@
 		public function 				delete ()
 		{
 			try {
-				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
-				} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
-					if ( ! $this->galleryMiddleware->isImageOwnerExist( $_SESSION['userid'], $_POST['id'] ) ) {
+				} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
+					if ( ! $this->gallery_middleware->isImageOwnerExist( $_SESSION['userid'], $_POST['id'] ) ) {
 						$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
-					} else if ( $this->galleryModel->deleteImage( $_POST['id'], $_SESSION['userid'] ) ) {
+					} else if ( $this->gallery_model->deleteImage( $_POST['id'], $_SESSION['userid'] ) ) {
 						$this->viewData = [ "success" => "true", "msg" => "Your image has been deleted successfully !" ];
 					} else {
 						$this->viewData = [ "success" => "true", "msg" => "Failed to delete your image !" ];

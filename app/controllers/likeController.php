@@ -1,39 +1,31 @@
 <?php
 
 	/**
-	 * 	like controller class
+	 * 	Like controller class
 	 */
 	class likeController extends Controller {
 		
-		private $viewData;
-		private $userMiddleware;
-		private $galleryMiddleware;
-		private $likesModel;
-
 		public function 				__construct()
 		{
+			parent::__construct();
 			session_start();
-			$this->viewData = array();
-			$this->likesModel = $this->call_model('LikesModel');
-			$this->userMiddleware = $this->call_middleware('UserMiddleware');
-			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
 		}
 		
 		public function 				add ()
 		{
-			if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+			if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 				$this->viewData = [ "success"=> "false", "msg" => "You need to login first !" ];
-			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 				try {
-					if ( $this->galleryMiddleware->isImageExist( $_POST["id"] ) ) {
-						if ( !$this->likesModel->isLikeExists( $_POST["id"], $_SESSION['userid'] ) ) {
-							if ( !$this->likesModel->likeImage( $_POST["id"], $_SESSION['userid'] ) ) {
+					if ( $this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
+						if ( !$this->like_model->isLikeExists( $_POST["id"], $_SESSION['userid'] ) ) {
+							if ( !$this->like_model->likeImage( $_POST["id"], $_SESSION['userid'] ) ) {
 								$this->viewData = [ "success" => "false", "msg" => "Failed to like the image !" ];
 							} else {
 								$this->viewData = [ "success" => "true" ];
 							}
 						} else {
-							if ( !$this->likesModel->unlikeImage( $_POST["id"], $_SESSION['userid'] ) ) {
+							if ( !$this->like_model->unlikeImage( $_POST["id"], $_SESSION['userid'] ) ) {
 								$this->viewData = [ "success" => "false", "msg" => "Failed to unlike the image !" ];
 							} else {
 								$this->viewData = [ "success" => "true" ];
@@ -52,12 +44,12 @@
 		public function					userswholikes ()
 		{
 			try {
-				if ( !$this->galleryMiddleware->isImageExist( $_GET["id"] ) ) {
+				if ( !$this->gallery_middleware->isImageExist( $_GET["id"] ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
 				} else {
 					$this->viewData = [
 						"success" => "true",
-						"users" => $this->likesModel->getUsersLikeImage( $_GET["id"] )
+						"users" => $this->like_model->getUsersLikeImage( $_GET["id"] )
 					];
 				}
 			} catch ( Exception $e ) {

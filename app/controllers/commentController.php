@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * 	comment controller class
+	 * 	Comment controller class
 	 */
 	class commentController extends Controller
 	{
