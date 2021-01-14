@@ -1,11 +1,10 @@
 <?php
-	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
-		$countUnreadNotifs = ( isset( $data["countUnreadNotifs"] ) ) ? $data["countUnreadNotifs"] : 0 ;
-		$token = ( isset( $_SESSION["token"] ) && !empty( $_SESSION["token"] ) ) ? $_SESSION["token"] : null;
-		$logged = ( isset( $userData ) ) ? true : false;
+	if ( isset( $this->view_data['data'] ) ) {
+		$userData = ( isset( $this->view_data['data']['userData'] ) ) ? $this->view_data['data']['userData'] : null;
+		$countUnreadNotifs = ( isset( $this->view_data['data']["countUnreadNotifs"] ) ) ? $this->view_data['data']["countUnreadNotifs"] : 0 ;
 	}
+	$token = ( isset( $_SESSION["token"] ) && !empty( $_SESSION["token"] ) ) ? $_SESSION["token"] : null;
+	$logged = ( isset( $userData ) ) ? true : false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
