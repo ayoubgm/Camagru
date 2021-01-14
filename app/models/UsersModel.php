@@ -27,7 +27,7 @@
 
 		public function				findUserByUsername ( $username )
 		{
-			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ $username ]) ) {
+			if ( $stt = $this->query("SELECT * FROM `users` WHERE username = ?", [ strtolower( $username ) ]) ) {
 				return ( $data = $stt->fetch(PDO::FETCH_ASSOC) )
 				? array(
 					'id' => $data['id'],
