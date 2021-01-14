@@ -7,8 +7,12 @@
 		
 		protected $viewData;
 		protected $user_middleware;
+		protected $gallery_middleware;
+		protected $comment_middleware;
 		protected $user_model;
 		protected $gallery_model;
+		protected $comment_model;
+		protected $like_model;
 		protected $notifications_model;
 		protected $helper;
 
@@ -16,8 +20,12 @@
 		{
 			$this->viewData = array();
 			$this->user_middleware = $this->call_middleware('UserMiddleware');
+			$this->gallery_middleware = $this->call_middleware('GalleryMiddleware');
+			$this->comment_middleware = $this->call_middleware('CommentMiddleware');
 			$this->user_model = $this->call_model('UsersModel');
 			$this->gallery_model = $this->call_model('GalleryModel');
+			$this->comment_model = $this->call_model('CommentsModel');
+			$this->like_model = $this->call_model('likesModel');
 			$this->notifications_model = $this->call_model('NotificationsModel');
 			$this->helper = $this->call_helper();
 		}
