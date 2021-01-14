@@ -133,7 +133,7 @@
 										"msg" => $error
 									];
 								} else if ( $rToken = $this->user_model->resetpassword( $_POST["email"] ) ) {
-									// $this->sendMail("Reset password", strtolower( $_POST["email"] ), $rToken);
+									$this->helper->sendMail("Reset password", strtolower( $_POST["email"] ), $rToken);
 									$this->viewData = [
 										"success" => "true",
 										"msg" => "A direct link for reset password has been sent successfully !"
@@ -241,7 +241,7 @@
 										"success" => "false",
 										"msg" => $error
 									];
-								} else if ( $this->user_model->newpassword( array( password_hash($_POST["newpassword"], PASSWORD_ARGON2I), $data[1] ) ) ) {
+								} else if ( $this->user_model->newpassword( array( password_hash($_POST["newpassword"], PASSWORD_BCRYPT), $data[1] ) ) ) {
 									$this->viewData += [
 										"success" => "true",
 										"msg" => "Your password has been changed successfully !"
