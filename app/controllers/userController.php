@@ -30,7 +30,12 @@
 								]
 							];
 							if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
-								$this->viewData["data"][ "userData"] = $this->user_model->findUserByUsername( $data[1] );
+								if ( $data = $this->user_model->findUserByUsername( $data[1] ) ) {
+									$this->viewData["data"][ "userData"] = $data;
+								} else {
+									$this->viewData["success"] = "false";
+									$this->viewData["msg"] = "The profile of the username specified is not found !"; 
+								}
 							} else {
 								$this->viewData["data"][ "userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
 							}
@@ -40,7 +45,7 @@
 						$this->viewData["msg"] = "Something goes wrong while get your profile informations, try later !";
 					}
 					if ( $redirect == "signin" ) { $this->call_view( "home" . DIRECTORY_SEPARATOR ."signin" )->render(); }
-					else { $this->call_view( "user" . DIRECTORY_SEPARATOR ."profile", $this->viewData )->render(); }
+					else { $this->call_view( "user" . DIRECTORY_SEPARATOR . "profile", $this->viewData )->render(); }
 				break;
 			}
 		}
@@ -49,7 +54,7 @@
 		{
 			try {
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
-					header("Location: /");
+					header("Location: /signin");
 				} else {
 					$this->viewData["data"] = [
 						"gallery" => $this->gallery_model->getAllEditedImages(),
@@ -106,7 +111,7 @@
 				case "GET":
 					try {
 						if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
-							header("Location: /");
+							header("Location: /signin");
 						} else {
 							$this->viewData = [
 								"success" => "true",
@@ -130,7 +135,7 @@
 		{
 			try {
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
-					header("Location: /");
+					header("Location: /signin");
 				} else {
 					$this->viewData["data"] = [
 						"gallery" => $this->gallery_model->getAllEditedImages(),
@@ -179,7 +184,7 @@
 		{
 			try {
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
-					header("Location: /home");
+					header("Location: /signin");
 				} else {
 					$this->viewData["data"] = [
 						"userData" => $this->user_model->findUserById( $_SESSION["userid"] ),
@@ -192,7 +197,7 @@
 								$this->viewData["success"] = "true";
 							break;
 							case "POST":
-								if ( 
+								if (
 									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
 									$this->user_middleware->validateUserToken( $_POST["token"] ) &&
 									( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) )
@@ -321,7 +326,10 @@
 					$this->viewData["success"] = "true";
 				}
 			} catch ( Exception $e ) {
-				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong, try later !" ];
+				$this->viewData = [
+					"success" => "false",
+					"msg" => "Something goes wrong, try later !"
+				];
 			}
 			die( json_encode( $this->viewData ) );
 		}
