@@ -13,7 +13,7 @@
 
 		public function 				profile( $data )
 		{
-			$redirect = null;
+			$redirect = "";
 			
 			switch( $_SERVER["REQUEST_METHOD"] ) {
 				case "GET":
@@ -22,20 +22,22 @@
 							$redirect = "signin";
 						} else {
 							$redirect = "profile";
-							$this->viewData["data"] = [
+							$this->viewData = [
 								"success" => "true",
-								"gallery" => $this->gallery_model->getAllEditedImages(),
-								"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
+								"data" => [
+									"gallery" => $this->gallery_model->getAllEditedImages(),
+									"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
+								]
 							];
 							if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
-								$this->viewData["data"] += [ "userData" => $this->user_model->findUserByUsername( strtolower( $data[1] ) ) ];
+								$this->viewData["data"][ "userData"] = $this->user_model->findUserByUsername( $data[1] );
 							} else {
-								$this->viewData["data"] += [ "userData" => $this->user_model->findUserById( $_SESSION["userid"] ) ];
+								$this->viewData["data"][ "userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
 							}
 						}
 					} catch ( Exception $e ) {
 						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Something goes wrong, try later !";
+						$this->viewData["msg"] = "Something goes wrong while get your profile informations, try later !";
 					}
 					if ( $redirect == "signin" ) { $this->call_view( "home" . DIRECTORY_SEPARATOR ."signin" )->render(); }
 					else { $this->call_view( "user" . DIRECTORY_SEPARATOR ."profile", $this->viewData )->render(); }
@@ -60,27 +62,40 @@
 							$this->viewData[ "success" ] = "true";
 						break;
 						case "POST":
-							if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) && ( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) ) ) {
+							if (
+								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+								$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+								( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) )
+							) {
 								unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
 								unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
 								$editedData = array_replace_recursive( $oldData, $_POST );
-								if ( ($error = $this->user_middleware->edit( $_SESSION["userid"], $editedData )) != null) {
-									$this->viewData += [ "success" => "false", "msg" => $error ];
+								if ( $error = $this->user_middleware->edit( $_SESSION["userid"], $editedData ) ) {
+									$this->viewData += [
+										"success" => "false",
+										"msg" => $error
+									];
 									$this->viewData["data"]["userData"] = $editedData;
 								} else if ( $this->user_model->edit( $_SESSION["userid"], $editedData ) ) {
-									$this->viewData += [ "success" => "true", "msg" => "Your informations has been edited successfully !" ];
+									$this->viewData += [
+										"success" => "true",
+										"msg" => "Your informations has been edited successfully !"
+									];
 									$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
 								} else {
-									$this->viewData += [ "success" => "true", "msg" => "Failed to change your informations !" ];
+									$this->viewData += [
+										"success" => "false",
+										"msg" => "Failed to change your informations !"
+									];
+									$this->viewData["data"]["userData"] = $editedData;
 								}
 							}
 						break;
 					}
 				}
 			} catch ( Exception $e ) {
-				print $e;
 				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong while editing your informations, try later !";
+				$this->viewData["msg"] = "Something goes wrong while update your informations, try later !";
 			}
 			$this->call_view( "user" . DIRECTORY_SEPARATOR ."edit_infos", $this->viewData )->render();
 		}
@@ -93,11 +108,13 @@
 						if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 							header("Location: /");
 						} else {
-							$this->viewData["data"] = [
+							$this->viewData = [
 								"success" => "true",
-								"userData" => $this->user_model->findUserById( $_SESSION["userid"] ),
-								"gallery" => $this->gallery_model->getAllEditedImages(),
-								"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
+								"data" => [
+									"userData" => $this->user_model->findUserById( $_SESSION["userid"] ),
+									"gallery" => $this->gallery_model->getAllEditedImages(),
+									"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
+								]
 							];
 						}
 					} catch ( Exception $e ) {
@@ -125,14 +142,27 @@
 							$this->viewData["success"] = "true";
 						break;
 						case "POST":
-							if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) && ( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) ) ) {
+							if (
+								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+								$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+								( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) )
+							) {
 								unset( $_POST["btn-submit"] );
 								if ( $error = $this->user_middleware->change_password( $_SESSION["userid"], $_POST ) ) {
-									$this->viewData += [ "success" => "false", "msg" => $error ];
+									$this->viewData += [
+										"success" => "false",
+										"msg" => $error
+									];
 								} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_ARGON2I) ) ) {
-									$this->viewData += [ "success" => "true", "msg" => "Your password has been changed successfully !" ];
+									$this->viewData += [
+										"success" => "true",
+										"msg" => "Your password has been changed successfully !"
+									];
 								} else {
-									$this->viewData += [ "success" => "false", "msg" => "Failed to your password !" ];
+									$this->viewData += [
+										"success" => "false",
+										"msg" => "Failed to your password !"
+									];
 								}
 							}
 						break;
@@ -162,7 +192,11 @@
 								$this->viewData["success"] = "true";
 							break;
 							case "POST":
-								if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) && ( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) ) ) {
+								if ( 
+									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+									$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+									( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) )
+								) {
 									unset( $_POST["btn-change-preference"] );
 									if ( $this->user_model->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
 										$this->viewData["success"] = "true";
@@ -186,7 +220,7 @@
 			}
 		}
 
-		private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $ydest )
+		static private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $ydest )
 		{
 			$dest = imagecreatefrompng( $destPath ); 
 			$src = imagecreatefrompng( $srcPath);
@@ -226,7 +260,7 @@
 					];
 					switch( $_SERVER["REQUEST_METHOD"] ) {
 						case "GET":
-							$this->viewData["success"] = true;
+							$this->viewData["success"] = "true";
 						break;
 						case "POST":
 							if (
@@ -238,15 +272,14 @@
 									$this->viewData["success"] = "false";
 									$this->viewData["msg"] = $error;
 								} else {
-									$imgWebcam = $_POST["dataimage"];
-									$imgCamBase64 = str_replace('data:image/png;base64', '', $imgWebcam);
+									$imgCamBase64 = str_replace('data:image/png;base64', '', $_POST["dataimage"]);
 									$finalImageCam = str_replace(' ', '+', $imgCamBase64);
 									$fileData = base64_decode( $finalImageCam );
 									$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
 									file_put_contents($pathFile, $fileData);
 									$srcPath = $_POST["sticker"];
 									$destPath = self::transformPathFileToUrl( $pathFile );
-									if ( $srcFinaleImg = $this->makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
+									if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
 										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
 										$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
 										if ( $this->gallery_model->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
