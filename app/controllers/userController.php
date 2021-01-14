@@ -260,7 +260,7 @@
 					$this->viewData["data"] = [
 						"gallery" => $this->gallery_model->getAllEditedImages(),
 						"userData" => $this->user_model->findUserById( $_SESSION["userid"] ),
-						"userGallery" => $this->gallery_model->userGallery( $_SESSION["username"] ),
+						"userGallery" => $this->gallery_model->userGallery( $_SESSION["userid"] ),
 						"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
 					];
 					switch( $_SERVER["REQUEST_METHOD"] ) {
@@ -273,7 +273,7 @@
 								$this->user_middleware->validateUserToken( $_POST["token"] ) &&
 								( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
 							) {
-								if ( $error = $this->user_middleware->validateDescription( $_POST["description"] ) ) {
+								if ( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) {
 									$this->viewData["success"] = "false";
 									$this->viewData["msg"] = $error;
 								} else {
@@ -281,7 +281,7 @@
 									$finalImageCam = str_replace(' ', '+', $imgCamBase64);
 									$fileData = base64_decode( $finalImageCam );
 									$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
-									file_put_contents($pathFile, $fileData);
+									file_put_contents( $pathFile, $fileData );
 									$srcPath = $_POST["sticker"];
 									$destPath = self::transformPathFileToUrl( $pathFile );
 									if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
@@ -291,12 +291,12 @@
 											$this->viewData["success"] = "true";
 											$this->viewData["msg"] = "Image has been saved successfully !";
 											$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
-											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["username"] );
+											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
 										} else {
 											$this->viewData["success"] = "false";
 											$this->viewData["msg"] = "Failed to create final image !";
 											$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
-											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["username"] );
+											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
 										}
 									} else {
 										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
@@ -307,13 +307,13 @@
 							}
 						break;
 					}
-					$this->call_view( "user" . DIRECTORY_SEPARATOR ."editing", $this->viewData )->render();
 				}
 			} catch ( Exception $e ) {
 				if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
 				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong, try later !";
+				$this->viewData["msg"] = "Something goes wrong while editing your picture, try later !";
 			}
+			$this->call_view( "user" . DIRECTORY_SEPARATOR ."editing", $this->viewData )->render();
 		}
 
 		public function					logout()

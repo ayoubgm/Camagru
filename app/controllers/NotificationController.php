@@ -5,19 +5,11 @@
 	 */
 
 	class notificationController extends Controller {
-		
-		private $viewData;
-		private $userMiddleware;
-		private $notificationModel;
-		private $helper;
 
 		public function 				__construct()
 		{
+			parent::__construct();
 			session_start();
-			$this->viewData = array();
-			$this->notificationModel = $this->call_model("NotificationsModel");
-			$this->userMiddleware = $this->call_middleware('UserMiddleware');
-			$this->helper = $this->call_helper();
 		}
 
 		public function					user()
@@ -26,7 +18,7 @@
 				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
 			} else {
 				try {
-					$notifs = $this->notificationModel->getUserNotifications( $_SESSION['userid'] );
+					$notifs = $this->notifications_model->getUserNotifications( $_SESSION['userid'] );
 					foreach ( $notifs as $key => $value ) {
 						$notifs[ $key ] += [ "moments" => $this->helper->getMomentOfDate( $value["createdat"] ) ]; 
 					}
@@ -42,9 +34,9 @@
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
 				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
-			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+			} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 				try {
-					if ( !$this->notificationModel->readANotifUser( $_POST['userid'], $_POST["notifid"] ) ) {
+					if ( !$this->notifications_model->readANotifUser( $_POST['userid'], $_POST["notifid"] ) ) {
 						$this->viewData = [ "success" => "false", "msg" => "Failed to read your notification !" ];
 					} else {
 						$this->viewData = [ "success" => "true" ];
@@ -61,9 +53,9 @@
 			if ( !isset( $_SESSION['userid'] ) ) {
 				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
 			} else {
-				if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+				if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 					try {
-						if ( !$this->notificationModel->readUserNotifications( $_SESSION['userid'] ) ) {
+						if ( !$this->notifications_model->readUserNotifications( $_SESSION['userid'] ) ) {
 							$this->viewData = [ "success" => "false", "msg" => "Failed to read your notifications !" ];
 						} else {
 							$this->viewData = [ "success" => "true", "msg" => "Read all your notifications successfully !" ];
@@ -81,9 +73,9 @@
 			if ( !isset( $_SESSION['userid'] ) ) {
 				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
 			} else {
-				if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+				if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 					try {
-						if ( !$this->notificationModel->deleteUserNotifications( $_SESSION['userid'] ) ) {
+						if ( !$this->notifications_model->deleteUserNotifications( $_SESSION['userid'] ) ) {
 							$this->viewData = [ "success" => "false", "msg" => "Failed to delete your notifications !" ];
 						} else {
 							$this->viewData = [ "success" => "true", "msg" => "Your notifications was deleted successfully !" ];

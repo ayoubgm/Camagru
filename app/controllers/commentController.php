@@ -6,31 +6,17 @@
 	class commentController extends Controller
 	{
 
-		private $viewData;
-		private $userMiddleware;
-		private $galleryMiddleware;
-		private $commentMiddleware;
-		private $commentModel;
-		private $likeModel;
-		private $helper;
-		
 		public function				__construct()
 		{
+			parent::__construct();
 			session_start();
-			$this->viewData = array();
-			$this->userMiddleware = $this->call_middleware('UserMiddleware');
-			$this->galleryMiddleware = $this->call_middleware('GalleryMiddleware');
-			$this->commentMiddleware = $this->call_middleware('CommentMiddleware');
-			$this->commentModel = $this->call_model('CommentsModel');
-			$this->likeModel = $this->call_model('likesModel');
-			$this->helper = $this->call_helper();
 		}
 
 		static public function		validateData( $obj, $id )
 		{
 			if ( !isset( $_SESSION['userid'] ) ) {
 				return "You need to login first !";
-			} else if ( !$obj->galleryMiddleware->isImageExist( $id ) ) {
+			} else if ( !$obj->gallery_middleware->isImageExist( $id ) ) {
 				return "The image is not found !";
 			} else {
 				return NULL;
@@ -40,18 +26,18 @@
 		public function				add()
 		{
 			try {
-				if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
-				} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
-					if ( !$this->galleryMiddleware->isImageExist( $_POST["id"] ) ) {
+				} else if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
+					if ( !$this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
 						$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
-					} else if ( $error = $this->commentMiddleware->add( $_POST['comment'] ) ) {
+					} else if ( $error = $this->comment_middleware->add( $_POST['comment'] ) ) {
 						$this->viewData = [ "success" => "false", "msg" => $error ];
-					} else if ( $id = $this->commentModel->save([ "content" => $_POST['comment'], "userid" => $_SESSION['userid'], "imgid" => $_POST["id"] ]) ) {
+					} else if ( $id = $this->comment_model->save([ "content" => $_POST['comment'], "userid" => $_SESSION['userid'], "imgid" => $_POST["id"] ]) ) {
 						$this->viewData = [
 							"success" => "true",
 							"msg" => "Added successfully !",
-							"data" => $this->commentModel->getComment( $id )
+							"data" => $this->comment_model->getComment( $id )
 						];
 					} else {
 						$this->viewData = ["success" => "false", "msg" => "Failed to save the comment !"];
@@ -68,15 +54,15 @@
 			try {
 				if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "Something went wrong while validate the image !" ];
-				} else if ( !$this->galleryMiddleware->isImageExist( $data[1] ) ) {
+				} else if ( !$this->gallery_middleware->isImageExist( $data[1] ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
 				} else {
-					$comments = $this->commentModel->getCommentsOfImg( $data[1] );
+					$comments = $this->comment_model->getCommentsOfImg( $data[1] );
 					foreach( $comments as $k => $v ) { $comments[ $k ] += [ "momments" => $this->helper->getMomentOfDate( $v["createdat"] ) ]; }
 					$this->viewData = [
 						"success" => "true",
 						"data" => $comments,
-						"countlikes" => $this->likeModel->getCountLikes( $data[1] )
+						"countlikes" => $this->like_model->getCountLikes( $data[1] )
 					];
 				}
 			} catch ( Exception $e ) {
@@ -87,14 +73,14 @@
 
 		public function				delete ()
 		{
-			if ( !$this->userMiddleware->isSignin( $_SESSION ) ) {
+			if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 				$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];	
 			} else {
-				if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->userMiddleware->validateUserToken( $_POST["token"] ) ) {
+				if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 					try {
-						if ( $error = $this->commentMiddleware->delete( $_POST["id"] ) ) {
+						if ( $error = $this->comment_middleware->delete( $_POST["id"] ) ) {
 							$this->viewData = [ "success" => "false", "msg" => $error ];	
-						} else if ( $this->commentModel->delete( $_POST["id"] ) ) {
+						} else if ( $this->comment_model->delete( $_POST["id"] ) ) {
 							$this->viewData = [ "success" => "true", "msg" => "The comment deleted successfully !" ];
 						} else {
 							$this->viewData = [ "success" => "false", "msg" => "Failed to delete the comment successfully !" ];
