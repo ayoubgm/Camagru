@@ -40,7 +40,7 @@
 
 		public function				addImage ( $data )
 		{
-			$this->query(
+			return $this->query(
 				"INSERT INTO gallery (userid, src, `description`) VALUES (?, ?, ?)",
 				[ $data['id'], $data['src'], $data['description'] ]
 			);
@@ -48,7 +48,7 @@
 
 		public function				deleteImage ( $imgid, $userid )
 		{
-			$this->query( "DELETE FROM `gallery` WHERE id = ? AND userid = ?", [ $imgid, $userid ] );
+			return $this->query( "DELETE FROM `gallery` WHERE id = ? AND userid = ?", [ $imgid, $userid ] );
 		}
 
 	}
