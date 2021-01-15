@@ -1,10 +1,9 @@
 <?php
 	if ( isset( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-		$gallery = $data['gallery'];
-		$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
-		$userGallery = ( isset( $data['userGallery'] ) ) ? $data['userGallery'] : null;
-		$countUnreadNotifs = $data["countUnreadNotifs"];
+		$gallery = ( isset( $this->view_data['data']['gallery'] ) ) ? $this->view_data['data']['gallery'] : null;
+		$userData = ( isset( $this->view_data['data']['userData'] ) ) ? $this->view_data['data']['userData'] : null;
+		$userGallery = ( isset( $this->view_data['data']['userGallery'] ) ) ? $this->view_data['data']['userGallery'] : null;
+		$countUnreadNotifs = ( isset( $this->view_data['data']["countUnreadNotifs"] ) ) ? $this->view_data['data']["countUnreadNotifs"] : 0 ;
 	}
 ?>
 <!DOCTYPE html>
@@ -30,8 +29,8 @@
 							<input class="btn btn-danger w-50 float-left" type="button" value="Capture" name="btn-capture" id="btn-capture" disabled/>
 							<input id="fileInput" accept="image/png,image/jpg,image/jpeg" class="btn btn-warning w-50 float-right text-white" type="file" value="Upload" disabled/>
 							<div class="text-center mt-5 pt-2" id="area-msg" style="font-weight: bold;">
-								<span id="msg" class="p-5 <?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
-									<?php if ( isset($data['msg']) ) echo $data['msg'];?>
+								<span id="msg" class="p-5 <?php echo ( isset( $this->view_data["success"] ) && $this->view_data["success"] == "true" ) ? "text-success" : "text-danger"; ?>">
+									<?php if ( isset($this->view_data["msg"]) ) echo $this->view_data["msg"];?>
 								</span>
 							</div>
 						</div>
