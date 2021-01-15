@@ -11,8 +11,8 @@
 						? ""
 						: $array[ $key ];
 					}
-					return $array;
 				}
+				return $array;
 			}
 			return NULL;
 		}
