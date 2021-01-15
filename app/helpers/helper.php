@@ -20,7 +20,6 @@
 					$message .= "<p>Its seems that your request a reset password link, you can change your password with the link below: </p></br>";
 					$message .= "<p><a href='" . SERVER . "/new_password/token/" . $token."'>Change your password</a></p>";
 				break;
-
 			}
 			$message .= '</body></html>';
 			mail($to, $subject, $message, $headers);
