@@ -1,8 +1,3 @@
-<?php
-	if ( isset( $this->view_data ) ) {
-		$data = $this->view_data;
-	}
-?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -11,6 +6,7 @@
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="/public/css/home/signin.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
+		<link rel="icon" href="/public/images/logo.png">
 		<title>Sign in</title>
 	</head>
 	<body>
@@ -51,8 +47,8 @@
 									</div>
 								</div>
 								<div class="text-center" id="area-msg">
-									<span id="msg" class="<?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
-										<?php if ( isset($data['msg']) ) echo $data['msg']; ?>
+									<span id="msg" class="<?php echo ( isset( $this->view_data["success"] ) && $this->view_data["success"] == "true" ) ? "text-success" : "text-danger"; ?>">
+										<?php if ( isset($this->view_data["msg"]) ) echo $this->view_data["msg"]; ?>
 									</span>
 								</div>
 								<div class="row">

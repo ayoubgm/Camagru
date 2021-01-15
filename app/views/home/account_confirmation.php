@@ -1,7 +1,6 @@
 <?php
 	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-		$token = ( isset( $data['token'] ) ) ? $data['token'] : null;
+		$token = ( isset( $this->view_data['data']['token'] ) ) ? $this->view_data['data']['token'] : null;
 	}
 ?>
 <!DOCTYPE html>

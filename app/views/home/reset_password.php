@@ -1,8 +1,3 @@
-<?php
-	if ( isset( $this->view_data['data'] ) && !empty( $this->view_data['data'] ) ) {
-		$data = $this->view_data['data'];
-	}
-?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>

@@ -1,8 +1,3 @@
-<?php
-	if ( isset( $this->view_data ) ) {
-		$data = $this->view_data;
-	}
-?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -34,7 +29,7 @@
 											id="inputFirstName"
 											name="firstname"
 											placeholder="firstname"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['firstname']) ){
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['firstname']) ){
 												echo $_POST['firstname'];
 											} ?>"
 											oninput="validateFirstName(this)"
@@ -48,7 +43,7 @@
 											name="lastname"
 											id="inputLastName"
 											placeholder="lastname"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['lastname']) ){ echo $_POST['lastname']; } ?>"
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['lastname']) ){ echo $_POST['lastname']; } ?>"
 											oninput="validateLastName(this)"
 										/>
 									</div>
@@ -62,7 +57,7 @@
 											name="username"
 											id="inputUsername"
 											placeholder="username"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['username']) ){ echo $_POST['username']; } ?>"
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['username']) ){ echo $_POST['username']; } ?>"
 											oninput="validateUsername(this)"
 										/>
 									</div>
@@ -74,7 +69,7 @@
 											name="email"
 											id="inputEmail"
 											placeholder="email"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['email']) ){ echo $_POST['email']; } ?>"
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['email']) ){ echo $_POST['email']; } ?>"
 											oninput="validateEmail(this)"
 										/>
 									</div>
@@ -88,8 +83,8 @@
 											name="gender"
 											onchange="validateGender(this)"
 										>
-											<option <?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "male") { echo " Selected "; } ?> value="male">Male</option>
-											<option <?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "female") { echo "Selected"; } ?> value="female">Female</option>
+											<option <?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "male") { echo " Selected "; } ?> value="male">Male</option>
+											<option <?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "female") { echo "Selected"; } ?> value="female">Female</option>
 										</select>
 									</div>	
 									<div class="form-group col-lg-10">
@@ -100,7 +95,7 @@
 											name="address"
 											id="inputAddress"
 											placeholder="address"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['address']) ){ echo $_POST['address']; } ?>"
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['address']) ){ echo $_POST['address']; } ?>"
 											oninput="validateAddress(this)"
 										/>
 									</div>
@@ -114,7 +109,7 @@
 											name="password"
 											id="inputPassword"
 											placeholder="password"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['password']) ){ echo $_POST['password']; } ?>"
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['password']) ){ echo $_POST['password']; } ?>"
 											oninput="validatePassword(this)"
 										/>
 									</div>
@@ -126,14 +121,14 @@
 											name="confirmation_password"
 											id="inputConfirmationPass"
 											placeholder="Confirmation password"
-											value="<?php if ( (isset($data['success']) && $data['success'] == "false") && isset($_POST['confirmation_password']) ){ echo $_POST['confirmation_password']; } ?>"
+											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['confirmation_password']) ){ echo $_POST['confirmation_password']; } ?>"
 											oninput="validateConfPass(this)"
 										/>
 									</div>
 								</div>
 								<div class="row text-center px-5 py-4">
-									<span id="msg" class="w-100 <?php echo ( isset( $data['success'] ) && $data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
-										<?php if ( isset($data['msg']) ) echo $data['msg'];?>
+									<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?>">
+										<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
 									</span>
 								</div>
 								<div class="form-row register my-5">

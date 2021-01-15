@@ -33,7 +33,7 @@
 					</div>
 				<?php } ?>
 				<h1 class="display-4">
-					<?php echo ( isset($_SESSION['userid']) ) ? "Welcome ".$userData["username"] : "Welcome"; ?>
+					<?php echo ( isset( $_SESSION['userid'] ) ) ? "Welcome " . $userData["username"] : "Welcome"; ?>
 				</h1>
 				<p class="lead">Make your pictures looks nice with our editor.</p>
 				<hr class="my-4">
