@@ -2,6 +2,21 @@
 
 	class helper {
 
+		public function		filter_array_posted ( $args )
+		{
+			if ( $array = filter_input_array( INPUT_POST, $args ) ) {
+				if ( in_array( null || false, $array ) ) {
+					foreach ( $array as $key => $value ) {
+						$array[ $key ] = ( is_bool( $array[ $key ] ) || is_null( $array[ $key ] ) )
+						? ""
+						: $array[ $key ];
+					}
+					return $array;
+				}
+			}
+			return NULL;
+		}
+
 		public function 	sendMail ( $subject, $to, $token )
 		{
 			$headers = 'Content-type: text/html;';
