@@ -55,6 +55,16 @@
 									/>
 								</div>
 							</div>
+							<div class="form-group row m-0 mb-1">
+								<div class="col-lg-8">
+									<input
+										type="text"
+										name="token"
+										value="<?php echo $token; ?>"
+										hidden
+									/>
+								</div>
+							</div>
 							<div class="row text-center py-2" style="height: 70px;">
 								<span id="msg" class="w-100 <?php echo ( isset( $this->view_data['success'] ) && $this->view_data['success'] == "true" ) ? "text-success" : "text-danger"; ?> ">
 									<?php if ( isset($this->view_data['msg']) ) echo $this->view_data['msg'];?>
@@ -63,7 +73,7 @@
 							<div class="form-row">
 								<input
 									type="submit"
-									class="offset-2 col-8 btn btn-outline-danger w-50 my-3"
+									class="offset-2 col-8 btn btn-success w-50 my-3"
 									value="Submit"
 									id="btn-submit"
 									name="btn-submit"
