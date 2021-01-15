@@ -31,16 +31,24 @@
 				$depart = ( $page - 1 ) * $imagePerPage;
 				$this->viewData["data"] += [ "gallery" => $this->gallery_model->getAllEditedImages( $depart, $imagePerPage ) ];
 				foreach ( $this->viewData["data"]["gallery"] as $key => $value ) {
-					$this->viewData["data"]["gallery"][ $key ] += [ "moments" => $this->helper->getMomentOfDate( $value["createdat"] ) ];
-					$this->viewData["data"]["gallery"][ $key ] += [ "usersWhoLike" => $this->like_model->getUsersLikeImage( $value["id"] ) ];
-					$this->viewData["data"]["gallery"][ $key ] += [ "comments" => $this->comment_model->getCommentsOfImg( $value["id"] ) ];
+					$this->viewData["data"]["gallery"][ $key ] += [
+						"moments" => $this->helper->getMomentOfDate( $value["createdat"] ),
+						"usersWhoLike" => $this->like_model->getUsersLikeImage( $value["id"] ),
+						"comments" => $this->comment_model->getCommentsOfImg( $value["id"] )
+					];
 				}
-				$this->viewData["data"]["totalImages"] = intval( $this->gallery_model->getCountImages() );
-				$this->viewData["data"]["page"] = intval( $page );
+				$this->viewData["data"] += [
+					"totalImages" => intval( $this->gallery_model->getCountImages() ),
+					"page" => intval( $page )
+				];
 			} catch ( Exception $e ) {
-				$viewData['success'] = "false";
-				$viewData['msg'] = "Something goes wrong !";
+				$viewData["success"] = "false";
+				$viewData["msg"] = "Something goes wrong !";
 			}
+			// var_dump( $this->viewData );
+			// foreach( $this->viewData["data"]["gallery"] as $key => $value ) {
+			// 	var_dump( $value );
+			// }
 			$this->call_view( 'gallery' . DIRECTORY_SEPARATOR . 'gallery', $this->viewData )->render();
 		}
 		
