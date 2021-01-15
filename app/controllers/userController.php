@@ -13,11 +13,11 @@
 
 		public function 				profile( $data )
 		{
-			$redirect = "";
+			$redirect = "profile";
 			
-			switch( $_SERVER["REQUEST_METHOD"] ) {
-				case "GET":
-					try {
+			try {
+				switch( $_SERVER["REQUEST_METHOD"] ) {
+					case "GET":
 						if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 							$redirect = "signin";
 						} else {
@@ -40,14 +40,14 @@
 								$this->viewData["data"][ "userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
 							}
 						}
-					} catch ( Exception $e ) {
-						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Something goes wrong while get your profile informations, try later !";
-					}
-					if ( $redirect == "signin" ) { $this->call_view( "home" . DIRECTORY_SEPARATOR ."signin" )->render(); }
-					else { $this->call_view( "user" . DIRECTORY_SEPARATOR . "profile", $this->viewData )->render(); }
-				break;
+					break;
+				}
+			} catch ( Exception $e ) {
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something goes wrong while get your profile informations, try later !";
 			}
+			if ( $redirect == "signin" ) { $this->call_view( "home" . DIRECTORY_SEPARATOR ."signin" )->render(); }
+			else { $this->call_view( "user" . DIRECTORY_SEPARATOR . "profile", $this->viewData )->render(); }
 		}
 		
 		public function 				edit()
@@ -67,33 +67,50 @@
 							$this->viewData[ "success" ] = "true";
 						break;
 						case "POST":
-							if (
-								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-								$this->user_middleware->validateUserToken( $_POST["token"] ) &&
-								( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) )
+							if ( $_POST = $this->helper->filter_array_posted( array(
+									'token' => FILTER_SANITIZE_STRING,
+									'btn-edit' => FILTER_SANITIZE_STRING,
+									'firstname' => FILTER_SANITIZE_STRING,
+									'lastname' => FILTER_SANITIZE_STRING,
+									'username' => FILTER_SANITIZE_STRING,
+									'email' => FILTER_SANITIZE_EMAIL,
+									'gender' => FILTER_SANITIZE_STRING,
+									'address' => FILTER_SANITIZE_STRING
+								))
 							) {
-								unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
-								unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
-								$editedData = array_replace_recursive( $oldData, $_POST );
-								if ( $error = $this->user_middleware->edit( $_SESSION["userid"], $editedData ) ) {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => $error
-									];
-									$this->viewData["data"]["userData"] = $editedData;
-								} else if ( $this->user_model->edit( $_SESSION["userid"], $editedData ) ) {
-									$this->viewData += [
-										"success" => "true",
-										"msg" => "Your informations has been edited successfully !"
-									];
-									$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
-								} else {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => "Failed to change your informations !"
-									];
-									$this->viewData["data"]["userData"] = $editedData;
+								if (
+									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+									$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+									( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) )
+								) {
+									unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
+									unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
+									$editedData = array_replace_recursive( $oldData, $_POST );
+									if ( $error = $this->user_middleware->edit( $_SESSION["userid"], $editedData ) ) {
+										$this->viewData += [
+											"success" => "false",
+											"msg" => $error
+										];
+										$this->viewData["data"]["userData"] = $editedData;
+									} else if ( $this->user_model->edit( $_SESSION["userid"], $editedData ) ) {
+										$this->viewData += [
+											"success" => "true",
+											"msg" => "Your informations has been edited successfully !"
+										];
+										$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
+									} else {
+										$this->viewData += [
+											"success" => "false",
+											"msg" => "Failed to change your informations !"
+										];
+										$this->viewData["data"]["userData"] = $editedData;
+									}
 								}
+							} else {
+								$this->viewData = [
+									"success" => "false",
+									"msg" => "Couldn't edit your informations, try later !"
+								];
 							}
 						break;
 					}
@@ -107,9 +124,9 @@
 
 		public function 				settings ()
 		{
-			switch( $_SERVER["REQUEST_METHOD"] ) {
-				case "GET":
-					try {
+			try {
+				switch( $_SERVER["REQUEST_METHOD"] ) {
+					case "GET":
 						if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 							header("Location: /signin");
 						} else {
@@ -122,13 +139,13 @@
 								]
 							];
 						}
-					} catch ( Exception $e ) {
-						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Something goes wrong, try later !";
-					}
-					$this->call_view( "user" . DIRECTORY_SEPARATOR ."settings", $this->viewData )->render();
-				break;
+					break;
+				}
+			} catch ( Exception $e ) {
+				$this->viewData["success"] = "false";
+				$this->viewData["msg"] = "Something goes wrong, try later !";
 			}
+			$this->call_view( "user" . DIRECTORY_SEPARATOR ."settings", $this->viewData )->render();
 		}
 
 		public function 				change_password ()
@@ -147,37 +164,50 @@
 							$this->viewData["success"] = "true";
 						break;
 						case "POST":
-							if (
-								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-								$this->user_middleware->validateUserToken( $_POST["token"] ) &&
-								( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) )
-							) {
-								unset( $_POST["btn-submit"] );
-								if ( $error = $this->user_middleware->change_password( $_SESSION["userid"], $_POST ) ) {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => $error
-									];
-								} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_ARGON2I) ) ) {
-									$this->viewData += [
-										"success" => "true",
-										"msg" => "Your password has been changed successfully !"
-									];
-								} else {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => "Failed to your password !"
-									];
+							if ( $_POST = $this->helper->filter_array_posted( array (
+								'token' => FILTER_SANITIZE_STRING,
+								'btn-submit' => FILTER_SANITIZE_STRING,
+								'oldpassword' => FILTER_SANITIZE_STRING,
+								'newpassword' => FILTER_SANITIZE_STRING,
+								'confirmation_password' => FILTER_SANITIZE_STRING
+							)) ) {
+								if (
+									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+									( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
+									( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) )
+								) {
+									unset( $_POST["btn-submit"] );
+									if ( $error = $this->user_middleware->change_password( $_SESSION["userid"], $_POST ) ) {
+										$this->viewData += [
+											"success" => "false",
+											"msg" => $error
+										];
+									} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_ARGON2I) ) ) {
+										$this->viewData += [
+											"success" => "true",
+											"msg" => "Your password has been changed successfully !"
+										];
+									} else {
+										$this->viewData += [
+											"success" => "false",
+											"msg" => "Failed to change your password !"
+										];
+									}
 								}
+							} else {
+								$this->viewData = [
+									"success" => "false",
+									"msg" => "Couldn't change your password, try later !"
+								];
 							}
 						break;
 					}
-					$this->call_view( "user" . DIRECTORY_SEPARATOR ."change_password", $this->viewData )->render();
 				}
 			} catch ( Exception $e ) {
 				$this->viewData["success"] = "false";
 				$this->viewData["msg"] = "Something goes wrong while changing your password !";
 			}
+			$this->call_view( "user" . DIRECTORY_SEPARATOR ."change_password", $this->viewData )->render();
 		}
 
 		public function 				notifications_preferences ( $data )
@@ -197,19 +227,30 @@
 								$this->viewData["success"] = "true";
 							break;
 							case "POST":
-								if (
-									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-									$this->user_middleware->validateUserToken( $_POST["token"] ) &&
-									( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) )
+								if ( $_POST = $this->helper->filter_array_posted( array(
+										'token' => FILTER_SANITIZE_STRING,
+										'btn-change-preference' => FILTER_SANITIZE_STRING
+									))
 								) {
-									unset( $_POST["btn-change-preference"] );
-									if ( $this->user_model->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
-										$this->viewData["success"] = "true";
-										$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
-									} else {
-										$this->viewData["success"] = "false";
-										$this->viewData["msg"] = "Failed to change your notifications preference !";
-									}						
+									if (
+										( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+										$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+										( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) )
+									) {
+										unset( $_POST["btn-change-preference"] );
+										if ( $this->user_model->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
+											$this->viewData["success"] = "true";
+											$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
+										} else {
+											$this->viewData["success"] = "false";
+											$this->viewData["msg"] = "Failed to change your notifications preference !";
+										}
+									}
+								} else {
+									$this->viewData = [
+										"success" => "false",
+										"msg" => "Couldn't change your notifications preference, try later !"
+									];
 								}
 							break;
 						}
@@ -217,12 +258,12 @@
 						$this->viewData["success"] = "false";
 						$this->viewData["msg"] = "Something is wrong !";
 					}
-					$this->call_view( "user" . DIRECTORY_SEPARATOR . "notifications_preferences", $this->viewData)->render();
 				}
 			} catch ( Exception $e ) {
 				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something is wrong, try later !";
+				$this->viewData["msg"] = "Something is wrong change your notifications preference !, try later !";
 			}
+			$this->call_view( "user" . DIRECTORY_SEPARATOR . "notifications_preferences", $this->viewData)->render();
 		}
 
 		static private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $ydest )
