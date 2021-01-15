@@ -73,6 +73,7 @@
 					}
 				}
 			} catch ( Exception $e ) {
+				print $e;
 				$this->viewData = [
 					"success" => "false",
 					"msg" => "Couldn't login, try later !"
