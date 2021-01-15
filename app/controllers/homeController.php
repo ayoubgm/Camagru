@@ -229,7 +229,7 @@
 							}
 						break;
 						case "POST":
-							if ( $_POST = $this->helper->filter_array_posted( INPUT_POST, array(
+							if ( $_POST = $this->helper->filter_array_posted( array(
 									'token' => FILTER_SANITIZE_STRING,
 									'btn-submit' => FILTER_SANITIZE_STRING,
 									'newpassword' => FILTER_SANITIZE_STRING,
