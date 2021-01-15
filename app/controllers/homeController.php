@@ -41,6 +41,12 @@
 							$this->viewData["success"] = "true";			
 						break;
 						case "POST":
+							$_POST = filter_input_array(INPUT_POST, array(
+								'username' => FILTER_SANITIZE_STRING,
+								'password' => FILTER_SANITIZE_STRING,
+								'btn-signin' => FILTER_SANITIZE_STRING
+							));
+							foreach ( $_POST as $key => $value ) { $_POST[ $key ] = is_bool( $_POST[ $key ] ) ? "" : $_POST[ $key ]; }
 							if ( isset( $_POST["btn-signin"] ) ) {
 								unset( $_POST["btn-signin"] );
 								if ( $error = $this->user_middleware->signin( $_POST ) ) {
@@ -82,6 +88,17 @@
 							$this->viewData = [ "success" => "true" ];			
 						break;
 						case "POST":
+							$_POST = filter_input_array( INPUT_POST, array(
+								'btn-signup' => FILTER_SANITIZE_STRING,
+								'firstname' => FILTER_SANITIZE_STRING,
+								'lastname' => FILTER_SANITIZE_STRING,
+								'username' => FILTER_SANITIZE_STRING,
+								'email' => FILTER_SANITIZE_EMAIL,
+								'gender' => FILTER_SANITIZE_STRING,
+								'password' => FILTER_SANITIZE_STRING,
+								'confirmation_password' => FILTER_SANITIZE_STRING
+							));
+							foreach ( $_POST as $key => $value ) { $_POST[ $key ] = is_bool( $_POST[ $key ] ) ? "" : $_POST[ $key ]; }
 							if ( isset( $_POST["btn-signup"] ) && !empty( $_POST["btn-signup"] ) ) {
 								unset( $_POST["btn-signup"] );
 								if ( $error = $this->user_middleware->signup( $_POST ) ) {
@@ -125,7 +142,12 @@
 						case "GET":
 							$this->viewData = [ "success" => "true" ];			
 						break;
-						case "POST":
+						case "POST": 
+							$_POST = filter_input_array( INPUT_POST, array(
+								'btn-reset' => FILTER_SANITIZE_STRING,
+								'email' => FILTER_SANITIZE_EMAIL
+							));
+							foreach ( $_POST as $key => $value ) { $_POST[ $key ] = is_bool( $_POST[ $key ] ) ? "" : $_POST[ $key ]; }
 							if ( isset( $_POST["btn-reset"] ) && !empty( $_POST["btn-reset"] ) ) {
 								if ( $error = $this->user_middleware->reset_password( $_POST["email"] ) ) {
 									$this->viewData = [
