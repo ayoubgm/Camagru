@@ -1,20 +1,19 @@
 <?php
-	$data = $this->view_data["data"];
-	$userData = ( isset( $data['userData'] ) ) ? $data['userData'] : null;
-	$countUnreadNotifs = $data["countUnreadNotifs"];
-	$totalImages = $data['totalImages'];
-	$imagePerPage = 5;
-	$currentPage = $data['page'];
-	$totalPages = ceil( $totalImages / $imagePerPage );
-	$gallery = $data['gallery'];
-
+	if ( isset( $this->view_data["data"] ) ) {
+		$userData = ( isset( $this->view_data["data"]['userData'] ) ) ? $this->view_data["data"]['userData'] : null;
+		$gallery = $this->view_data["data"]['gallery'];
+		$countUnreadNotifs = $this->view_data["data"]["countUnreadNotifs"];
+		$imagePerPage = 5;
+		$totalImages = $this->view_data["data"]['totalImages'];
+		$currentPage = $this->view_data["data"]['page'];
+		$totalPages = ceil( $totalImages / $imagePerPage );
+	}
 	function		searchForMyLike ( $users, $userid ) {
 		foreach ( $users as $key => $value ) {
 			if ( $value["id"] == $userid ) { return true; }
 		}
 		return false;
 	}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
