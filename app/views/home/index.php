@@ -18,6 +18,15 @@
 		<link rel="stylesheet" href="/public/css/home/index.css"/>
 		<link rel="stylesheet" href="/public/css/_header.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
+		<noscript>
+			We're sorry but the application doesn't work properly without JavaScript enabled. Please enable it to continue.
+			<style>
+				* { display: none; }
+				/* div { display:none; }
+				header { display: none; }
+				footer { display: none; } */
+			</style>
+		</noscript>
 		<script>
 			const userToken = "<?php echo $token; ?>";
 			const logged = <?php echo ( $logged ) ? "true" : "false"; ?>;
