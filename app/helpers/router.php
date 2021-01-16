@@ -1,9 +1,9 @@
 <?php
-
 	/**
 	 * 	router class
 	 */
-	class Router {
+	class router
+	{
 		
 		protected $url;
 		protected $controller = "homeController";

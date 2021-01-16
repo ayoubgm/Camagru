@@ -1,9 +1,9 @@
 <?php
-
 	/**
 	 *  view class
 	 */
-	class View {
+	class view
+	{
 
 		protected $view_name;
 		protected $view_data;

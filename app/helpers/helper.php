@@ -1,6 +1,9 @@
 <?php
-
-	class helper {
+	/**
+	 * 	helper class
+	 */
+	class helper
+	{
 
 		public function		isRequestGET ( $request )
 		{
