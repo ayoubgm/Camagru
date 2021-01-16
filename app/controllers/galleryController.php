@@ -3,7 +3,8 @@
 	/**
 	 * 	Gallery controller class
 	 */
-	class galleryController extends Controller {
+	class galleryController extends Controller
+	{
 
 		public function 				__construct()
 		{

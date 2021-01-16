@@ -3,7 +3,8 @@
 	/**
 	 * 	Controller class
 	 */
-	class Controller {
+	class Controller
+	{
 		
 		protected $viewData;
 		protected $user_middleware;
@@ -37,7 +38,7 @@
 
 		protected function				call_view ( $view_name, $view_data = [] )
 		{
-			if ( file_exists(VIEWS . $view_name . '.php') ) {  return new View( $view_name, $view_data ); }
+			if ( file_exists(VIEWS . $view_name . '.php') ) {  return new view( $view_name, $view_data ); }
 		}
 
 		protected function				call_middleware ( $middleware )

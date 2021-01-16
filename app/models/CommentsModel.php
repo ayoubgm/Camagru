@@ -1,9 +1,8 @@
 <?php
-
 	/**
 	 *	Comments model class
 	 */
-	class 		CommentsModel extends Model
+	class CommentsModel extends Model
 	{
 
 		public function				getCommentsOfImg ( $imgid )

@@ -3,7 +3,8 @@
 	/**
 	 * 	Notification controller class
 	 */
-	class notificationController extends Controller {
+	class notificationController extends Controller
+	{
 
 		public function 				__construct()
 		{

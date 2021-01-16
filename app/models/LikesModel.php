@@ -3,7 +3,7 @@
 	/**
 	 *  Likes model class
 	 */
-	class		LikesModel extends Model
+	class LikesModel extends Model
 	{
 
 		public function				likeImage ( $imgid, $userid )

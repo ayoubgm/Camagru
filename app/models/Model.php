@@ -1,6 +1,9 @@
 <?php
-
-	class	Model extends database {
+	/**
+	 *	Model model class
+	 */
+	class Model extends database
+	{
 
 		public function			__construct()
 		{

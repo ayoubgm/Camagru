@@ -1,9 +1,9 @@
 <?php
-
 	/**
 	 * 	User controller class
 	 */
-	class userController extends Controller {
+	class userController extends Controller
+	{
 
 		public function 				__construct ()
 		{

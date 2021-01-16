@@ -1,9 +1,8 @@
 <?php
-
 	/**
 	 *	Users model class
 	 */
-	class		UsersModel extends Model
+	class UsersModel extends Model
 	{
 
 		public function				findUserById ( $userid )

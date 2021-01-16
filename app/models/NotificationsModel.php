@@ -1,10 +1,8 @@
 <?php
-
 	/**
 	 * Notifications model class
 	 */
-
-	class           NotificationsModel extends Model
+	class NotificationsModel extends Model
 	{
 
 		public function				getUserNotifications ( $id )

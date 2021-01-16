@@ -3,7 +3,8 @@
 	/**
 	 * 	Like controller class
 	 */
-	class likeController extends Controller {
+	class likeController extends Controller
+	{
 		
 		public function 				__construct()
 		{
