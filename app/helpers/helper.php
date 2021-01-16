@@ -2,6 +2,16 @@
 
 	class helper {
 
+		public function		isRequestGET ( $request )
+		{
+			return  ( $request == "GET" ) ? true : false;
+		}
+
+		public function		isRequestPOST ( $request )
+		{
+			return  ( $request == "POST" ) ? true : false;
+		}
+
 		public function		filter_array_posted ( $args )
 		{
 			if ( $array = filter_input_array( INPUT_POST, $args ) ) {
@@ -62,7 +72,7 @@
 				$string = $interval->format('%s')." sec";
 			}
 			return $string;
-		}    
+		}
 
 	}
 
