@@ -14,14 +14,16 @@
 		{
 			session_start();
 			try {
-				$this->viewData["data"][ "gallery"] = $this->gallery_model->getAllEditedImages();
-				if ( $this->user_middleware->isSignin( $_SESSION ) ) {
-					$this->viewData["data"] += [
-						"userData" => $this->user_model->findUserById( $_SESSION['userid'] ),
-						"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
-					];
+				if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
+					$this->viewData["data"][ "gallery"] = $this->gallery_model->getAllEditedImages();
+					if ( $this->user_middleware->isSignin( $_SESSION ) ) {
+						$this->viewData["data"] += [
+							"userData" => $this->user_model->findUserById( $_SESSION['userid'] ),
+							"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
+						];
+					}
+					$this->viewData += [ "success" => "true" ];
 				}
-				$this->viewData += [ "success" => "true" ];
 			} catch ( Exception $e ) {
 				$this->viewData["success"] = "false";
 				$this->viewData["msg"] = "Something goes wrong, try later !";
