@@ -1,7 +1,6 @@
 <?php
-
 	/**
-	 * 	gallery middlewares class 
+	 * 	Gallery middlewares class 
 	 */
 	class GalleryMiddleware extends Middleware
 	{

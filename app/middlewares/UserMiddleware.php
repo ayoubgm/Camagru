@@ -1,9 +1,9 @@
 <?php
-
 	/**
-	 * 	user middlewares class
+	 * 	User middlewares class
 	 */
-	class UserMiddleware extends Middleware {
+	class UserMiddleware extends Middleware
+	{
 
 		// Middleware for validating sign in data
 		public function					signin ( $data )

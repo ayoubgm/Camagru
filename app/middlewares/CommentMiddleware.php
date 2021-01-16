@@ -1,7 +1,6 @@
 <?php
-
 	/**
-	 * 	gallery middlewares class 
+	 * 	Comment middlewares class 
 	 */
 	class CommentMiddleware extends Middleware
 	{
@@ -22,5 +21,4 @@
 		}
 
 	}
-
 ?>

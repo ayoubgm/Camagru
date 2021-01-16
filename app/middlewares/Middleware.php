@@ -1,9 +1,9 @@
 <?php
-
 	/**
-	 *  middleware class
+	 *  Middleware class
 	 */
-	class Middleware extends database {
+	class Middleware extends database
+	{
 
 		public function			__construct()
 		{
