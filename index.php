@@ -17,5 +17,5 @@
 	$modules = [ROOT, APP, CONTROLLERS, MODELS, VIEWS, HELPERS, MIDDLEWARES, CONFIG, PUBLIC_DIR, IMAGES];
 	set_include_path( get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, $modules) );
 	spl_autoload_register('spl_autoload', false);
-	new Router();
+	new router();
 ?>
