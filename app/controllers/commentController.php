@@ -12,17 +12,6 @@
 			session_start();
 		}
 
-		static public function		validateData( $obj, $id )
-		{
-			if ( !isset( $_SESSION['userid'] ) ) {
-				return "You need to login first !";
-			} else if ( !$obj->gallery_middleware->isImageExist( $id ) ) {
-				return "The image is not found !";
-			} else {
-				return NULL;
-			}
-		}
-
 		public function				add()
 		{
 			try {
@@ -60,35 +49,26 @@
 			die( json_encode( $this->viewData ) );
 		}
 
-		public function				commentsImg( $data )
+		public function				commentsImg()
 		{
 			try {
-				if ( !isset( $data ) || ( !isset( $data[0] ) || $data[0] != "id" ) || ( !isset( $data[1] ) || empty( $data[1] ) ) ) {
-					$this->viewData = [
-						"success" => "false",
-						"msg" => "Something went wrong while validate the image !"
-					];
-				} else if ( !$this->gallery_middleware->isImageExist( $data[1] ) ) {
-					$this->viewData = [
-						"success" => "false",
-						"msg" => "The image is not found !"
-					];
-				} else {
-					$comments = $this->comment_model->getCommentsOfImg( $data[1] );
-					foreach( $comments as $k => $v ) {
-						$comments[ $k ] += [ "momments" => $this->helper->getMomentOfDate( $v["createdat"] ) ];
+				if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
+					if ( $_GET = $this->helper->filter_inputs( "GET", array( 'id' => FILTER_SANITIZE_NUMBER_INT )) ) {
+						if ( !$this->gallery_middleware->isImageExist( $_GET[1] ) ) {
+							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
+						} else {
+							$comments = $this->comment_model->getCommentsOfImg( $_GET[1] );
+							foreach( $comments as $k => $v ) { $comments[ $k ] += [ "momments" => $this->helper->getMomentOfDate( $v["createdat"] ) ]; }
+							$this->viewData = [
+								"success" => "true",
+								"data" => $comments,
+								"countlikes" => $this->like_model->getCountLikes( $_GET[1] )
+							];
+						}
 					}
-					$this->viewData = [
-						"success" => "true",
-						"data" => $comments,
-						"countlikes" => $this->like_model->getCountLikes( $data[1] )
-					];
 				}
 			} catch ( Exception $e ) {
-				$this->viewData = [
-					"success" => "false",
-					"msg" => "Something is wrong while load comments of the image !"
-				];
+				$this->viewData = [ "success" => "false", "msg" => "Something is wrong while load comments of the image, try later !" ];
 			}
 			die( json_encode( $this->viewData ) );
 		}
