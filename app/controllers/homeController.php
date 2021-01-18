@@ -196,48 +196,50 @@
 						"success" => "false",
 						"msg" => $error
 					];
-				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
+				} else {
 					$this->viewData["data"][ "token"] = $data[1];
-					if ( $error = $this->user_middleware->validateRecoveryToken( $data[1] ) ) {
-						$this->viewData += [
-							"success" => "false",
-							"msg" => $error
-						];
-					} else {
-						$this->viewData += [ "success" => "true" ];
-					}
-				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_array_posted( array(
-							'token' => FILTER_SANITIZE_STRING,
-							'btn-submit' => FILTER_SANITIZE_STRING,
-							'newpassword' => FILTER_SANITIZE_STRING,
-							'confirmation_password' => FILTER_SANITIZE_STRING
-						))
-					) {
-						if ( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) ) {
-							unset( $_POST["btn-submit"] );
-							if ( $error = $this->user_middleware->new_password( $_POST ) ) {
-								$this->viewData += [
-									"success" => "false",
-									"msg" => $error
-								];
-							} else if ( $this->user_model->newpassword( array( password_hash($_POST["newpassword"], PASSWORD_BCRYPT), $data[1] ) ) ) {
-								$this->viewData += [
-									"success" => "true",
-									"msg" => "Your password has been changed successfully !"
-								];
-							} else {
-								$this->viewData += [
-									"success" => "false",
-									"msg" => "Failed to change your password !"
-								];
-							}
+					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
+						if ( $error = $this->user_middleware->validateRecoveryToken( $data[1] ) ) {
+							$this->viewData += [
+								"success" => "false",
+								"msg" => $error
+							];
+						} else {
+							$this->viewData["success"] = "true";
 						}
-					} else {
-						$this->viewData = [
-							"success" => "false",
-							"msg" => "Couldn't change your password, try later !"
-						];
+					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
+						if ( $_POST = $this->helper->filter_array_posted( array(
+								'token' => FILTER_SANITIZE_STRING,
+								'btn-submit' => FILTER_SANITIZE_STRING,
+								'newpassword' => FILTER_SANITIZE_STRING,
+								'confirmation_password' => FILTER_SANITIZE_STRING
+							))
+						) {
+							if ( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) ) {
+								unset( $_POST["btn-submit"] );
+								if ( $error = $this->user_middleware->new_password( $_POST ) ) {
+									$this->viewData += [
+										"success" => "false",
+										"msg" => $error
+									];
+								} else if ( $this->user_model->newpassword( array( password_hash($_POST["newpassword"], PASSWORD_BCRYPT), $data[1] ) ) ) {
+									$this->viewData += [
+										"success" => "true",
+										"msg" => "Your password has been changed successfully !"
+									];
+								} else {
+									$this->viewData += [
+										"success" => "false",
+										"msg" => "Failed to change your password !"
+									];
+								}
+							}
+						} else {
+							$this->viewData = [
+								"success" => "false",
+								"msg" => "Couldn't change your password, try later !"
+							];
+						}
 					}
 				}
 			} catch ( Exception $e ) {
