@@ -8,6 +8,14 @@
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 		<link rel="icon" href="/public/images/logo.png">
 		<title>Sign in</title>
+		<noscript>
+			<p class="text-white">We're sorry but the application doesn't work properly without JavaScript enabled. Please enable it to continue.</p>
+			<style>
+				header { display: none; }
+				div { display:none; }
+				footer { display: none; }
+			</style>
+		</noscript>
 	</head>
 	<body>
 		<div class="container">

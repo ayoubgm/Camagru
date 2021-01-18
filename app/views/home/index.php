@@ -12,19 +12,18 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Camagru</title>
 		<link rel="icon" href="/public/images/logo.png">
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="/public/css/home/index.css"/>
 		<link rel="stylesheet" href="/public/css/_header.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
+		<title>Camagru</title>
 		<noscript>
-			We're sorry but the application doesn't work properly without JavaScript enabled. Please enable it to continue.
+			<p class="text-white">We're sorry but the application doesn't work properly without JavaScript enabled. Please enable it to continue.</p>
 			<style>
-				* { display: none; }
-				/* div { display:none; }
 				header { display: none; }
-				footer { display: none; } */
+				div { display:none; }
+				footer { display: none; }
 			</style>
 		</noscript>
 		<script>

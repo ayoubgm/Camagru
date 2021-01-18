@@ -3,11 +3,19 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Registration</title>
 		<link rel="icon" href="/public/images/logo.png">
 		<link rel="stylesheet" href="/public/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="/public/css/home/signup.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
+		<title>Registration</title>
+		<noscript>
+			<p class="text-white">We're sorry but the application doesn't work properly without JavaScript enabled. Please enable it to continue.</p>
+			<style>
+				header { display: none; }
+				div { display:none; }
+				footer { display: none; }
+			</style>
+		</noscript>
 	</head>
 	<body>
 		<div class="container col-md-7 p-0 h-100">
