@@ -13,31 +13,43 @@ const imageid = url.split('=')[1];
 const pathWithourQS = url.split('?')[0];
 const queryString = url.split('?')[1];
 
-const			deleteImage = ( id ) => {
-	const xhr = new XMLHttpRequest();
-	const imgid = id.split('-')[3];
-	const url = "/gallery/delete";
-	const params = "id=" + imgid + "&token=" + localStorage.getItem( "token" );
+const			createUserWhoLike = ( data ) => {
+	let divLike = document.createElement('div');
+	let htmlString;
 
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xhr.onloadend = () => {
-		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const data = JSON.parse( xhr.response );
+	divLike.id = "like-" + data.id;
+	divLike.classList.add("row");
+	divLike.style.cssText = "height: auto; margin: 5px 0px;";
+	htmlString = "<div class='bg-success' style='width: 30px; height: 30px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 10pt; padding-top: 5px;'>";
+	htmlString += data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
+	htmlString += "<a href='/user/profile/username/"+data.username+"' style='text-decoration: none; font-size: 10pt; color: rgb(78, 78, 78); padding: 5px;'>"+data.username+"</a></br>";
+	divLike.innerHTML = htmlString;
+	areaUsersLikeImg.appendChild( divLike );
+}
 
-			if ( data.success == "false" ) {
-				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( data.msg, "error" ); }
-			} else {
-				alertMessage( data.msg, "success" );
-				location.reload();
-			}
-		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
-		}
-		HideAlert();
+const			createComment = ( data, connectedUserId ) => {
+	let div = document.createElement('div');
+	let Subdiv1 = document.createElement('div');
+	let Subdiv2 = document.createElement('div');
+	let htmlDiv2 = "";
+
+	div.id = "comment-"+data.id;
+	div.classList.add("row");
+	div.style.cssText = "height: auto; margin-bottom: 5px;"
+	Subdiv1.classList.add("col-lg-1");
+	Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
+	Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
+	Subdiv2.classList.add("col-lg-11");
+	if ( connectedUserId.toString() == data.userid ) {
+		htmlDiv2 += "<span id='btn-delete-com-" + data.id + "' style='float: right; color: red; cursor: pointer;' onclick='deleteComment( "+data.imgid+", "+data.id+", "+connectedUserId+" )'>x</span>";
 	}
-	xhr.send( params );
+	htmlDiv2 += "<a href='/user/profile/username/"+data.username+"' style='text-decoration: none; font-weight: bold; font-size: 13pt; color: rgb(90, 90, 90)'>"+data.username+"</a></br>";
+	htmlDiv2 += "<div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span>";
+	Subdiv2.innerHTML = htmlDiv2;
+	div.append(Subdiv1);
+	div.append(Subdiv2);
+	commentsImg.scrollTop = commentsImg.scrollHeight - commentsImg.clientHeight;
+	commentsImg.appendChild( div );
 }
 
 const			likeOrUnlike = ( id ) => {
@@ -74,10 +86,9 @@ const			likeOrUnlike = ( id ) => {
 	xhr.send( params );
 }
 
-const			addComment = ( connectedUserid ) => {
+const			addComment = ( id, connectedUserid ) => {
 	const xhr = new XMLHttpRequest();
-	const btnSend = document.querySelector('[id^="btn-send-comment-img-"]');
-	const imgid = btnSend.id.split('-')[4];
+	const imgid = id.split('-')[4];
 	const commentContent = document.getElementById('commentInput');
 	const countComment = parseInt( document.getElementById('countComments-'+imgid).innerHTML );
 	const url = "/comment/add";
@@ -87,35 +98,20 @@ const			addComment = ( connectedUserid ) => {
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const result = JSON.parse( xhr.response );
-			
-			if ( result.success == "false" ) {
-				if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( result.msg, "error" ); }
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+				else { alertMessage( data.msg, "error" ); }
 			} else {
 				document.getElementById('countComments-'+imgid).innerHTML = countComment + 1;
 				getComments( "comments-img-" + imgid, connectedUserid );
-				alertMessage( result.msg, "success" );
+				alertMessage( data.msg, "success" );
 			}
 		} else {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}` , "error" );
 		}
 	}
 	xhr.send( params );
-}
-
-const			createUserWhoLike = ( data ) => {
-	let divLike = document.createElement('div');
-	let htmlString;
-
-	divLike.id = "like-" + data.id;
-	divLike.classList.add("row");
-	divLike.style.cssText = "height: auto; margin: 5px 0px;";
-	htmlString = "<div class='bg-success' style='width: 30px; height: 30px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 10pt; padding-top: 5px;'>";
-	htmlString += data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
-	htmlString += "<a href='/user/profile/username/"+data.username+"' style='text-decoration: none; font-size: 10pt; color: rgb(78, 78, 78); padding: 5px;'>"+data.username+"</a></br>";
-	divLike.innerHTML = htmlString;
-	areaUsersLikeImg.appendChild( divLike );
 }
 
 const			getUsersWhoLikedImg = ( id ) => {
@@ -141,31 +137,6 @@ const			getUsersWhoLikedImg = ( id ) => {
 		HideAlert();
 	}
 	xhr.send();
-}
-
-const			createComment = ( data, connectedUserId ) => {
-	let div = document.createElement('div');
-	let Subdiv1 = document.createElement('div');
-	let Subdiv2 = document.createElement('div');
-	let htmlDiv2 = "";
-
-	div.id = "comment-"+data.id;
-	div.classList.add("row");
-	div.style.cssText = "height: auto; margin-bottom: 5px;"
-	Subdiv1.classList.add("col-lg-1");
-	Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
-	Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
-	Subdiv2.classList.add("col-lg-11");
-	if ( connectedUserId.toString() == data.userid ) {
-		htmlDiv2 += "<span id='btn-delete-com-" + data.id + "' style='float: right; color: red; cursor: pointer;' onclick='deleteComment( "+data.imgid+", "+data.id+", "+connectedUserId+" )'>x</span>";
-	}
-	htmlDiv2 += "<a href='/user/profile/username/"+data.username+"' style='text-decoration: none; font-weight: bold; font-size: 13pt; color: rgb(90, 90, 90)'>"+data.username+"</a></br>";
-	htmlDiv2 += "<div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span>";
-	Subdiv2.innerHTML = htmlDiv2;
-	div.append(Subdiv1);
-	div.append(Subdiv2);
-	commentsImg.scrollTop = commentsImg.scrollHeight - commentsImg.clientHeight;
-	commentsImg.appendChild( div );
 }
 
 const			getComments = ( id, connectedUserId ) => {
@@ -231,6 +202,32 @@ const			deleteComment = ( imgid, comid, connectedUserid ) => {
 			}
 		} else {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
+		}
+		HideAlert();
+	}
+	xhr.send( params );
+}
+
+const			deleteImage = ( id ) => {
+	const xhr = new XMLHttpRequest();
+	const imgid = id.split('-')[3];
+	const url = "/gallery/delete";
+	const params = "id=" + imgid + "&token=" + localStorage.getItem( "token" );
+
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onloadend = () => {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+				else { alertMessage( data.msg, "error" ); }
+			} else {
+				alertMessage( data.msg, "success" );
+				location.reload();
+			}
+		} else {
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
 		}
 		HideAlert();
 	}
