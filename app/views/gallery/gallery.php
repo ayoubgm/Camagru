@@ -159,7 +159,7 @@
 								type="submit"
 								name="btn-comment"
 								value="Send"
-								onclick="addComment( <?php echo $_SESSION['userid'] ?> )"
+								onclick="addComment( this.id, <?php echo $_SESSION['userid'] ?> )"
 							>
 						</div>
 					</div>
