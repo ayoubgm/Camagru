@@ -54,17 +54,19 @@
 			try {
 				if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					if ( $_GET = $this->helper->filter_inputs( "GET", array( 'id' => FILTER_SANITIZE_NUMBER_INT )) ) {
-						if ( !$this->gallery_middleware->isImageExist( $_GET[1] ) ) {
+						if ( !$this->gallery_middleware->isImageExist( $_GET['id'] ) ) {
 							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
 						} else {
-							$comments = $this->comment_model->getCommentsOfImg( $_GET[1] );
+							$comments = $this->comment_model->getCommentsOfImg( $_GET['id'] );
 							foreach( $comments as $k => $v ) { $comments[ $k ] += [ "momments" => $this->helper->getMomentOfDate( $v["createdat"] ) ]; }
 							$this->viewData = [
 								"success" => "true",
 								"data" => $comments,
-								"countlikes" => $this->like_model->getCountLikes( $_GET[1] )
+								"countlikes" => $this->like_model->getCountLikes( $_GET['id'] )
 							];
 						}
+					} else {
+						$this->viewData = [ "success" => "false", "msg" => "Couldn't load comments of the image, try later !" ];
 					}
 				}
 			} catch ( Exception $e ) {
