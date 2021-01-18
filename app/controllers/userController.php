@@ -57,7 +57,7 @@
 						$this->viewData[ "success" ] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 						$oldData = $this->user_model->findUserById( $_SESSION["userid"] );
-						if ( $_POST = $this->helper->filter_array_posted( array(
+						if ( $_POST = $this->helper->filter_inputs( "POST", array(
 								'token' => FILTER_SANITIZE_STRING,
 								'btn-edit' => FILTER_SANITIZE_STRING,
 								'firstname' => FILTER_SANITIZE_STRING,
@@ -145,7 +145,7 @@
 					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 						$this->viewData["success"] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						if ( $_POST = $this->helper->filter_array_posted( array (
+						if ( $_POST = $this->helper->filter_inputs( "POST", array (
 							'token' => FILTER_SANITIZE_STRING,
 							'btn-submit' => FILTER_SANITIZE_STRING,
 							'oldpassword' => FILTER_SANITIZE_STRING,
@@ -207,7 +207,7 @@
 						if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 							$this->viewData["success"] = "true";
 						} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-							if ( $_POST = $this->helper->filter_array_posted( array(
+							if ( $_POST = $this->helper->filter_inputs( "POST", array(
 									'token' => FILTER_SANITIZE_STRING,
 									'btn-change-preference' => FILTER_SANITIZE_STRING
 								))
@@ -337,8 +337,14 @@
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 					header("Location: /signin");			
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					session_destroy();
-					$this->viewData["success"] = "true";
+					if ( $_POST = $this->helper->filter_inputs( "POST", array( 'token' => FILTER_SANITIZE_STRING )) ) {
+						if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
+							session_destroy();
+							$this->viewData["success"] = "true";
+						}
+					} else {
+						$this->viewData = [ "success" => "false", "msg" => "Couldn't logout, try later !" ];
+					}
 				}
 			} catch ( Exception $e ) {
 				$this->viewData["success"] = "false";

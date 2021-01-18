@@ -40,7 +40,7 @@
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					$this->viewData["success"] = "true";			
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_array_posted( array(
+					if ( $_POST = $this->helper->filter_inputs( "POST", array(
 						'btn-signin' => FILTER_SANITIZE_STRING,
 						'username' => FILTER_SANITIZE_STRING,
 						'password' => FILTER_SANITIZE_STRING
@@ -83,7 +83,7 @@
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					$this->viewData = [ "success" => "true" ];
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_array_posted( array(
+					if ( $_POST = $this->helper->filter_inputs( "POST", array(
 							'btn-signup' => FILTER_SANITIZE_STRING,
 							'firstname' => FILTER_SANITIZE_STRING,
 							'lastname' => FILTER_SANITIZE_STRING,
@@ -136,7 +136,7 @@
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					$this->viewData = [ "success" => "true" ];					
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_array_posted( array(
+					if ( $_POST = $this->helper->filter_inputs( "POST", array(
 							'btn-reset' => FILTER_SANITIZE_STRING,
 							'email' => FILTER_SANITIZE_EMAIL
 						))
@@ -202,7 +202,7 @@
 							$this->viewData["success"] = "true";
 						}
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						if ( $_POST = $this->helper->filter_array_posted( array(
+						if ( $_POST = $this->helper->filter_inputs( "POST", array(
 								'token' => FILTER_SANITIZE_STRING,
 								'btn-submit' => FILTER_SANITIZE_STRING,
 								'newpassword' => FILTER_SANITIZE_STRING,
