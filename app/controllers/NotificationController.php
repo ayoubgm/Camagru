@@ -106,10 +106,7 @@
 					}
 				}
 			} catch ( Exception $e ) {
-				$this->viewData = [
-					"success" => "false",
-					"msg" => "Something went wrong while delete your notifications, try later !"
-				];
+				$this->viewData = [ "success" => "false", "msg" => "Something went wrong while delete your notifications, try later !" ];
 			}
 			die( json_encode( $this->viewData ) );
 		}
