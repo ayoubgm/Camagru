@@ -80,8 +80,7 @@ const			likeOrUnlike = ( id ) => {
 			}
 		} else {
 			alertMessage( `An error has occurenced ${xhr.status}, ${xhr.statusText}`, "error" ); HideAlert();
-		} 
-		HideAlert();
+		}
 	}
 	xhr.send( params );
 }
@@ -190,29 +189,29 @@ const			deleteImage = ( id ) => {
 }
 
 const			getComments = ( id, connectedUserId ) => {
-	const xhr = new XMLHttpRequest();
+	let imgid = id.split('-')[2];
 	const areaCountComments = document.getElementById("count-comments");
 	const countLikes = document.getElementById("count-likes");
 	const arealikes = document.querySelector("[id^=likes-img]");
-	let imgid = id.split('-')[2];
-	
+	const xhr = new XMLHttpRequest();
+	const url = "/comment/commentsImg";
+	const params = "id="+imgid;
+
 	modelBG.classList.add('active-model');
 	getUsersWhoLikedImg("likes-img-" + imgid);
 	btnSendComment.id = "btn-send-comment-img-" + imgid;
 	arealikes.id = "likes-img-"+imgid;
 	areaUsersLikeImg.id = "users-like-img-" + imgid;
-	xhr.open("GET", "/comment/commentsImg/id/" + imgid, true);
+	xhr.open("GET", url+"?"+params, true);
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const data = JSON.parse( xhr.response );
-			
 			if ( data.success == "false" ) {
 				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
 				else { alertMessage( data.msg, "error" ); HideAlert(); }
 			} else {
 				const comments = data.data;
 				countLikes.innerHTML = data.countlikes;
-				
 				if ( comments.length != 0 ) {
 					commentsImg.innerHTML = "";
 					areaCountComments.innerHTML = comments.length;
