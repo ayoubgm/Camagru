@@ -24,8 +24,7 @@
 			// 		echo "Failed to create or recreate the database !";
 			// 	}
 			// }
-			$this->params = $this->url ? array_values( $this->url ) : [];
-			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);
+			$this->redirect();
 		}
 		
 		protected function				setControllerAndMethod()
@@ -59,6 +58,12 @@
 			} else if ( !method_exists($this->controller, $this->method ) ) {
 				$this->method = 'notfound';
 			}
+			$this->params = $this->url ? array_values( $this->url ) : [];
+		}
+
+		protected function				redirect()
+		{
+			call_user_func_array([ $this->controller, $this->method ], [ $this->params ]);
 		}
 		
 		protected function 				parseURL()
