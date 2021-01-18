@@ -5,19 +5,21 @@
 	class helper
 	{
 
-		public function		isRequestGET ( $request )
+		public function		isRequestGET ( $method )
 		{
-			return  ( $request == "GET" ) ? true : false;
+			return  ( $method == "GET" ) ? true : false;
 		}
 
-		public function		isRequestPOST ( $request )
+		public function		isRequestPOST ( $method )
 		{
-			return  ( $request == "POST" ) ? true : false;
+			return  ( $method == "POST" ) ? true : false;
 		}
 
-		public function		filter_array_posted ( $args )
+		public function		filter_inputs ( $method, $args )
 		{
-			if ( $array = filter_input_array( INPUT_POST, $args ) ) {
+			$type = ( $method == "POST" ) ? INPUT_POST : INPUT_GET;
+
+			if ( $array = filter_input_array( $type, $args ) ) {
 				if ( in_array( null || false, $array ) ) {
 					foreach ( $array as $key => $value ) {
 						$array[ $key ] = ( is_bool( $array[ $key ] ) || is_null( $array[ $key ] ) )
