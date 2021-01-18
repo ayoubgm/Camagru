@@ -9,7 +9,7 @@ const commentsImg = document.getElementById('comments-img');
 const btnSendComment = document.getElementById('btn-send-comment');
 const areaUsersLikeImg = document.querySelector("[id^=users-like-img]");
 const url = window.location.href;
-const imageid = url.split('=')[1];
+const imageidUrl = url.split('=')[1];
 const pathWithourQS = url.split('?')[0];
 const queryString = url.split('?')[1];
 
@@ -68,7 +68,7 @@ const			likeOrUnlike = ( id ) => {
 			
 			if ( result.success == "false" ) {
 				if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( result.msg, "error" ); }
+				else { alertMessage( result.msg, "error" ); HideAlert(); }
 			} else {
 				if ( srcBtnLike.includes( "icone-like-inactive.png" ) ) {
 					document.getElementById("countLikes-"+imgid).innerHTML = countLikes + 1,
@@ -79,11 +79,34 @@ const			likeOrUnlike = ( id ) => {
 				}
 			}
 		} else {
-			alertMessage( `An error has occurenced ${xhr.status}, ${xhr.statusText}`, "error" );
+			alertMessage( `An error has occurenced ${xhr.status}, ${xhr.statusText}`, "error" ); HideAlert();
 		} 
 		HideAlert();
 	}
 	xhr.send( params );
+}
+
+const			getUsersWhoLikedImg = ( id ) => {
+	const xhr = new XMLHttpRequest();
+	let imgid = id.split('-')[2];
+	const url = "/like/userswholikes";
+	const params = "id="+imgid;
+	
+	xhr.open("GET", url+"?"+params, true);
+	xhr.onloadend = () => {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) { alertMessage( data.msg, "error" ); HideAlert(); }
+			else {
+				const users = data.users;
+				if ( users.length == 0 ) { areaUsersLikeImg.innerHTML = "No likes yet !"; }
+				else { for ( let i = 0; i < users.length; i++ ) { createUserWhoLike ( users[i] ); } }
+			}
+		} else {
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
+		}
+	}
+	xhr.send();
 }
 
 const			addComment = ( id, connectedUserid ) => {
@@ -101,42 +124,69 @@ const			addComment = ( id, connectedUserid ) => {
 			const data = JSON.parse( xhr.response );
 			if ( data.success == "false" ) {
 				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( data.msg, "error" ); }
+				else { alertMessage( data.msg, "error" ); HideAlert(); }
 			} else {
 				document.getElementById('countComments-'+imgid).innerHTML = countComment + 1;
 				getComments( "comments-img-" + imgid, connectedUserid );
-				alertMessage( data.msg, "success" );
+				alertMessage( data.msg, "success" ); HideAlert();
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}` , "error" );
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText}` , "error" ); HideAlert();
 		}
 	}
 	xhr.send( params );
 }
 
-const			getUsersWhoLikedImg = ( id ) => {
+const			deleteComment = ( imgid, comid, connectedUserid ) => {
 	const xhr = new XMLHttpRequest();
-	let imgid = id.split('-')[2];
-	
-	xhr.open("GET", "/like/userswholikes?id=" + imgid, true);
+	const countComment = parseInt( document.getElementById('countComments-'+imgid).innerHTML );
+	const url = "/comment/delete";
+	const params = "id="+comid+"&token="+localStorage.getItem( "token" );
+
+	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const data = JSON.parse( xhr.response );
-			
-			if ( data.success == "false" ) { alertMessage( data.msg, "error" ); }
-			else {
-				const users = data.users;
-				
-				if ( users.length == 0 ) { areaUsersLikeImg.innerHTML = "No likes yet !"; }
-				else { for ( let i = 0; i < users.length; i++ ) { createUserWhoLike ( users[i] ); } }
+			if ( data.success == "false" ) {
+				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+				else { alertMessage( data.msg, "error" ); HideAlert(); }
+			} else {
+				getComments( "comments-img-" + imgid, connectedUserid );
+				document.getElementById('countComments-'+imgid).innerHTML = countComment - 1;
+				alertMessage( data.msg, "success" ); HideAlert();
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
-		HideAlert();
 	}
-	xhr.send();
+	xhr.send( params );
+}
+
+const			deleteImage = ( id ) => {
+	const xhr = new XMLHttpRequest();
+	const imgid = id.split('-')[3];
+	const url = "/gallery/delete";
+	const params = "id=" + imgid + "&token=" + localStorage.getItem( "token" );
+
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.onloadend = () => {
+		if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+				else { alertMessage( data.msg, "error" ); HideAlert(); }
+			} else {
+				alertMessage( data.msg, "success" );
+				HideAlert();
+				location.reload();
+			}
+		} else {
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
+		}
+	}
+	xhr.send( params );
 }
 
 const			getComments = ( id, connectedUserId ) => {
@@ -158,7 +208,7 @@ const			getComments = ( id, connectedUserId ) => {
 			
 			if ( data.success == "false" ) {
 				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( data.msg, "error" ); }
+				else { alertMessage( data.msg, "error" ); HideAlert(); }
 			} else {
 				const comments = data.data;
 				countLikes.innerHTML = data.countlikes;
@@ -173,65 +223,10 @@ const			getComments = ( id, connectedUserId ) => {
 				}
 			}
 		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
+			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
-		HideAlert();
 	}
 	xhr.send();
-}
-
-const			deleteComment = ( imgid, comid, connectedUserid ) => {
-	const xhr = new XMLHttpRequest();
-	const countComment = parseInt( document.getElementById('countComments-'+imgid).innerHTML );
-	const url = "/comment/delete";
-	const params = "id="+comid+"&token="+localStorage.getItem( "token" );
-
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhr.onloadend = () => {
-		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const data = JSON.parse( xhr.response );
-
-			if ( data.success == "false" ) {
-				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( data.msg, "error" ); }
-			} else {
-				getComments( "comments-img-" + imgid, connectedUserid );
-				document.getElementById('countComments-'+imgid).innerHTML = countComment - 1;
-				alertMessage( data.msg, "success" );
-			}
-		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" )
-		}
-		HideAlert();
-	}
-	xhr.send( params );
-}
-
-const			deleteImage = ( id ) => {
-	const xhr = new XMLHttpRequest();
-	const imgid = id.split('-')[3];
-	const url = "/gallery/delete";
-	const params = "id=" + imgid + "&token=" + localStorage.getItem( "token" );
-
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	xhr.onloadend = () => {
-		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const data = JSON.parse( xhr.response );
-			if ( data.success == "false" ) {
-				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( data.msg, "error" ); }
-			} else {
-				alertMessage( data.msg, "success" );
-				location.reload();
-			}
-		} else {
-			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" );
-		}
-		HideAlert();
-	}
-	xhr.send( params );
 }
 
 const			closeModel = () => {
@@ -266,6 +261,6 @@ document.addEventListener("click", ( event ) => {
 	});
 });
 
-if ( ( typeof imageid != 'undefined' && imageid ) && ( typeof connectedUser != 'undefined' && connectedUser ) ) {
-	getComments( "comments-img-" + imageid, connectedUser );
+if ( ( typeof imageidUrl != 'undefined' && imageidUrl ) && ( typeof connectedUser != 'undefined' && connectedUser ) ) {
+	getComments( "comments-img-" + imageidUrl, connectedUser );
 }
