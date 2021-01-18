@@ -63,10 +63,8 @@
 							}
 						}
 					} else {
-						$this->viewData = [
-							"success" => "false",
-							"msg" => "Couldn't login, try later !"
-						];
+						$this->viewData["success"] = "false";
+						$this->viewData["msg"] = "Couldn't login, try later !";
 					}	
 				}
 			} catch ( Exception $e ) {
@@ -118,10 +116,8 @@
 							}
 						}
 					} else {
-						$this->viewData = [
-							"success" => "false",
-							"msg" => "Couldn't create your account, try later !"
-						];
+						$this->viewData["success"] = "false";
+						$this->viewData["msg"] = "Couldn't create your account, try later !";
 					}
 				}
 			} catch ( Exception $e ) {
@@ -165,10 +161,8 @@
 							}
 						}
 					} else {
-						$this->viewData = [
-							"success" => "false",
-							"msg" => "Couldn't reset your password, try later !"
-						];
+						$this->viewData["success"] = "false";
+						$this->viewData["msg"] = "Couldn't reset your password, try later !";
 					}
 				}
 			} catch ( Exception $e ) {
@@ -235,10 +229,8 @@
 								}
 							}
 						} else {
-							$this->viewData = [
-								"success" => "false",
-								"msg" => "Couldn't change your password, try later !"
-							];
+							$this->viewData["success"] = "false";
+							$this->viewData["msg"] = "Couldn't change your password, try later !";
 						}
 					}
 				}

@@ -70,7 +70,7 @@
 						) {
 							if (
 								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-								$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+								( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
 								( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) )
 							) {
 								unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
@@ -286,7 +286,7 @@
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 						if (
 							( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-							$this->user_middleware->validateUserToken( $_POST["token"] ) &&
+							( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
 							( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
 						) {
 							if ( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) {
