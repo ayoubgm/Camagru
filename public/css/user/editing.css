@@ -96,8 +96,9 @@ form {
 }
 
 .model {
+    overflow: scroll;
     width: 80%;
-    height: 50% ;
+    height: 80%;
     background-color: white;
     border-radius: 8px;
     padding: 8px;
@@ -146,4 +147,10 @@ form {
 @media (max-width: 991.98px) {
     #main #main-section { height: 1180px; }
     .model #canvas-area #area-description { padding-left: 18px; }
+}
+
+@media (max-width: 768.98px) {
+    .model #canvas-area #model-header h4 {
+        font-size: 12pt;
+    }
 }
