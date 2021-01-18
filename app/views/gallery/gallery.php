@@ -26,6 +26,14 @@
 		<link rel="stylesheet" href="/public/css/gallery/gallery.css"/>
 		<link rel="stylesheet" href="/public/css/_footer.css"/>
 		<title>Gallery</title>
+		<noscript>
+			<p class="text-white">We're sorry but the application doesn't work properly without JavaScript enabled. Please enable it to continue.</p>
+			<style>
+				header { display: none; }
+				div { display:none; }
+				footer { display: none; }
+			</style>
+		</noscript>
 		<script> const connectedUser = "<?php if ( isset( $userData ) ) { echo $userData["id"]; } ?>";</script>
 	</head>
 	<body onload="getNotifications();">
