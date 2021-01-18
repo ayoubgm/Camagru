@@ -29,7 +29,6 @@
 				}
 				return $array;
 			}
-			return NULL;
 		}
 
 		public function 	sendMail ( $subject, $to, $token )
