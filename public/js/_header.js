@@ -29,19 +29,19 @@ const					createNotification = ( data ) => {
 // Display all user notifications
 const					getNotifications = () => {
 	const xhr = new XMLHttpRequest();
+	const url = "/notification/user";
+	const params = "token="+localStorage.getItem( "token" );
 	
-	xhr.open("GET", "/notification/user", true);
+	xhr.open("GET", url+"?"+params, true);
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
 			const data = JSON.parse( xhr.response );
-
 			if ( data.success == "false" ) {
 				if ( data.msg != "You need to login first !" ) {
 					alertMessage( data.msg, "error" ); HideAlert();
 				}
 			} else {
 				const notifs = data.data;
-
 				if ( notifs.length != 0 ) {
 					notificationsArea.innerHTML = "";
 					for ( let i = 0; i < notifs.length; i++ ) { createNotification( notifs[i] ); }
@@ -89,17 +89,15 @@ const					readAllUserNotifs = () => {
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const result = JSON.parse( xhr.response );
-
-			if ( result.success == "false" ) {
-				if ( result.msg != "You need to login first !" ) {
-					alertMessage( result.msg, "error" ); HideAlert();
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg != "You need to login first !" ) {
+					alertMessage( data.msg, "error" ); HideAlert();
 				}
 			} else {
 				document.getElementById('countNotifs').innerHTML = 0;
 				getNotifications();
-				alertMessage( result.msg, "success" );
-				HideAlert();
+				alertMessage( data.msg, "success" ); HideAlert();
 			}
 		} else {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
@@ -117,18 +115,17 @@ const					deleteAllUserNotifs = () => {
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const result = JSON.parse( xhr.response );
-
-			if ( result.success == "false" ) {
-				if ( result.msg == "You need to login first !" ) {
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg == "You need to login first !" ) {
 					location.href = "/signin";
 				} else {
-					alertMessage( result.msg, "error" ); HideAlert();
+					alertMessage( data.msg, "error" ); HideAlert();
 				}
 			} else {
 				document.getElementById('countNotifs').innerHTML = 0;
 				getNotifications();
-				alertMessage( result.msg, "success" );
+				alertMessage( data.msg, "success" );
 				HideAlert();
 			}
 		} else {
@@ -140,13 +137,15 @@ const					deleteAllUserNotifs = () => {
 
 const					logout = () => {
 	const xhr = new XMLHttpRequest();
+	const url = "/user/logout";
+	const params = "token="+localStorage.getItem( "token" );
 
-	xhr.open("GET", "/user/logout", true);
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const result = JSON.parse( xhr.response );
-
-			if ( result.success == "false" ) { alertMessage( result.msg, "error" ); HideAlert(); }
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) { alertMessage( data.msg, "error" ); HideAlert(); }
 			else {
 				localStorage.removeItem( "token" );
 				location.href = "/home";
@@ -155,7 +154,7 @@ const					logout = () => {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
 		}
 	}
-	xhr.send();
+	xhr.send( params );
 }
 
 const					alertMessage = ( text, type ) => {
