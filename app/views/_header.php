@@ -33,8 +33,8 @@
 						<div id="manage-notifications">
 							<?php if ( $countUnreadNotifs != 0 ) { ?>
 								<span id="see-all" class="float-left" onclick="readAllUserNotifs();">read all</span>
-								<span id="delete-all" class="float-right" onclick="deleteAllUserNotifs();">delete all</span>
 							<?php } ?>
+							<span id="delete-all" class="float-right" onclick="deleteAllUserNotifs();">delete all</span>
 						</div>
 						<hr>
 						<div id="notifications-user"></div>
