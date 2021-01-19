@@ -160,8 +160,8 @@
 
 		public function				validateImageDescription ( $descr )
 		{
-			return ( !preg_match( "/^[A-Za-z0-9 ]{10,200}$/", $descr ) )
-			? "The description must contains letters and numbers only ( between 10 and 200 ) !"
+			return ( !preg_match( "/^[A-Za-z0-9 ]{5,200}$/", $descr ) )
+			? "The description must contains letters and numbers only ( between 5 and 200 ) !"
 			: null;
 		}
 
