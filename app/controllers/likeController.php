@@ -63,7 +63,7 @@
 			try {
 				if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					if (
-						( $this->helper->validate_inputs( [ 'id' => FILTER_SANITIZE_STRING ], $_GET ) ) &&
+						( $this->helper->validate_inputs( [ 'id' => [ "REQUIRED" => true, "EMPTY" => false ] ], $_GET ) ) &&
 						( $_GET = $this->helper->filter_inputs( "GET", array( 'id' => FILTER_SANITIZE_NUMBER_INT )) )
 					) {
 						if ( !$this->gallery_middleware->isImageExist( $_GET["id"] ) ) {
