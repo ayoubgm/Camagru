@@ -2,7 +2,9 @@
 	if ( isset( $this->view_data["data"] ) ) {
 		$userData = ( isset( $this->view_data["data"]['userData'] ) ) ? $this->view_data["data"]['userData'] : null;
 		$gallery = $this->view_data["data"]['gallery'];
-		$countUnreadNotifs = $this->view_data["data"]["countUnreadNotifs"];
+		$countUnreadNotifs = ( isset( $this->view_data["data"]["countUnreadNotifs"] ) )
+							? $this->view_data["data"]["countUnreadNotifs"]
+							: 0;
 		$imagePerPage = 5;
 		$totalImages = $this->view_data["data"]['totalImages'];
 		$currentPage = $this->view_data["data"]['page'];
@@ -51,7 +53,7 @@
 								<a id="user-link" href="/user/profile/username/<?php echo $image['username']; ?>"><?php print( $image['username'] ); ?></a>
 							</div>
 							<div id="area-img-menu" class="float-right">
-								<?php if ( $image["userid"] == $_SESSION["userid"] ) { ?>
+								<?php if ( isset( $_SESSION["userid"] ) && $image["userid"] == $_SESSION["userid"] ) { ?>
 									<div
 										id="btn-details-img-<?php echo $image["id"]; ?>"
 										class="burger-img"
@@ -113,9 +115,13 @@
 							<img
 								id="like-img-<?php echo $image['id']; ?>"
 								src="<?php
-									echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) )
-									? "/public/images/icone-like-active.png"
-									: "/public/images/icone-like-inactive.png";
+									if ( isset( $_SESSION['userid'] ) ) {
+										echo ( searchForMyLike ( $image["usersWhoLike"], $_SESSION['userid'] ) )
+										? "/public/images/icone-like-active.png"
+										: "/public/images/icone-like-inactive.png";
+									} else {
+										echo "/public/images/icone-like-inactive.png";
+									}
 								?>"
 								onclick="likeOrUnlike( this.id )"
 							/>
@@ -124,7 +130,7 @@
 							<img
 								id="comments-img-<?php echo $image['id']; ?>"
 								src="/public/images/comment-icone.png"
-								onclick="getComments( this.id, <?php echo $_SESSION['userid'] ?> );"
+								onclick="getComments( this.id, <?php echo $_SESSION['userid']; ?> );"
 							/>
 						</div>
 					</div>
