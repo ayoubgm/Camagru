@@ -18,10 +18,19 @@
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 					$this->viewData = [ "success"=> "false", "msg" => "You need to login first !" ];
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_inputs( "POST", array(
-							'token' => FILTER_SANITIZE_STRING,
-							'id' => FILTER_SANITIZE_STRING
-						))
+					if (
+						(
+							$this->helper->validate_inputs([
+								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'id' => [ "REQUIRED" => true, "EMPTY" => false ]
+							], $_POST )
+						) &&
+						(
+							$_POST = $this->helper->filter_inputs( "POST", array(
+								'token' => FILTER_SANITIZE_STRING,
+								'id' => FILTER_SANITIZE_STRING
+							))
+						)
 					) {
 						if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 							if ( !$this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
@@ -54,7 +63,10 @@
 		{
 			try {
 				if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_GET = $this->helper->filter_inputs( "GET", array( 'id' => FILTER_SANITIZE_NUMBER_INT )) ) {
+					if (
+						( $this->helper->validate_inputs( [ 'id' => FILTER_SANITIZE_STRING ], $_GET ) ) &&
+						( $_GET = $this->helper->filter_inputs( "GET", array( 'id' => FILTER_SANITIZE_NUMBER_INT )) )
+					) {
 						if ( !$this->gallery_middleware->isImageExist( $_GET["id"] ) ) {
 							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
 						} else {
