@@ -30,23 +30,22 @@
 								'token' => FILTER_SANITIZE_STRING,
 								'id' => FILTER_SANITIZE_STRING
 							))
-						)
+						) &&
+						( $this->user_middleware->validateUserToken( $_POST["token"] ) )
 					) {
-						if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
-							if ( !$this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
-								$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
-							} else if ( $this->like_model->isLikeExists( $_POST["id"], $_SESSION['userid'] ) ) {
-								if ( $this->like_model->unlikeImage( $_POST["id"], $_SESSION['userid'] ) ) {
-									$this->viewData = [ "success" => "true" ];
-								} else {
-									$this->viewData = [ "success" => "false", "msg" => "Failed to unlike the image !" ];
-								}
+						if ( !$this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
+							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
+						} else if ( $this->like_model->isLikeExists( $_POST["id"], $_SESSION['userid'] ) ) {
+							if ( $this->like_model->unlikeImage( $_POST["id"], $_SESSION['userid'] ) ) {
+								$this->viewData = [ "success" => "true" ];
 							} else {
-								if ( $this->like_model->likeImage( $_POST["id"], $_SESSION['userid'] ) ) {
-									$this->viewData = [ "success" => "true" ];
-								} else {
-									$this->viewData = [ "success" => "false", "msg" => "Failed to like the image !" ];
-								}
+								$this->viewData = [ "success" => "false", "msg" => "Failed to unlike the image !" ];
+							}
+						} else {
+							if ( $this->like_model->likeImage( $_POST["id"], $_SESSION['userid'] ) ) {
+								$this->viewData = [ "success" => "true" ];
+							} else {
+								$this->viewData = [ "success" => "false", "msg" => "Failed to like the image !" ];
 							}
 						}
 					} else {
