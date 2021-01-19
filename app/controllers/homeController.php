@@ -40,36 +40,40 @@
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					$this->viewData["success"] = "true";			
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_inputs( "POST", array(
-						'btn-signin' => FILTER_SANITIZE_STRING,
-						'username' => FILTER_SANITIZE_STRING,
-						'password' => FILTER_SANITIZE_STRING
-					)) ) {
-						if ( isset( $_POST["btn-signin"] ) && !empty( $_POST["btn-signin"] ) ) {
-							unset( $_POST["btn-signin"] );
-							if ( $error = $this->user_middleware->signin( $_POST ) ) {
-								$this->viewData = [
-									"success" => "false",
-									"msg" => $error
-								];
-							} else {
-								$userData = $this->user_model->findUserByUsername( $_POST["username"] );
-								$_SESSION = [
-									"userid" => $userData["id"],
-									"username" => $userData["username"],
-									"token" => bin2hex( random_bytes( 32 ) )
-								];
-								header("Location: /home");
-							}
+					if ( 
+						(
+							$this->helper->validate_inputs([
+								"btn-signin" => [ "REQUIRED" => true, "EMPTY" => false ],
+								"username" => [ "REQUIRED" => true, "EMPTY" => false ],
+								"password" => [ "REQUIRED" => true, "EMPTY" => false ]
+							], $_POST )
+						) &&
+						(
+							$_POST = $this->helper->filter_inputs( "POST", array(
+								'btn-signin' => FILTER_SANITIZE_STRING,
+								'username' => FILTER_SANITIZE_STRING,
+								'password' => FILTER_SANITIZE_STRING
+							))
+						)
+					) {
+						unset( $_POST["btn-signin"] );
+						if ( $error = $this->user_middleware->signin( $_POST ) ) {
+							$this->viewData = [ "success" => "false", "msg" => $error ];
+						} else {
+							$userData = $this->user_model->findUserByUsername( $_POST["username"] );
+							$_SESSION = [
+								"userid" => $userData["id"],
+								"username" => $userData["username"],
+								"token" => bin2hex( random_bytes( 32 ) )
+							];
+							header("Location: /home");
 						}
 					} else {
-						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Couldn't login, try later !";
-					}	
+						$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
+					}
 				}
 			} catch ( Exception $e ) {
-				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Couldn't login, try later !";
+				$this->viewData = [ "success" => "false", "msg" => "Couldn't login, try later !" ];
 			}
 			$this->call_view( 'home' . DIRECTORY_SEPARATOR .'signin', $this->viewData )->render();
 		}
