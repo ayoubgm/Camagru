@@ -63,11 +63,11 @@
 								<div class="col-6">
 									<div class="form-row">
 										<label class="w-25" style="font-size: 12pt; font-weight: bold;">X : </label>
-										<input type="number" class="form-control w-75" name="x" id="x-axis" min="0" max="640"/>
+										<input type="number" class="form-control w-75" name="x" id="x-axis" min="0" max="640" value="0"/>
 									</div>
 									<div class="form-row">
 										<label class="w-25" style="font-size: 12pt; font-weight: bold;">Y : </label>
-										<input type="number" class="form-control w-75" name="y" id="y-axis" min="0" max="480"/>
+										<input type="number" class="form-control w-75" name="y" id="y-axis" min="0" max="480" value="0"/>
 									</div>
 								</div>
 							</div>
