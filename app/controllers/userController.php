@@ -24,7 +24,7 @@
 							"countUnreadNotifs" => $this->notifications_model->getCountUnreadNotifications( $_SESSION['userid'] )
 						]
 					];
-					if ( ( isset( $data[0] ) && $data[0] === "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
+					if ( ( isset( $data[0] ) && $data[0] == "username" ) && ( isset( $data[1] ) && !empty( $data[1] ) ) ) {
 						if ( $data = $this->user_model->findUserByUsername( $data[1] ) ) {
 							$this->viewData["data"][ "userData"] = $data;
 						} else {
@@ -56,49 +56,51 @@
 					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 						$this->viewData[ "success" ] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						$oldData = $this->user_model->findUserById( $_SESSION["userid"] );
-						if ( $_POST = $this->helper->filter_inputs( "POST", array(
-								'token' => FILTER_SANITIZE_STRING,
-								'btn-edit' => FILTER_SANITIZE_STRING,
-								'firstname' => FILTER_SANITIZE_STRING,
-								'lastname' => FILTER_SANITIZE_STRING,
-								'username' => FILTER_SANITIZE_STRING,
-								'email' => FILTER_SANITIZE_EMAIL,
-								'gender' => FILTER_SANITIZE_STRING,
-								'address' => FILTER_SANITIZE_STRING
-							))
+						if (
+							(
+								$this->helper->validate_inputs([
+									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'btn-edit' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'firstname' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'lastname' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'username' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'email' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'gender' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'address' => [ "REQUIRED" => true, "EMPTY" => true ],
+								], $_POST )
+							) &&
+							( 
+								$_POST = $this->helper->filter_inputs( "POST", array(
+									'token' => FILTER_SANITIZE_STRING,
+									'btn-edit' => FILTER_SANITIZE_STRING,
+									'firstname' => FILTER_SANITIZE_STRING,
+									'lastname' => FILTER_SANITIZE_STRING,
+									'username' => FILTER_SANITIZE_STRING,
+									'email' => FILTER_SANITIZE_EMAIL,
+									'gender' => FILTER_SANITIZE_STRING,
+									'address' => FILTER_SANITIZE_STRING
+								))
+							)
 						) {
-							if (
-								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-								( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
-								( isset( $_POST["btn-edit"] ) && !empty( $_POST["btn-edit"] ) )
-							) {
+							if ( $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
+								$oldData = $this->user_model->findUserById( $_SESSION["userid"] );
 								unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
 								unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
 								$editedData = array_replace_recursive( $oldData, $_POST );
 								if ( $error = $this->user_middleware->edit( $_SESSION["userid"], $editedData ) ) {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => $error
-									];
+									$this->viewData += [ "success" => "false", "msg" => $error ];
 									$this->viewData["data"]["userData"] = $editedData;
 								} else if ( $this->user_model->edit( $_SESSION["userid"], $editedData ) ) {
-									$this->viewData += [
-										"success" => "true",
-										"msg" => "Your informations has been edited successfully !"
-									];
+									$this->viewData += [ "success" => "true", "msg" => "Your informations has been edited successfully !" ];
 									$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
 								} else {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => "Failed to change your informations !"
-									];
+									$this->viewData += [ "success" => "false", "msg" => "Failed to change your informations !" ];
 									$this->viewData["data"]["userData"] = $editedData;
 								}
 							}
 						} else {
 							$this->viewData["success"] = "false";
-							$this->viewData["msg"] = "Couldn't edit your informations, try later !";
+							$this->viewData["msg"] = "Something is missing !";
 						}
 					}
 				}
@@ -145,39 +147,39 @@
 					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 						$this->viewData["success"] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						if ( $_POST = $this->helper->filter_inputs( "POST", array (
-							'token' => FILTER_SANITIZE_STRING,
-							'btn-submit' => FILTER_SANITIZE_STRING,
-							'oldpassword' => FILTER_SANITIZE_STRING,
-							'newpassword' => FILTER_SANITIZE_STRING,
-							'confirmation_password' => FILTER_SANITIZE_STRING
-						)) ) {
-							if (
-								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-								( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
-								( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) )
-							) {
+						if (
+							(
+								$this->helper->validate_inputs([
+									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'btn-submit' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'oldpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'newpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'confirmation_password' => [ "REQUIRED" => true, "EMPTY" => false ],
+								], $_POST )
+							) &&
+							(
+								$_POST = $this->helper->filter_inputs( "POST", array (
+									'token' => FILTER_SANITIZE_STRING,
+									'btn-submit' => FILTER_SANITIZE_STRING,
+									'oldpassword' => FILTER_SANITIZE_STRING,
+									'newpassword' => FILTER_SANITIZE_STRING,
+									'confirmation_password' => FILTER_SANITIZE_STRING
+								))
+							)
+						) {
+							if ( $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 								unset( $_POST["btn-submit"] );
 								if ( $error = $this->user_middleware->change_password( $_SESSION["userid"], $_POST ) ) {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => $error
-									];
-								} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_ARGON2I) ) ) {
-									$this->viewData += [
-										"success" => "true",
-										"msg" => "Your password has been changed successfully !"
-									];
+									$this->viewData += [ "success" => "false", "msg" => $error ];
+								} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_BCRYPT) ) ) {
+									$this->viewData += [ "success" => "true", "msg" => "Your password has been changed successfully !" ];
 								} else {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => "Failed to change your password !"
-									];
+									$this->viewData += [ "success" => "false", "msg" => "Failed to change your password !" ];
 								}
 							}
 						} else {
 							$this->viewData["success"] = "false";
-							$this->viewData["msg"] = "Couldn't change your password, try later !";
+							$this->viewData["msg"] = "Something is missing !";
 						}
 					}
 				}
@@ -207,16 +209,21 @@
 						if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 							$this->viewData["success"] = "true";
 						} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-							if ( $_POST = $this->helper->filter_inputs( "POST", array(
-									'token' => FILTER_SANITIZE_STRING,
-									'btn-change-preference' => FILTER_SANITIZE_STRING
-								))
+							if (
+								(
+									$this->helper->validate_inputs([
+										'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+										'btn-change-preference' => [ "REQUIRED" => true, "EMPTY" => false ]
+									], $_POST )
+								) &&
+								(
+									$_POST = $this->helper->filter_inputs( "POST", array(
+										'token' => FILTER_SANITIZE_STRING,
+										'btn-change-preference' => FILTER_SANITIZE_STRING
+									))
+								)
 							) {
-								if (
-									( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-									( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
-									( isset( $_POST["btn-change-preference"] ) && !empty( $_POST["btn-change-preference"] ) )
-								) {
+								if ( $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 									unset( $_POST["btn-change-preference"] );
 									if ( $this->user_model->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
 										$this->viewData["success"] = "true";
@@ -228,12 +235,12 @@
 								}
 							} else {
 								$this->viewData["success"] = "false";
-								$this->viewData["msg"] = "Couldn't change your notifications preference, try later !";
+								$this->viewData["msg"] = "Something is missing !";
 							}
 						}
 					} else {
 						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Something is wrong !";
+						$this->viewData["msg"] = "Something is missing !";
 					}
 				}
 			} catch ( Exception $e ) {
@@ -284,21 +291,31 @@
 					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 						$this->viewData["success"] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						if ( $_POST = $this->helper->filter_inputs( "POST", array(
-								'token' => FILTER_SANITIZE_STRING,
-								'btn-save' => FILTER_SANITIZE_STRING,
-								'dataimage' => FILTER_SANITIZE_STRING,
-								'sticker' => FILTER_SANITIZE_URL,
-								'x' => FILTER_SANITIZE_NUMBER_INT,
-								'y' => FILTER_SANITIZE_NUMBER_INT,
-								'description' => FILTER_SANITIZE_STRING
-							))
+						if (
+							(
+								$this->helper->validate_inputs([
+									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'btn-save' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'dataimage' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'sticker' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'x' => [ "REQUIRED" => true, "EMPTY" => true ],
+									'y' => [ "REQUIRED" => true, "EMPTY" => true ],
+									'description' => [ "REQUIRED" => true, "EMPTY" => false ],
+								], $_POST)
+							) &&
+							(
+								$_POST = $this->helper->filter_inputs( "POST", array(
+									'token' => FILTER_SANITIZE_STRING,
+									'btn-save' => FILTER_SANITIZE_STRING,
+									'dataimage' => FILTER_SANITIZE_STRING,
+									'sticker' => FILTER_SANITIZE_URL,
+									'x' => FILTER_SANITIZE_NUMBER_INT,
+									'y' => FILTER_SANITIZE_NUMBER_INT,
+									'description' => FILTER_SANITIZE_STRING
+								))
+							)
 						) {
-							if (
-								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-								( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
-								( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
-							) {
+							if ( $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 								if (
 									( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) ||
 									( $error = $this->gallery_middleware->validateCoordinatesSticker( $_POST["x"], $_POST["y"] ) )
@@ -330,19 +347,19 @@
 									} else {
 										if ( isset( $pathFile ) && file_exists( $pathFile ) ) { unlink( $pathFile ); }
 										$this->viewData["success"] = "false";
-										$this->viewData["msg"] = "Something goes wrong while create final image try later !";
+										$this->viewData["msg"] = "Something goes wrong while create final image !";
 									}
 								}
 							}
 						} else {
-							$this->viewData = [ "success" => "false", "msg" => "Couldn't edit the picture, try later !" ];
+							$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
 						}
 					}
 				}
 			} catch ( Exception $e ) {
 				if ( isset( $pathFile ) && file_exists( $pathFile ) ) { unlink( $pathFile ); }
 				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong while editing your picture, try later !";
+				$this->viewData["msg"] = "Something goes wrong while edit your picture, try later !";
 			}
 			$this->call_view( "user" . DIRECTORY_SEPARATOR ."editing", $this->viewData )->render();
 		}
@@ -353,18 +370,21 @@
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 					header("Location: /signin");			
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_inputs( "POST", array( 'token' => FILTER_SANITIZE_STRING )) ) {
-						if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
+					if (
+						( $this->helper->validate_inputs([ 'token' =>  [ "REQUIRED" => true, "EMPTY" => false ] ], $_POST) ) &&
+						( $_POST = $this->helper->filter_inputs( "POST", array( 'token' => FILTER_SANITIZE_STRING )) )
+					) {
+						if ( $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
 							session_destroy();
 							$this->viewData["success"] = "true";
 						}
 					} else {
-						$this->viewData = [ "success" => "false", "msg" => "Couldn't logout, try later !" ];
+						$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
 					}
 				}
 			} catch ( Exception $e ) {
 				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong, try later !";
+				$this->viewData["msg"] = "Something goes wrong while logout, try later !";
 			}
 			die( json_encode( $this->viewData ) );
 		}
