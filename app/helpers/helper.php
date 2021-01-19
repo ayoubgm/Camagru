@@ -15,6 +15,17 @@
 			return  ( $method == "POST" ) ? true : false;
 		}
 
+		public function		validate_inputs ( $required_inputs, $post_inputs )
+		{
+			$an_input_not_set = false;
+
+			foreach ( $required_inputs as $key => $value ) {
+				if ( $value["REQUIRED"] ) { if ( !array_key_exists( $key, $post_inputs ) ) { $an_input_not_set = true; break; } }
+				if ( !$value["EMPTY"] ) { if ( !isset( $post_inputs[ $key ] ) || empty( $post_inputs[ $key ] ) ) { $an_input_not_set = true; break; } }
+			}
+			return ( $an_input_not_set ) ? false : true;
+		}
+
 		public function		filter_inputs ( $method, $args )
 		{
 			$type = ( $method == "POST" ) ? INPUT_POST : INPUT_GET;
