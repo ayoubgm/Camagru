@@ -299,7 +299,10 @@
 								( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
 								( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
 							) {
-								if ( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) {
+								if (
+									( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) ||
+									( $error = $this->gallery_middleware->validateCoordinatesSticker( $_POST["x"], $_POST["y"] ) )
+								) {
 									$this->viewData["success"] = "false";
 									$this->viewData["msg"] = $error;
 								} else {
