@@ -125,7 +125,7 @@
 							$this->viewData = [ "success" => "false", "msg" => "Failed to create your account !" ];
 						}
 					} else {
-						$this->viewData = ["success" => "false", "msg" => "Couldn't create your account, try later !"];
+						$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
 					}
 				}
 			} catch ( Exception $e ) {
@@ -166,7 +166,7 @@
 							$this->viewData = [ "success" => "false", "msg" => "Failed to reset your password !" ];
 						}
 					} else {
-						$this->viewData = ["success" => "false", "msg" => "Couldn't reset your password, try later !" ];
+						$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
 					}
 				}
 			} catch ( Exception $e ) {
@@ -227,7 +227,7 @@
 							}
 						} else {
 							$this->viewData["success"] = "false";
-							$this->viewData["msg"] = "Couldn't change your password, try later !";
+							$this->viewData["msg"] = "Something is missing !";
 						}
 					}
 				}
