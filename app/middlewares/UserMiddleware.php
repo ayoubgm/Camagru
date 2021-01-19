@@ -72,10 +72,10 @@
 
 		public function					new_password ( $data )
 		{
-			if ( !$this->isRecoveryTokenValid( $data['token'] ) ) {
-				return "The recovery token is invalid or has already expired !";
-			} else if ( !$data['newpassword'] || !$data['confirmation_password'] || !$data['token'] ) {
+			if ( !$data['newpassword'] || !$data['confirmation_password'] || !$data['token'] ) {
 				return "Invalid data provided !";
+			} else if ( !$this->isRecoveryTokenValid( $data['token'] ) ) {
+				return "The recovery token is invalid or has already expired !";
 			} else if ( $error = $this->validatePassword( $data['newpassword'] ) ) {
 				return $error;
 			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {
