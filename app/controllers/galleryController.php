@@ -58,19 +58,27 @@
 				if ( !$this->user_middleware->isSignin( $_SESSION ) ) {
 					$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_inputs( "POST", array(
-							'token' => FILTER_SANITIZE_STRING,
-							'id' => FILTER_SANITIZE_NUMBER_INT
-						))
+					if (
+						(
+							$this->helper->validate_inputs([
+								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'id' => [ "REQUIRED" => true, "EMPTY" => false ]
+							], $_POST )
+						) &&
+						(
+							$_POST = $this->helper->filter_inputs( "POST", array(
+								'token' => FILTER_SANITIZE_STRING,
+								'id' => FILTER_SANITIZE_NUMBER_INT
+							))
+						) &&
+						( $this->user_middleware->validateUserToken( $_POST["token"] ) )
 					) {
-						if ( ( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) && $this->user_middleware->validateUserToken( $_POST["token"] ) ) {
-							if ( ! $this->gallery_middleware->isImageOwnerExist( $_SESSION['userid'], $_POST['id'] ) ) {
-								$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
-							} else if ( $this->gallery_model->deleteImage( $_POST['id'], $_SESSION['userid'] ) ) {
-								$this->viewData = [ "success" => "true", "msg" => "Your image has been deleted successfully !" ];
-							} else {
-								$this->viewData = [ "success" => "true", "msg" => "Failed to delete your image !" ];
-							}
+						if ( ! $this->gallery_middleware->isImageOwnerExist( $_SESSION['userid'], $_POST['id'] ) ) {
+							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];
+						} else if ( $this->gallery_model->deleteImage( $_POST['id'], $_SESSION['userid'] ) ) {
+							$this->viewData = [ "success" => "true", "msg" => "Your image has been deleted successfully !" ];
+						} else {
+							$this->viewData = [ "success" => "true", "msg" => "Failed to delete your image !" ];
 						}
 					} else {
 						$this->viewData = [ "success" => "false", "msg" => "Couldn't delete the image, try later !" ];
