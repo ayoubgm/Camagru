@@ -189,47 +189,41 @@
 				if ( $this->user_middleware->isSignin( $_SESSION ) ) {
 					header("Location: /");
 				} else if ( $error = $this->validateToken( $data ) ) {
-					$this->viewData = [
-						"success" => "false",
-						"msg" => $error
-					];
+					$this->viewData = ["success" => "false","msg" => $error ];
 				} else {
 					$this->viewData["data"][ "token"] = $data[1];
 					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 						if ( $error = $this->user_middleware->validateRecoveryToken( $data[1] ) ) {
-							$this->viewData += [
-								"success" => "false",
-								"msg" => $error
-							];
+							$this->viewData += [ "success" => "false", "msg" => $error ];
 						} else {
 							$this->viewData["success"] = "true";
 						}
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						if ( $_POST = $this->helper->filter_inputs( "POST", array(
-								'token' => FILTER_SANITIZE_STRING,
-								'btn-submit' => FILTER_SANITIZE_STRING,
-								'newpassword' => FILTER_SANITIZE_STRING,
-								'confirmation_password' => FILTER_SANITIZE_STRING
-							))
+						if (
+							(
+								$this->helper->validate_inputs([
+									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'btn-submit' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'newpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'confirmation_password' => [ "REQUIRED" => true, "EMPTY" => false ]
+								], $_POST)
+							) &&
+							(
+								$_POST = $this->helper->filter_inputs( "POST", array(
+									'token' => FILTER_SANITIZE_STRING,
+									'btn-submit' => FILTER_SANITIZE_STRING,
+									'newpassword' => FILTER_SANITIZE_STRING,
+									'confirmation_password' => FILTER_SANITIZE_STRING
+								))
+							)
 						) {
-							if ( isset( $_POST["btn-submit"] ) && !empty( $_POST["btn-submit"] ) ) {
-								unset( $_POST["btn-submit"] );
-								if ( $error = $this->user_middleware->new_password( $_POST ) ) {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => $error
-									];
-								} else if ( $this->user_model->newpassword( array( password_hash($_POST["newpassword"], PASSWORD_BCRYPT), $data[1] ) ) ) {
-									$this->viewData += [
-										"success" => "true",
-										"msg" => "Your password has been changed successfully !"
-									];
-								} else {
-									$this->viewData += [
-										"success" => "false",
-										"msg" => "Failed to change your password !"
-									];
-								}
+							unset( $_POST["btn-submit"] );
+							if ( $error = $this->user_middleware->new_password( $_POST ) ) {
+								$this->viewData += [ "success" => "false", "msg" => $error ];
+							} else if ( $this->user_model->newpassword( array( password_hash($_POST["newpassword"], PASSWORD_BCRYPT), $data[1] ) ) ) {
+								$this->viewData += [ "success" => "true", "msg" => "Your password has been changed successfully !" ];
+							} else {
+								$this->viewData += [ "success" => "false", "msg" => "Failed to change your password !" ];
 							}
 						} else {
 							$this->viewData["success"] = "false";
@@ -252,27 +246,15 @@
 					header("Location: /");
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					if ( $error = $this->validateToken( $data ) ) {
-						$this->viewData = [
-							"success" => "false",
-							"msg" => $error
-						];
+						$this->viewData = [ "success" => "false", "msg" => $error ];
 					} else {
 						$this->viewData[ "data" ] = [ "token" => $data[1] ];
 						if ( $error = $this->user_middleware->validateActivationToken( $data[1] ) ) {
-							$this->viewData += [
-								"success" => "false",
-								"msg" => $error
-							];
+							$this->viewData += [ "success" => "false", "msg" => $error ];
 						} else if ( $this->user_model->activateAccount( array( 'token' => $data[1] ) ) ) {
-							$this->viewData += [
-								"success" => "true",
-								"msg" => "Your account has been activated successfully !"
-							];
+							$this->viewData += [ "success" => "true", "msg" => "Your account has been activated successfully !" ];
 						} else {
-							$this->viewData += [
-								"success" => "false",
-								"msg" => "Failed to activate your account !"
-							];
+							$this->viewData += [ "success" => "false", "msg" => "Failed to activate your account !" ];
 						}
 					}
 				}
