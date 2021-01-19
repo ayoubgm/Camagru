@@ -87,46 +87,49 @@
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					$this->viewData = [ "success" => "true" ];
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_inputs( "POST", array(
-							'btn-signup' => FILTER_SANITIZE_STRING,
-							'firstname' => FILTER_SANITIZE_STRING,
-							'lastname' => FILTER_SANITIZE_STRING,
-							'username' => FILTER_SANITIZE_STRING,
-							'email' => FILTER_SANITIZE_EMAIL,
-							'gender' => FILTER_SANITIZE_STRING,
-							'address' => FILTER_SANITIZE_STRING,
-							'password' => FILTER_SANITIZE_STRING,
-							'confirmation_password' => FILTER_SANITIZE_STRING
-						))
+					if (
+						(
+							$this->helper->validate_inputs([
+								'btn-signup' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'firstname' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'lastname' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'username' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'email' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'gender' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'address' => [ "REQUIRED" => true, "EMPTY" => true ],
+								'password' => [ "REQUIRED" => true, "EMPTY" => false ] ,
+								'confirmation_password' => [ "REQUIRED" => true, "EMPTY" => false ]
+							], $_POST )
+						) &&
+						(
+							$_POST = $this->helper->filter_inputs( "POST", array(
+								'btn-signup' => FILTER_SANITIZE_STRING,
+								'firstname' => FILTER_SANITIZE_STRING,
+								'lastname' => FILTER_SANITIZE_STRING,
+								'username' => FILTER_SANITIZE_STRING,
+								'email' => FILTER_SANITIZE_EMAIL,
+								'gender' => FILTER_SANITIZE_STRING,
+								'address' => FILTER_SANITIZE_STRING,
+								'password' => FILTER_SANITIZE_STRING,
+								'confirmation_password' => FILTER_SANITIZE_STRING
+							))
+						)
 					) {
-						if ( isset( $_POST["btn-signup"] ) && !empty( $_POST["btn-signup"] ) ) {
-							unset( $_POST["btn-signup"] );
-							if ( $error = $this->user_middleware->signup( $_POST ) ) {
-								$this->viewData = [
-									"success" => "false",
-									"msg" => $error
-								];
-							} else if ( $atoken = $this->user_model->save( $_POST ) ) {
-								$this->helper->sendMail("Confirmation mail", strtolower( $_POST["email"] ), $atoken);
-								$this->viewData = [
-									"success" => "true",
-									"msg" => "Successful registration, you will receive an email for activation account !"
-								];
-							} else {
-								$this->viewData = [
-									"success" => "false",
-									"msg" => "Failed to create your account !"
-								];
-							}
+						unset( $_POST["btn-signup"] );
+						if ( $error = $this->user_middleware->signup( $_POST ) ) {
+							$this->viewData = [ "success" => "false", "msg" => $error ];
+						} else if ( $atoken = $this->user_model->save( $_POST ) ) {
+							$this->helper->sendMail("Confirmation mail", strtolower( $_POST["email"] ), $atoken);
+							$this->viewData = [ "success" => "true", "msg" => "Successful registration, you will receive an email for activation account !" ];
+						} else {
+							$this->viewData = [ "success" => "false", "msg" => "Failed to create your account !" ];
 						}
 					} else {
-						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Couldn't create your account, try later !";
+						$this->viewData = ["success" => "false", "msg" => "Couldn't create your account, try later !"];
 					}
 				}
 			} catch ( Exception $e ) {
-				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong while create your account, try later !";
+				$this->viewData = [ "success" => "false", "msg" => "Something goes wrong while create your account, try later !" ];
 			}
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'signup', $this->viewData)->render();
 		}
@@ -140,38 +143,34 @@
 				} else if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 					$this->viewData = [ "success" => "true" ];					
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-					if ( $_POST = $this->helper->filter_inputs( "POST", array(
-							'btn-reset' => FILTER_SANITIZE_STRING,
-							'email' => FILTER_SANITIZE_EMAIL
-						))
+					if (
+						(
+							$this->helper->validate_inputs([
+								'btn-reset' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'email' => [ "REQUIRED" => true, "EMPTY" => false ],
+							], $_POST )
+						) &&
+						(
+							$_POST = $this->helper->filter_inputs( "POST", array(
+								'btn-reset' => FILTER_SANITIZE_STRING,
+								'email' => FILTER_SANITIZE_EMAIL
+							))
+						)
 					) {
-						if ( isset( $_POST["btn-reset"] ) && !empty( $_POST["btn-reset"] ) ) {
-							if ( $error = $this->user_middleware->reset_password( $_POST["email"] ) ) {
-								$this->viewData = [
-									"success" => "false",
-									"msg" => $error
-								];
-							} else if ( $rToken = $this->user_model->resetpassword( $_POST["email"] ) ) {
-								$this->helper->sendMail("Reset password", strtolower( $_POST["email"] ), $rToken);
-								$this->viewData = [
-									"success" => "true",
-									"msg" => "A direct link for reset password has been sent successfully !"
-								];
-							} else {
-								$this->viewData = [
-									"success" => "false",
-									"msg" => "Failed to reset your password !"
-								];
-							}
+						if ( $error = $this->user_middleware->reset_password( $_POST["email"] ) ) {
+							$this->viewData = [ "success" => "false", "msg" => $error ];
+						} else if ( $rToken = $this->user_model->resetpassword( $_POST["email"] ) ) {
+							$this->helper->sendMail("Reset password", strtolower( $_POST["email"] ), $rToken);
+							$this->viewData = [ "success" => "true", "msg" => "A direct link for reset password has been sent successfully !" ];
+						} else {
+							$this->viewData = [ "success" => "false", "msg" => "Failed to reset your password !" ];
 						}
 					} else {
-						$this->viewData["success"] = "false";
-						$this->viewData["msg"] = "Couldn't reset your password, try later !";
+						$this->viewData = ["success" => "false", "msg" => "Couldn't reset your password, try later !" ];
 					}
 				}
 			} catch ( Exception $e ) {
-				$this->viewData["success"] = "false";
-				$this->viewData["msg"] = "Something goes wrong while reseting your password, try later !";
+				$this->viewData = ["success" => "false", "msg" => "Something goes wrong while reseting your password, try later !"];
 			}
 			$this->call_view('home' . DIRECTORY_SEPARATOR .'reset_password', $this->viewData)->render();
 		}
