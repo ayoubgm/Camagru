@@ -284,47 +284,60 @@
 					if ( $this->helper->isRequestGET( $_SERVER["REQUEST_METHOD"] ) ) {
 						$this->viewData["success"] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
-						if (
-							( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
-							( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
-							( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
+						if ( $_POST = $this->helper->filter_inputs( "POST", array(
+								'token' => FILTER_SANITIZE_STRING,
+								'btn-save' => FILTER_SANITIZE_STRING,
+								'dataimage' => FILTER_SANITIZE_STRING,
+								'sticker' => FILTER_SANITIZE_URL,
+								'x' => FILTER_SANITIZE_NUMBER_INT,
+								'y' => FILTER_SANITIZE_NUMBER_INT,
+								'description' => FILTER_SANITIZE_STRING
+							))
 						) {
-							if ( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) {
-								$this->viewData["success"] = "false";
-								$this->viewData["msg"] = $error;
-							} else {
-								$imgCamBase64 = str_replace('data:image/png;base64', '', $_POST["dataimage"]);
-								$finalImageCam = str_replace(' ', '+', $imgCamBase64);
-								$fileData = base64_decode( $finalImageCam );
-								$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
-								file_put_contents( $pathFile, $fileData );
-								$srcPath = $_POST["sticker"];
-								$destPath = self::transformPathFileToUrl( $pathFile );
-								if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
-									if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
-									$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
-									if ( $this->gallery_model->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
-										$this->viewData["success"] = "true";
-										$this->viewData["msg"] = "Image has been saved successfully !";
-										$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
-										$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
-									} else {
-										$this->viewData["success"] = "false";
-										$this->viewData["msg"] = "Failed to create final image !";
-										$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
-										$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
-									}
-								} else {
-									if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
+							if (
+								( isset( $_POST["token"] ) && !empty( $_POST["token"] ) ) &&
+								( $this->user_middleware->validateUserToken( $_POST["token"] ) ) &&
+								( isset( $_POST["btn-save"] ) && !empty( $_POST["btn-save"] ) ) 
+							) {
+								if ( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) {
 									$this->viewData["success"] = "false";
-									$this->viewData["msg"] = "Something goes wrong while create final image try later !";
+									$this->viewData["msg"] = $error;
+								} else {
+									$imgCamBase64 = str_replace('data:image/png;base64', '', $_POST["dataimage"]);
+									$finalImageCam = str_replace(' ', '+', $imgCamBase64);
+									$fileData = base64_decode( $finalImageCam );
+									$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
+									file_put_contents( $pathFile, $fileData );
+									$srcPath = $_POST["sticker"];
+									$destPath = self::transformPathFileToUrl( $pathFile );
+									if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
+										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
+										$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
+										if ( $this->gallery_model->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
+											$this->viewData["success"] = "true";
+											$this->viewData["msg"] = "Image has been saved successfully !";
+											$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
+											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
+										} else {
+											$this->viewData["success"] = "false";
+											$this->viewData["msg"] = "Failed to create final image !";
+											$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
+											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
+										}
+									} else {
+										if ( isset( $pathFile ) && file_exists( $pathFile ) ) { unlink( $pathFile ); }
+										$this->viewData["success"] = "false";
+										$this->viewData["msg"] = "Something goes wrong while create final image try later !";
+									}
 								}
 							}
+						} else {
+							$this->viewData = [ "success" => "false", "msg" => "Couldn't edit the picture, try later !" ];
 						}
 					}
 				}
 			} catch ( Exception $e ) {
-				if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
+				if ( isset( $pathFile ) && file_exists( $pathFile ) ) { unlink( $pathFile ); }
 				$this->viewData["success"] = "false";
 				$this->viewData["msg"] = "Something goes wrong while editing your picture, try later !";
 			}
