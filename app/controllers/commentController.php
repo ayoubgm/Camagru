@@ -19,37 +19,40 @@
 					$this->viewData = [ "success" => "false", "msg" => "You need to login first !" ];
 				} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 					if (
-						(
-							$this->helper->validate_inputs([
-								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
-								'id' => [ "REQUIRED" => true, "EMPTY" => false ],
-								'comment' => [ "REQUIRED" => true, "EMPTY" => false ]
-							], $_POST )
-						) &&
-						(
-							$_POST = $this->helper->filter_inputs( "POST", array(
-								'token' => FILTER_SANITIZE_STRING,
-								'id' => FILTER_SANITIZE_NUMBER_INT,
-								'comment' => FILTER_SANITIZE_STRING
-							))
-						) &&
-						$this->user_middleware->validateUserToken( $_POST["token"] )
+						$this->helper->validate_inputs([
+							'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+							'id' => [ "REQUIRED" => true, "EMPTY" => false ],
+							'comment' => [ "REQUIRED" => true, "EMPTY" => false ]
+						], $_POST )
 					) {
-						if ( !$this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
-							$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
-						} else if ( $error = $this->comment_middleware->add( $_POST['comment'] ) ) {
-							$this->viewData = [ "success" => "false", "msg" => $error ];
-						} else if ( $id = $this->comment_model->save([ "content" => $_POST['comment'], "userid" => $_SESSION['userid'], "imgid" => $_POST["id"] ]) ) {
-							$this->viewData = [
-								"success" => "true",
-								"data" => $this->comment_model->getComment( $id ),
-								"msg" => "Added successfully !"
-							];
+						if (
+							(
+								$_POST = $this->helper->filter_inputs( "POST", array(
+									'token' => FILTER_SANITIZE_STRING,
+									'id' => FILTER_SANITIZE_NUMBER_INT,
+									'comment' => FILTER_SANITIZE_STRING
+								))
+							) &&
+							$this->user_middleware->validateUserToken( $_POST["token"] )
+						) {
+							if ( !$this->gallery_middleware->isImageExist( $_POST["id"] ) ) {
+								$this->viewData = [ "success" => "false", "msg" => "The image is not found !" ];	
+							} else if ( $error = $this->comment_middleware->add( $_POST['comment'] ) ) {
+								$this->viewData = [ "success" => "false", "msg" => $error ];
+							} else if ( $id = $this->comment_model->save([ "content" => $_POST['comment'], "userid" => $_SESSION['userid'], "imgid" => $_POST["id"] ]) ) {
+								$this->viewData = [
+									"success" => "true",
+									"data" => $this->comment_model->getComment( $id ),
+									"msg" => "Added successfully !"
+								];
+							} else {
+								$this->viewData = [ "success" => "false", "msg" => "Failed to save the comment !" ];
+							}
 						} else {
-							$this->viewData = [ "success" => "false", "msg" => "Failed to save the comment !" ];
+							$this->viewData = [ "success" => "false", "msg" => "Couldn't add the comment, try later !" ];
 						}
 					} else {
-						$this->viewData = [ "success" => "false", "msg" => "Couldn't add the comment, try later !" ];
+						$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
 					}
 				}
 			} catch ( Exception $e ) {
@@ -111,9 +114,9 @@
 						} else {
 							$this->viewData = [ "success" => "false", "msg" => "Failed to delete the comment successfully !" ];
 						}
+					} else {
+						$this->viewData = [ "success" => "false", "msg" => "Couldn't delete the comment, try later !" ];
 					}
-				} else {
-					$this->viewData = [ "success" => "false", "msg" => "Couldn't delete the comment, try later !" ];
 				}
 			} catch ( Exception $e ) {
 				$this->viewData = [ "success" => "false", "msg" => "Something is wrong while delete the comment, try later !" ];

@@ -57,49 +57,53 @@
 						$this->viewData[ "success" ] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 						if (
-							(
-								$this->helper->validate_inputs([
-									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'btn-edit' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'firstname' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'lastname' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'username' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'email' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'gender' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'address' => [ "REQUIRED" => true, "EMPTY" => true ],
-								], $_POST )
-							) &&
-							( 
-								$_POST = $this->helper->filter_inputs( "POST", array(
-									'token' => FILTER_SANITIZE_STRING,
-									'btn-edit' => FILTER_SANITIZE_STRING,
-									'firstname' => FILTER_SANITIZE_STRING,
-									'lastname' => FILTER_SANITIZE_STRING,
-									'username' => FILTER_SANITIZE_STRING,
-									'email' => FILTER_SANITIZE_EMAIL,
-									'gender' => FILTER_SANITIZE_STRING,
-									'address' => FILTER_SANITIZE_STRING
-								))
-							) &&
-							( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+							$this->helper->validate_inputs([
+								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'btn-edit' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'firstname' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'lastname' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'username' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'email' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'gender' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'address' => [ "REQUIRED" => true, "EMPTY" => true ],
+							], $_POST )
 						) {
-							$oldData = $this->user_model->findUserById( $_SESSION["userid"] );
-							unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
-							unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
-							$editedData = array_replace_recursive( $oldData, $_POST );
-							if ( $error = $this->user_middleware->edit( $_SESSION["userid"], $editedData ) ) {
-								$this->viewData += [ "success" => "false", "msg" => $error ];
-								$this->viewData["data"]["userData"] = $editedData;
-							} else if ( $this->user_model->edit( $_SESSION["userid"], $editedData ) ) {
-								$this->viewData += [ "success" => "true", "msg" => "Your informations has been edited successfully !" ];
-								$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
+							if (
+								( 
+									$_POST = $this->helper->filter_inputs( "POST", array(
+										'token' => FILTER_SANITIZE_STRING,
+										'btn-edit' => FILTER_SANITIZE_STRING,
+										'firstname' => FILTER_SANITIZE_STRING,
+										'lastname' => FILTER_SANITIZE_STRING,
+										'username' => FILTER_SANITIZE_STRING,
+										'email' => FILTER_SANITIZE_EMAIL,
+										'gender' => FILTER_SANITIZE_STRING,
+										'address' => FILTER_SANITIZE_STRING
+									))
+								) &&
+								( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+							) {
+								$oldData = $this->user_model->findUserById( $_SESSION["userid"] );
+								unset( $_POST["btn-edit"] ); unset( $_POST["token"] );
+								unset( $oldData["id"] ); unset( $oldData["createdat"] ); unset( $oldData["notifEmail"] );
+								$editedData = array_replace_recursive( $oldData, $_POST );
+								if ( $error = $this->user_middleware->edit( $_SESSION["userid"], $editedData ) ) {
+									$this->viewData += [ "success" => "false", "msg" => $error ];
+									$this->viewData["data"]["userData"] = $editedData;
+								} else if ( $this->user_model->edit( $_SESSION["userid"], $editedData ) ) {
+									$this->viewData += [ "success" => "true", "msg" => "Your informations has been edited successfully !" ];
+									$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
+								} else {
+									$this->viewData += [ "success" => "false", "msg" => "Failed to change your informations !" ];
+									$this->viewData["data"]["userData"] = $editedData;
+								}
 							} else {
-								$this->viewData += [ "success" => "false", "msg" => "Failed to change your informations !" ];
-								$this->viewData["data"]["userData"] = $editedData;
+								$this->viewData["success"] = "false";
+								$this->viewData["msg"] = "Couldn't update your informations !";
 							}
 						} else {
 							$this->viewData["success"] = "false";
-							$this->viewData["msg"] = "Couldn't update your informations !";
+							$this->viewData["msg"] = "Something is missing !";
 						}
 					}
 				}
@@ -147,37 +151,40 @@
 						$this->viewData["success"] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 						if (
-							(
-								$this->helper->validate_inputs([
-									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'btn-submit' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'oldpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'newpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'confirmation_password' => [ "REQUIRED" => true, "EMPTY" => false ],
-								], $_POST )
-							) &&
-							(
-								$_POST = $this->helper->filter_inputs( "POST", array (
-									'token' => FILTER_SANITIZE_STRING,
-									'btn-submit' => FILTER_SANITIZE_STRING,
-									'oldpassword' => FILTER_SANITIZE_STRING,
-									'newpassword' => FILTER_SANITIZE_STRING,
-									'confirmation_password' => FILTER_SANITIZE_STRING
-								))
-							) &&
-							( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+							$this->helper->validate_inputs([
+								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'btn-submit' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'oldpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'newpassword' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'confirmation_password' => [ "REQUIRED" => true, "EMPTY" => false ],
+							], $_POST )
 						) {
-							unset( $_POST["btn-submit"] );
-							if ( $error = $this->user_middleware->change_password( $_SESSION["userid"], $_POST ) ) {
-								$this->viewData += [ "success" => "false", "msg" => $error ];
-							} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_BCRYPT) ) ) {
-								$this->viewData += [ "success" => "true", "msg" => "Your password has been changed successfully !" ];
+							if (
+								(
+									$_POST = $this->helper->filter_inputs( "POST", array (
+										'token' => FILTER_SANITIZE_STRING,
+										'btn-submit' => FILTER_SANITIZE_STRING,
+										'oldpassword' => FILTER_SANITIZE_STRING,
+										'newpassword' => FILTER_SANITIZE_STRING,
+										'confirmation_password' => FILTER_SANITIZE_STRING
+									))
+								) &&
+								( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+							) {
+								unset( $_POST["btn-submit"] );
+								if ( $error = $this->user_middleware->change_password( $_SESSION["userid"], $_POST ) ) {
+									$this->viewData += [ "success" => "false", "msg" => $error ];
+								} else if ( $this->user_model->change_password( $_SESSION["userid"], password_hash($_POST["newpassword"], PASSWORD_BCRYPT) ) ) {
+									$this->viewData += [ "success" => "true", "msg" => "Your password has been changed successfully !" ];
+								} else {
+									$this->viewData += [ "success" => "false", "msg" => "Failed to change your password !" ];
+								}
 							} else {
-								$this->viewData += [ "success" => "false", "msg" => "Failed to change your password !" ];
+								$this->viewData["success"] = "false";
+								$this->viewData["msg"] = "Couldn't change your password !";
 							}
 						} else {
-							$this->viewData["success"] = "false";
-							$this->viewData["msg"] = "Couldn't change your password !";
+							$this->viewData += [ "success" => "false", "msg" => "Something is missing !" ];
 						}
 					}
 				}
@@ -208,31 +215,35 @@
 							$this->viewData["success"] = "true";
 						} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 							if (
-								(
-									$this->helper->validate_inputs([
-										'token' => [ "REQUIRED" => true, "EMPTY" => false ],
-										'btn-change-preference' => [ "REQUIRED" => true, "EMPTY" => false ]
-									], $_POST )
-								) &&
-								(
-									$_POST = $this->helper->filter_inputs( "POST", array(
-										'token' => FILTER_SANITIZE_STRING,
-										'btn-change-preference' => FILTER_SANITIZE_STRING
-									))
-								) &&
-								( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+								$this->helper->validate_inputs([
+									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+									'btn-change-preference' => [ "REQUIRED" => true, "EMPTY" => false ]
+								], $_POST )
 							) {
-								unset( $_POST["btn-change-preference"] );
-								if ( $this->user_model->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
-									$this->viewData["success"] = "true";
-									$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
+								if (
+									(
+										$_POST = $this->helper->filter_inputs( "POST", array(
+											'token' => FILTER_SANITIZE_STRING,
+											'btn-change-preference' => FILTER_SANITIZE_STRING
+										))
+									) &&
+									( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+								) {
+									unset( $_POST["btn-change-preference"] );
+									if ( $this->user_model->change_preference_email_notifs( $_SESSION["userid"], $data[1] ) ) {
+										$this->viewData["success"] = "true";
+										$this->viewData["data"]["userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
+									} else {
+										$this->viewData["success"] = "false";
+										$this->viewData["msg"] = "Failed to change your notifications preference !";
+									}
 								} else {
 									$this->viewData["success"] = "false";
-									$this->viewData["msg"] = "Failed to change your notifications preference !";
+									$this->viewData["msg"] = "Couldn't ! change your notifications preference !";
 								}
 							} else {
 								$this->viewData["success"] = "false";
-								$this->viewData["msg"] = "Couldn't ! change your notifications preference !";
+								$this->viewData["msg"] = "Something is missing !";
 							}
 						}
 					} else {
@@ -289,66 +300,69 @@
 						$this->viewData["success"] = "true";
 					} else if ( $this->helper->isRequestPOST( $_SERVER["REQUEST_METHOD"] ) ) {
 						if (
-							(
-								$this->helper->validate_inputs([
-									'token' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'btn-save' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'dataimage' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'sticker' => [ "REQUIRED" => true, "EMPTY" => false ],
-									'x' => [ "REQUIRED" => true, "EMPTY" => true ],
-									'y' => [ "REQUIRED" => true, "EMPTY" => true ],
-									'description' => [ "REQUIRED" => true, "EMPTY" => false ],
-								], $_POST)
-							) &&
-							(
-								$_POST = $this->helper->filter_inputs( "POST", array(
-									'token' => FILTER_SANITIZE_STRING,
-									'btn-save' => FILTER_SANITIZE_STRING,
-									'dataimage' => FILTER_SANITIZE_STRING,
-									'sticker' => FILTER_SANITIZE_URL,
-									'x' => FILTER_SANITIZE_NUMBER_INT,
-									'y' => FILTER_SANITIZE_NUMBER_INT,
-									'description' => FILTER_SANITIZE_STRING
-								))
-							) &&
-							( $this->user_middleware->validateUserToken( $_POST["token"] ) )
+							$this->helper->validate_inputs([
+								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'btn-save' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'dataimage' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'sticker' => [ "REQUIRED" => true, "EMPTY" => false ],
+								'x' => [ "REQUIRED" => true, "EMPTY" => true ],
+								'y' => [ "REQUIRED" => true, "EMPTY" => true ],
+								'description' => [ "REQUIRED" => true, "EMPTY" => false ],
+							], $_POST)
 						) {
 							if (
-								( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) ||
-								( $error = $this->gallery_middleware->validateCoordinatesSticker( $_POST["x"], $_POST["y"] ) )
+								(
+									$_POST = $this->helper->filter_inputs( "POST", array(
+										'token' => FILTER_SANITIZE_STRING,
+										'btn-save' => FILTER_SANITIZE_STRING,
+										'dataimage' => FILTER_SANITIZE_STRING,
+										'sticker' => FILTER_SANITIZE_URL,
+										'x' => FILTER_SANITIZE_NUMBER_INT,
+										'y' => FILTER_SANITIZE_NUMBER_INT,
+										'description' => FILTER_SANITIZE_STRING
+									))
+								) &&
+								( $this->user_middleware->validateUserToken( $_POST["token"] ) )
 							) {
-								$this->viewData["success"] = "false";
-								$this->viewData["msg"] = $error;
-							} else {
-								$imgCamBase64 = str_replace('data:image/png;base64', '', $_POST["dataimage"]);
-								$finalImageCam = str_replace(' ', '+', $imgCamBase64);
-								$fileData = base64_decode( $finalImageCam );
-								$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
-								file_put_contents( $pathFile, $fileData );
-								$srcPath = $_POST["sticker"];
-								$destPath = self::transformPathFileToUrl( $pathFile );
-								if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
-									if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
-									$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
-									if ( $this->gallery_model->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
-										$this->viewData["success"] = "true";
-										$this->viewData["msg"] = "Image has been saved successfully !";
-										$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
-										$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
-									} else {
-										$this->viewData["success"] = "false";
-										$this->viewData["msg"] = "Failed to create final image !";
-										$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
-										$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
-									}
-								} else {
-									if ( isset( $pathFile ) && file_exists( $pathFile ) ) { unlink( $pathFile ); }
+								if (
+									( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) ||
+									( $error = $this->gallery_middleware->validateCoordinatesSticker( $_POST["x"], $_POST["y"] ) )
+								) {
 									$this->viewData["success"] = "false";
-									$this->viewData["msg"] = "Something goes wrong while create final image !";
+									$this->viewData["msg"] = $error;
+								} else {
+									$imgCamBase64 = str_replace('data:image/png;base64', '', $_POST["dataimage"]);
+									$finalImageCam = str_replace(' ', '+', $imgCamBase64);
+									$fileData = base64_decode( $finalImageCam );
+									$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
+									file_put_contents( $pathFile, $fileData );
+									$srcPath = $_POST["sticker"];
+									$destPath = self::transformPathFileToUrl( $pathFile );
+									if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
+										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
+										$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
+										if ( $this->gallery_model->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
+											$this->viewData["success"] = "true";
+											$this->viewData["msg"] = "Image has been saved successfully !";
+											$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
+											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
+										} else {
+											$this->viewData["success"] = "false";
+											$this->viewData["msg"] = "Failed to create final image !";
+											$this->viewData["data"]["gallery"] = $this->gallery_model->getAllEditedImages();
+											$this->viewData["data"]["userGallery"] = $this->gallery_model->userGallery( $_SESSION["userid"] );
+										}
+									} else {
+										if ( isset( $pathFile ) && file_exists( $pathFile ) ) { unlink( $pathFile ); }
+										$this->viewData["success"] = "false";
+										$this->viewData["msg"] = "Something goes wrong while create final image !";
+									}
 								}
+							} else {
+								$this->viewData = [ "success" => "false", "msg" => "Couldn't edit your picture !" ];
 							}
 						} else {
-							$this->viewData = [ "success" => "false", "msg" => "Couldn't edit your picture !" ];
+							$this->viewData = [ "success" => "false", "msg" => "Something is missing !" ];
 						}
 					}
 				}
