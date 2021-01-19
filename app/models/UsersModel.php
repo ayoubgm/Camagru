@@ -56,41 +56,46 @@
 				password_hash($data['password'], PASSWORD_BCRYPT),
 				$aToken
 			);
-			if ( $this->query( 'INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?) ', $newUser ) ) {
+			if ( $this->query( "INSERT INTO users (firstname, lastname, username, email, gender, `address`, `password`, activationToken) VALUES (?,?,?,?,?,?,?,?) ", $newUser ) ) {
 				return $aToken;
 			}
 		}
 
 		public function				activateAccount ( $data )
 		{
-			return $this->query( 'UPDATE users SET activationToken = NULL WHERE activationToken = ?', [ $data['token'] ] );
+			return $this->query( "UPDATE users SET activationToken = NULL WHERE activationToken = ?", [ $data["token"] ] );
 		}
 
 		public function				resetpassword ( $email )
 		{
 			$rToken = base64_encode( strtolower($email) . date("Y-m-d H:i:s") );
-			if ( $this->query( 'UPDATE users SET recoveryToken = ? WHERE email = ?', [ $rToken, $email ] ) ) {
+			if ( $this->query( "UPDATE users SET recoveryToken = ? WHERE email = ?", [ $rToken, $email ] ) ) {
 				return $rToken;
 			}
 		}
 		
 		public function				newpassword ( $data )
 		{
-			return $this->query( 'UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?', $data );
+			return $this->query( "UPDATE users SET `password` = ?, recoveryToken = NULL WHERE recoveryToken = ?", $data );
 		}
 
 		public function				edit ( $userID, $editedData )
 		{
 			$editedData['id'] = $userID;
 			return $this->query(
-				' UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?',
+				"UPDATE `users` SET firstname = ?, lastname = ?, username = ?, email = ?, gender = ?, `address` = ? WHERE id = ?",
 				array_map( 'strtolower', array_values($editedData) )
 			);
 		}
 
+		public function				change_password ( $userID, $newpassword )
+		{
+			return $this->query("UPDATE `users` set `password` = ? WHERE id = ? ", array( $newpassword, $userID ));
+		}
+
 		public function				change_preference_email_notifs ( $userid, $value )
 		{
-			return $this->query( 'UPDATE users SET notifEmail = ? WHERE id = ?', [ $value, $userid ] );
+			return $this->query( "UPDATE users SET notifEmail = ? WHERE id = ?", [ $value, $userid ] );
 		}
 		
 	}
