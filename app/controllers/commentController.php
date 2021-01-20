@@ -40,6 +40,10 @@
 							} else if ( $error = $this->comment_middleware->add( $_POST['comment'] ) ) {
 								$this->viewData = [ "success" => "false", "msg" => $error ];
 							} else if ( $id = $this->comment_model->save([ "content" => $_POST['comment'], "userid" => $_SESSION['userid'], "imgid" => $_POST["id"] ]) ) {
+								$authorData = $this->gallery_model->getImageDetails( $_POST["id"] );
+								if ( $authorData[0]["notifEmail"] ) {
+									$this->helper->sendMail("New comment", $authorData[0]["email"] );
+								}
 								$this->viewData = [
 									"success" => "true",
 									"data" => $this->comment_model->getComment( $id ),
