@@ -258,7 +258,7 @@
 			$this->call_view( "user" . DIRECTORY_SEPARATOR . "notifications_preferences", $this->viewData)->render();
 		}
 
-		static private function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $ydest )
+		function 				makeMixedImage( $userData, $destPath, $srcPath, $xdest, $ydest )
 		{
 			$dest = imagecreatefrompng( $destPath ); 
 			$src = imagecreatefrompng( $srcPath);
@@ -277,7 +277,7 @@
 			}
 		}
 
-		static private function				transformPathFileToUrl ( $path )
+		function				transformPathFileToUrl ( $path )
 		{
 			if ( isset( $path ) ) {
 				return str_replace('\\\\', '//', str_replace('\\', '/', str_replace( PUBLIC_DIR, PUBLIC_FOLDER . '/', $path )) );
@@ -325,6 +325,7 @@
 								( $this->user_middleware->validateUserToken( $_POST["token"] ) )
 							) {
 								if (
+									( $error = $this->gallery_middleware->validateSticker( $_POST["sticker"] ) ) ||
 									( $error = $this->gallery_middleware->validateDescription( $_POST["description"] ) ) ||
 									( $error = $this->gallery_middleware->validateCoordinatesSticker( $_POST["x"], $_POST["y"] ) )
 								) {
@@ -337,10 +338,10 @@
 									$pathFile = EDITEDPICS.'IMG'.'_'.time().'_'.$_SESSION['userid'].'_'.$_SESSION['username'].'.png';
 									file_put_contents( $pathFile, $fileData );
 									$srcPath = $_POST["sticker"];
-									$destPath = self::transformPathFileToUrl( $pathFile );
-									if ( $srcFinaleImg = self::makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
+									$destPath = $this->transformPathFileToUrl( $pathFile );
+									if ( $srcFinaleImg = $this->makeMixedImage( $this->viewData["data"]["userData"], $destPath, $srcPath, intval($_POST["x"]), intval($_POST["y"]) ) ) {
 										if ( file_exists( $pathFile ) ) { unlink( $pathFile ); }
-										$pathFinaleImg = self::transformPathFileToUrl( $srcFinaleImg );
+										$pathFinaleImg = $this->transformPathFileToUrl( $srcFinaleImg );
 										if ( $this->gallery_model->addImage([ 'id' => $_SESSION['userid'], 'src' => $pathFinaleImg, 'description' => $_POST['description'] ]) ) {
 											$this->viewData["success"] = "true";
 											$this->viewData["msg"] = "Image has been saved successfully !";
