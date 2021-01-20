@@ -40,7 +40,7 @@ const			createComment = ( data, connectedUserId ) => {
 	Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
 	Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
 	Subdiv2.classList.add("col-lg-11");
-	if ( connectedUserId.toString() == data.userid ) {
+	if ( connectedUserId && connectedUserId.toString() == data.userid ) {
 		htmlDiv2 += "<span id='btn-delete-com-" + data.id + "' style='float: right; color: red; cursor: pointer;' onclick='deleteComment( "+data.imgid+", "+data.id+", "+connectedUserId+" )'>x</span>";
 	}
 	htmlDiv2 += "<a href='/user/profile/username/"+data.username+"' style='text-decoration: none; font-weight: bold; font-size: 13pt; color: rgb(90, 90, 90)'>"+data.username+"</a></br>";
@@ -64,11 +64,10 @@ const			likeOrUnlike = ( id ) => {
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
-			const result = JSON.parse( xhr.response );
-			
-			if ( result.success == "false" ) {
-				if ( result.msg == "You need to login first !" ) { location.href = "/signin"; }
-				else { alertMessage( result.msg, "error" ); HideAlert(); }
+			const data = JSON.parse( xhr.response );
+			if ( data.success == "false" ) {
+				if ( data.msg == "You need to login first !" ) { location.href = "/signin"; }
+				else { alertMessage( data.msg, "error" ); HideAlert(); }
 			} else {
 				if ( srcBtnLike.includes( "icone-like-inactive.png" ) ) {
 					document.getElementById("countLikes-"+imgid).innerHTML = countLikes + 1,
