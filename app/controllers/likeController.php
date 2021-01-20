@@ -28,7 +28,7 @@
 						(
 							$_POST = $this->helper->filter_inputs( "POST", array(
 								'token' => FILTER_SANITIZE_STRING,
-								'id' => FILTER_SANITIZE_STRING
+								'id' => FILTER_SANITIZE_NUMBER_INT
 							))
 						) &&
 						( $this->user_middleware->validateUserToken( $_POST["token"] ) )
