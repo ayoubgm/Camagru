@@ -45,7 +45,8 @@ const 			validateLastName = ( lastname ) => {
 }
 // Validate lastname by run some regex
 const 			validateUsername = ( username ) => {
-    if ( !/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-zA-Z0-9._-]+(?<![-_.])$/.test( username.value ) ) {
+    if (username.value.length < 3 || username.value.length > 20 || !/^[a-zA-Z]+(([-_.]?[a-zA-Z0-9])?)+$/.test(username.value)){
+    // if ( !/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-zA-Z0-9._-]+(?<![-_.])$/.test( username.value ) ) {
         setError(username, "The username should contain between 3 and 20 letters or numbers ( -, _ or . ) !");
         return false;
     } else {
