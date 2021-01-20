@@ -42,7 +42,7 @@
 			}
 		}
 
-		public function 	sendMail ( $subject, $to, $token )
+		public function 	sendMail ( $subject, $to, $token = null )
 		{
 			$headers = 'Content-type: text/html;';
 			$headers .= 'From: admin'."\r\n".
@@ -60,6 +60,10 @@
 					$message .= "<p>Its seems that your request a reset password link, you can change your password with the link below: </p></br>";
 					$message .= "<p><a href='" . SERVER . "/new_password/token/" . $token."'>Change your password</a></p>";
 				break;
+				case "New comment":
+					$message = "<span>Hello, </span>";
+					$message .= "<p>Its seems a picture that you already post it, have a new comment check the notifications on the plateforme</p>";
+					$message .= "<p><a href='" . SERVER . "'>Home</a></p>";
 			}
 			$message .= '</body></html>';
 			mail($to, $subject, $message, $headers);
