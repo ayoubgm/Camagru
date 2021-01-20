@@ -48,7 +48,7 @@
 								'token' => [ "REQUIRED" => true, "EMPTY" => false ],
 								'userid' => [ "REQUIRED" => true, "EMPTY" => false ],
 								'notifid' => [ "REQUIRED" => true, "EMPTY" => false ]
-							], $_GET)
+							], $_POST)
 						) &&
 						(
 							$_POST = $this->helper->filter_inputs( "POST", array(
