@@ -102,7 +102,7 @@
 						</div>
 						<hr/>
 						<div id="row" class="p-2">
-							<canvas id="canvas" width="640" height="480" name="image" class="img-fluid"></canvas>	
+							<canvas id="canvas" width="640" height="480" class="img-fluid"></canvas>	
 							<canvas id="canvas-webcam" width="640" height="480" name="image" hidden></canvas>
 						</div>
 						<div id="area-description" class="row">
@@ -131,7 +131,7 @@
 		// with getUserMedia as it would overwrite existing properties.
 		// Here, we will just add the getUserMedia property if it's missing.
 		if (navigator.mediaDevices.getUserMedia === undefined) {
-			navigator.mediaDevices.getUserMedia = function(constraints) {
+			navigator.mediaDevices.getUserMedia = (constraints) => {
 				// First get ahold of the legacy getUserMedia, if present
 				var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 				
@@ -146,8 +146,8 @@
 				});
 			}
 		}
-		navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-		.then(function(stream) {
+		navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+		.then( (stream) => {
 			var video = document.querySelector('video');
 			// Older browsers may not have srcObject
 			if ("srcObject" in video) {
@@ -156,11 +156,11 @@
 				// Avoid using this in new browsers, as it is going away.
 				video.src = window.URL.createObjectURL(stream);
 			}
-			video.onloadedmetadata = function(e) {
+			video.onloadedmetadata = (e) => {
 				video.play();
 			};
 		})
-		.catch(function(err) {
+		.catch( (err) => {
 			console.log(err.name + ": " + err.message);
 		});
 	</script>
