@@ -33,7 +33,20 @@
 				WHERE userid = ?
 				ORDER BY createdat DESC
 				LIMIT '.$depart.','.$imagePerPage;
-			if ( $stt = $this->query( $query, [ strtolower( $id ) ] ) ) {
+			if ( $stt = $this->query( $query, [ $id ] ) ) {
+				return $stt->fetchAll(PDO::FETCH_ASSOC);
+			}
+		}
+
+		public function				getImageDetails ( $id )
+		{
+			$query = '
+				SELECT u.email, u.notifEmail
+				FROM `gallery` g INNER JOIN `users` u
+				ON g.userid = u.id
+				WHERE g.id = ?
+			';
+			if ( $stt = $this->query( $query, [ $id ] ) ) {
 				return $stt->fetchAll(PDO::FETCH_ASSOC);
 			}
 		}
