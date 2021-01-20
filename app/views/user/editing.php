@@ -33,7 +33,7 @@
 				<!-- Main section -->
 				<div id="main-section" class="col-lg-8 row d-flex justify-content-start">
 						<div id="video-area" class="col-lg-8">
-							<video autoplay="true" id="videoElement"></video>
+							<video muted autoplay="true" id="videoElement"></video>
 							<input class="btn btn-danger w-50 float-left" type="button" value="Capture" name="btn-capture" id="btn-capture" disabled/>
 							<input id="fileInput" accept="image/png,image/jpg,image/jpeg" class="btn btn-warning w-50 float-right text-white" type="file" value="Upload" disabled/>
 							<div class="text-center mt-5 pt-2" id="area-msg" style="font-weight: bold;">
@@ -121,5 +121,48 @@
 		<?php require_once(VIEWS . "_footer.php"); ?>
 	</body>
 	<script type="text/javascript" src="/public/js/_header.js"></script>
+	<script>
+		// Older browsers might not implement mediaDevices at all, so we set an empty object first
+		if (navigator.mediaDevices === undefined) {
+			navigator.mediaDevices = {};
+		}
+  
+		// Some browsers partially implement mediaDevices. We can't just assign an object
+		// with getUserMedia as it would overwrite existing properties.
+		// Here, we will just add the getUserMedia property if it's missing.
+		if (navigator.mediaDevices.getUserMedia === undefined) {
+			navigator.mediaDevices.getUserMedia = function(constraints) {
+				// First get ahold of the legacy getUserMedia, if present
+				var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+				
+				// Some browsers just don't implement it - return a rejected promise with an error
+				// to keep a consistent interface
+				if (!getUserMedia) {
+					return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+				}
+				// Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+				return new Promise(function(resolve, reject) {
+					getUserMedia.call(navigator, constraints, resolve, reject);
+				});
+			}
+		}
+		navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+		.then(function(stream) {
+			var video = document.querySelector('video');
+			// Older browsers may not have srcObject
+			if ("srcObject" in video) {
+				video.srcObject = stream;
+			} else {
+				// Avoid using this in new browsers, as it is going away.
+				video.src = window.URL.createObjectURL(stream);
+			}
+			video.onloadedmetadata = function(e) {
+				video.play();
+			};
+		})
+		.catch(function(err) {
+			console.log(err.name + ": " + err.message);
+		});
+	</script>
 	<script type="text/javascript" src="/public/js/user/editing.js"></script>
 </html>
