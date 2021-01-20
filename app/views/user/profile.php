@@ -42,21 +42,25 @@
 							</a>
 						<?php } ?>
 					</p>
-					<div class="full-name text-center mt-5">
-						<img src="/public/images/user-profile.png"/></br>
-						</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
-						<hr/>
-					</div>
-					<div class="user-infos">
-						<span id="field">Full name : </span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?></br>
-						<span id="field">Username : </span><?php print($userData['username']); ?></br>
-						<span id="field">Email : </span><?php print($userData['email']); ?></br>
-						<span id="field">Gender : </span><?php print($userData['gender']); ?></br>
-						<?php if ( $userData['address'] ) { ?>
-							<span id="field">Address : </span><?php print($userData['address']); ?></br>
-						<?php } ?>
-						<span id="field">Created at : </span><?php print($userData['createdat']); ?></br>
-					</div>
+					<?php if ( isset( $this->view_data["success"] ) && $this->view_data["success"] == "false" ) { ?>
+						<div class="alert alert-danger"><?php print $this->view_data["msg"]; ?></div>
+					<?php } else { ?>
+						<div class="full-name text-center mt-5">
+							<img src="/public/images/user-profile.png"/></br>
+							</span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?>
+							<hr/>
+						</div>
+						<div class="user-infos">
+							<span id="field">Full name : </span><?php print($userData['firstname']); echo " "; print($userData['lastname']); ?></br>
+							<span id="field">Username : </span><?php print($userData['username']); ?></br>
+							<span id="field">Email : </span><?php print($userData['email']); ?></br>
+							<span id="field">Gender : </span><?php print($userData['gender']); ?></br>
+							<?php if ( $userData['address'] ) { ?>
+								<span id="field">Address : </span><?php print($userData['address']); ?></br>
+							<?php } ?>
+							<span id="field">Created at : </span><?php print($userData['createdat']); ?></br>
+						</div>
+					<?php }?>
 				</div>
 			</div>
 		</div>

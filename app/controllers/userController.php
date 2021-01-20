@@ -29,7 +29,7 @@
 							$this->viewData["data"][ "userData"] = $data;
 						} else {
 							$this->viewData["success"] = "false";
-							$this->viewData["msg"] = "The profile of the username specified is not found !"; 
+							$this->viewData["msg"] = "The profile of the username specified is not found !";
 						}
 					} else {
 						$this->viewData["data"][ "userData"] = $this->user_model->findUserById( $_SESSION["userid"] );
