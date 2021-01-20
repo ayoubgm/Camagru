@@ -1,5 +1,4 @@
 if ( typeof logged !== 'undefined' ) { localStorage.setItem(`token`, userToken); }
-const alert = document.getElementById('alert-msg');
 const userMenu = document.querySelector("nav .btn-auth .dropdown");
 const btnProfilePic = document.getElementById("profile-img");
 const menuNotifs = document.getElementById("notifications");
@@ -7,18 +6,18 @@ const btnMenuNotifs = document.getElementById("notif-img");
 const notificationsArea = document.getElementById("notifications-user");
 
 const					createNotification = ( data ) => {
-	let div = document.createElement('div');
-	let hr = document.createElement('hr');
-	let htmldiv = "";
+	var div = document.createElement('div');
+	var hr = document.createElement('hr');;
+	var htmldiv = "";
 	
 	div.id = "notif-" + data.id;
 	div.classList.add("w-100");
 	div.style.cssText = "height: 32px; padding: 5px; cursor: pointer;";
 	if ( data.seen == "0" ) { div.style.cssText += "background-color: #e2f9ff"; }
 	htmldiv += "<span class='float-left' style='color: #00a3cc;'>"+ data.content +"</span>";
-	htmldiv += "<span class='float-right' style='font-size: 10pt'>"+ data.moments +"</span>"
+	htmldiv += "<span class='float-right' style='font-size: 10pt'>"+ data.moments +"</span>";
 	div.addEventListener('click', () => {
-		readANotification( data.userid, data.id )
+		readANotification( data.userid, data.id );
 		window.location.href = "/gallery?image=" + data.imgid;
 	});
 	div.innerHTML = htmldiv;
@@ -31,6 +30,7 @@ const					getNotifications = () => {
 	const xhr = new XMLHttpRequest();
 	const url = "/notification/user";
 	const params = "token="+localStorage.getItem( "token" );
+	var i = 0;
 	
 	xhr.open("GET", url+"?"+params, true);
 	xhr.onloadend = () => {
@@ -44,7 +44,7 @@ const					getNotifications = () => {
 				const notifs = data.data;
 				if ( notifs.length != 0 ) {
 					notificationsArea.innerHTML = "";
-					for ( let i = 0; i < notifs.length; i++ ) { createNotification( notifs[i] ); }
+					for ( i = 0; i < notifs.length; i++ ) { createNotification( notifs[i] ); }
 				} else {
 					notificationsArea.innerHTML = "<span class='p-1'>No notifications yet !</span>";
 				}
@@ -158,6 +158,8 @@ const					logout = () => {
 }
 
 const					alertMessage = ( text, type ) => {
+	const alert = document.getElementById('alert-msg');
+	
 	switch ( type ) {
 		case "success":
 			alert.classList.add("alert-success");
@@ -173,6 +175,8 @@ const					alertMessage = ( text, type ) => {
 }
 
 const					HideAlert = () => {
+	const alert = document.getElementById('alert-msg');
+
 	setTimeout(() => {
 		alert.classList.remove("alert-success");
 		alert.classList.remove("alert-danger");
@@ -199,7 +203,7 @@ document.addEventListener('click', (event) => {
 const					navSlide = () => {
 	const burger = document.querySelector('.burger');
 	const nav = document.querySelector('.nav-links');
-	const navLinks = document.querySelectorAll('.nav-links li')
+	const navLinks = document.querySelectorAll('.nav-links li');
 
 	burger.addEventListener('click', () => {
 		// Toggle navbar

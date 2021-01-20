@@ -14,8 +14,8 @@ const pathWithourQS = url.split('?')[0];
 const queryString = url.split('?')[1];
 
 const			createUserWhoLike = ( data ) => {
-	let divLike = document.createElement('div');
-	let htmlString;
+	var divLike = document.createElement('div');
+	var htmlString;
 
 	divLike.id = "like-" + data.id;
 	divLike.classList.add("row");
@@ -28,15 +28,15 @@ const			createUserWhoLike = ( data ) => {
 }
 
 const			createComment = ( data, connectedUserId ) => {
-	let div = document.createElement('div');
-	let Subdiv1 = document.createElement('div');
-	let Subdiv2 = document.createElement('div');
-	let htmlDiv2 = "";
+	var div = document.createElement('div');
+	var Subdiv1 = document.createElement('div');
+	var Subdiv2 = document.createElement('div');
+	var htmlDiv2 = "";
 
 	div.id = "comment-"+data.id;
 	div.classList.add("row");
 	div.style.cssText = "height: auto; margin-bottom: 5px;"
-	Subdiv1.classList.add("col-lg-1");
+	Subdiv1.classList.add("col-1");
 	Subdiv1.style.cssText = "vertical-align: middle;  display: table-cell;text-align: center;"
 	Subdiv1.innerHTML = "<div class='bg-primary' style='width: 55px; height: 55px; display: inline-block; border-radius: 100%; text-align: center; color: white; font-size: 14pt; padding-top: 10px;'>" + data.firstname.charAt(0).toUpperCase() + data.lastname.charAt(0).toUpperCase() + "</div>";
 	Subdiv2.classList.add("col-lg-11");
@@ -46,8 +46,8 @@ const			createComment = ( data, connectedUserId ) => {
 	htmlDiv2 += "<a href='/user/profile/username/"+data.username+"' style='text-decoration: none; font-weight: bold; font-size: 13pt; color: rgb(90, 90, 90)'>"+data.username+"</a></br>";
 	htmlDiv2 += "<div>"+ data.content +"</div><span class='text-muted' style='float:right; font-size: 10pt;'>"+data.momments+" ago</span>";
 	Subdiv2.innerHTML = htmlDiv2;
-	div.append(Subdiv1);
-	div.append(Subdiv2);
+	div.appendChild(Subdiv1);
+	div.appendChild(Subdiv2);
 	commentsImg.scrollTop = commentsImg.scrollHeight - commentsImg.clientHeight;
 	commentsImg.appendChild( div );
 }
@@ -86,10 +86,11 @@ const			likeOrUnlike = ( id ) => {
 
 const			getUsersWhoLikedImg = ( id ) => {
 	const xhr = new XMLHttpRequest();
-	let imgid = id.split('-')[2];
+	var imgid = id.split('-')[2];
 	const url = "/like/userswholikes";
 	const params = "id="+imgid;
-	
+	var i = 0;
+
 	xhr.open("GET", url+"?"+params, true);
 	xhr.onloadend = () => {
 		if ( xhr.readyState == 4 && xhr.status == 200 ) {
@@ -98,7 +99,7 @@ const			getUsersWhoLikedImg = ( id ) => {
 			else {
 				const users = data.users;
 				if ( users.length == 0 ) { areaUsersLikeImg.innerHTML = "No likes yet !"; }
-				else { for ( let i = 0; i < users.length; i++ ) { createUserWhoLike ( users[i] ); } }
+				else { for ( i = 0; i < users.length; i++ ) { createUserWhoLike ( users[i] ); } }
 			}
 		} else {
 			alertMessage( `An error has occurenced: ${xhr.status}, ${xhr.statusText})`, "error" ); HideAlert();
@@ -188,13 +189,14 @@ const			deleteImage = ( id ) => {
 }
 
 const			getComments = ( id, connectedUserId ) => {
-	let imgid = id.split('-')[2];
+	var imgid = id.split('-')[2];
 	const areaCountComments = document.getElementById("count-comments");
 	const countLikes = document.getElementById("count-likes");
 	const arealikes = document.querySelector("[id^=likes-img]");
 	const xhr = new XMLHttpRequest();
 	const url = "/comment/commentsImg";
 	const params = "id="+imgid;
+	var i = 0;
 
 	modelBG.classList.add('active-model');
 	getUsersWhoLikedImg("likes-img-" + imgid);
@@ -214,7 +216,7 @@ const			getComments = ( id, connectedUserId ) => {
 				if ( comments.length != 0 ) {
 					commentsImg.innerHTML = "";
 					areaCountComments.innerHTML = comments.length;
-					for ( let i = 0; i < comments.length; i++ ) { createComment( comments[i], connectedUserId ); }
+					for ( i = 0; i < comments.length; i++ ) { createComment( comments[i], connectedUserId ); }
 				} else {
 					commentsImg.innerHTML = "No comments yet !"
 					areaCountComments.innerHTML = 0;
@@ -228,7 +230,8 @@ const			getComments = ( id, connectedUserId ) => {
 }
 
 const			closeModel = () => {
-	let btnSend = document.querySelector('[id^=btn-send-comment]');
+	var btnSend = document.querySelector('[id^=btn-send-comment]');
+	
 	btnSend.id = "btn-send-comment";
 	modelBG.classList.remove('active-model');
 	if ( queryString ) window.location.href = pathWithourQS;
@@ -239,9 +242,10 @@ const			closeLikesModel = () => {
 }
 
 const			showDetailsImgMenu = ( burgerId ) => {
-	let imgid = burgerId.split('-')[3];
-	let menuDetailsImg = document.getElementById("details-img-"+imgid);
-	let btnDetailsImg = document.getElementById( burgerId );
+	var imgid = burgerId.split('-')[3];
+	var menuDetailsImg = document.getElementById("details-img-"+imgid);
+	var btnDetailsImg = document.getElementById( burgerId );
+	
 	if ( menuDetailsImg.style["display"] == "none" ) menuDetailsImg.style.display = "block";
 	else menuDetailsImg.style.display = "none";
 }
@@ -250,9 +254,9 @@ document.addEventListener("click", ( event ) => {
 	const listMenusDetails = document.querySelectorAll('[id^="details-img-"]');
 	[].forEach.call( listMenusDetails, ( node ) => {
 		const imgid = node.id.split('-')[2];
-		let btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
-		let btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
-		let menuDetailsIsClicked = node.contains( event.target );
+		var btnBurgerDetails = document.getElementById("btn-details-img-" + imgid);
+		var btnBurgerIsClicked = btnBurgerDetails.contains( event.target );
+		var menuDetailsIsClicked = node.contains( event.target );
 		if ( !btnBurgerIsClicked && !menuDetailsIsClicked && node.style.display == "block" ) {
 			node.style.display = "none"
 		}

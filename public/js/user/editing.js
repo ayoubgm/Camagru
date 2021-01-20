@@ -14,18 +14,12 @@ const modelBG = document.querySelector('.model-bg');
 const modelClose = document.querySelector('#icon-cancel');
 const textarea = document.getElementById('textarea');
 const description = document.getElementById('description');
-let context = canvas.getContext('2d');
-let contextWebcam = canvasWebcam.getContext('2d');
-let base_image = new Image();
-
-if ( navigator.mediaDevices.getUserMedia ) {
-	navigator.mediaDevices.getUserMedia({ 'video': true })
-	.then(( stream ) => { video.srcObject = stream; })
-	.catch(( error ) => { alertMessage("If your camera doesn't work you can upload an image !", "error"); HideAlert(); });
-}
+var context = canvas.getContext('2d');
+var contextWebcam = canvasWebcam.getContext('2d');
+var base_image = new Image();
 
 const viewOption = ( option ) => {
-	if ( option.value != "" && navigator.mediaDevices.getUserMedia ) {
+	if ( option.value != "" ) {
 		btn_capture.removeAttribute('disabled');
 		fileInput.removeAttribute('disabled');
 		base_image.src = option.value;
@@ -53,11 +47,12 @@ btn_capture.addEventListener('click', () => {
 // Event listener for image upload 
 fileInput.addEventListener('change', (e) => {
 	if( e.target.files ) {
-		let file = e.target.files[0];
+		const file = e.target.files[0];
 		const fsize = e.target.files[0].size; 
 		const sizefile = Math.round((fsize / 1024)); 
 		const allowed = ["jpeg", "png"];
 		var found = false;
+		var i = 0;
 		
 		/**
 		 * Validation:
@@ -65,7 +60,7 @@ fileInput.addEventListener('change', (e) => {
 		 * -> Size of the file
 		 * -> Width and height of the image
 		 **/
-		for ( let i = 0; i < allowed.length; i++ ) {
+		for ( i = 0; i < allowed.length; i++ ) {
 			if ( file.type.match('image/' + allowed[i] ) ) { found = true; break; }
 		}
 		if ( !found ) {
@@ -100,7 +95,7 @@ setTimeout(() => {
 }, 4000);
 
 form.addEventListener('submit', () => {
-	let dataUrl = canvasWebcam.toDataURL();
+	var dataUrl = canvasWebcam.toDataURL();
 	textarea.value = dataUrl;
 	return true;
 });
