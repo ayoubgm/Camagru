@@ -41,6 +41,7 @@
 												echo $_POST['firstname'];
 											} ?>"
 											oninput="validateFirstName(this)"
+											autocomplete="off"
 										/>
 									</div>
 									<div class="form-group col-lg-6">
@@ -53,6 +54,7 @@
 											placeholder="lastname"
 											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['lastname']) ){ echo $_POST['lastname']; } ?>"
 											oninput="validateLastName(this)"
+											autocomplete="off"
 										/>
 									</div>
 								</div>
@@ -67,6 +69,7 @@
 											placeholder="username"
 											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['username']) ){ echo $_POST['username']; } ?>"
 											oninput="validateUsername(this)"
+											autocomplete="off"
 										/>
 									</div>
 									<div class="form-group col-lg-8">
@@ -79,6 +82,7 @@
 											placeholder="email"
 											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['email']) ){ echo $_POST['email']; } ?>"
 											oninput="validateEmail(this)"
+											autocomplete="off"
 										/>
 									</div>
 								</div>
@@ -90,6 +94,7 @@
 											class="custom-select"
 											name="gender"
 											onchange="validateGender(this)"
+											autocomplete="off"
 										>
 											<option <?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "male") { echo " Selected "; } ?> value="male">Male</option>
 											<option <?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['gender']) && $_POST['gender'] == "female") { echo "Selected"; } ?> value="female">Female</option>
@@ -105,6 +110,7 @@
 											placeholder="address"
 											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['address']) ){ echo $_POST['address']; } ?>"
 											oninput="validateAddress(this)"
+											autocomplete="off"
 										/>
 									</div>
 								</div>
@@ -119,6 +125,7 @@
 											placeholder="password"
 											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['password']) ){ echo $_POST['password']; } ?>"
 											oninput="validatePassword(this)"
+											autocomplete="off"
 										/>
 									</div>
 									<div class="form-group col-lg-6">
@@ -131,6 +138,7 @@
 											placeholder="Confirmation password"
 											value="<?php if ( (isset($this->view_data['success']) && $this->view_data['success'] == "false") && isset($_POST['confirmation_password']) ){ echo $_POST['confirmation_password']; } ?>"
 											oninput="validateConfPass(this)"
+											autocomplete="off"
 										/>
 									</div>
 								</div>

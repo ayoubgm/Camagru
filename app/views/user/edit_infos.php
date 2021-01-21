@@ -38,7 +38,7 @@
 					</div>
 					<hr/>
 					<div class="col-md-12 user-infos text-left">
-						<form action="/user/edit" method="POST">
+						<form action="/user/edit" method="POST" oninput="">
 							<div class="form-row">
 								<div class="form-group col-lg-6 m-0 mb-1">
 									<label for="inputFirstName">Firstname <span class="text-danger">*</span>:</label>
@@ -49,6 +49,7 @@
 										name="firstname"
 										placeholder="firstname"
 										value="<?php print( $userData['firstname'] ); ?>"
+										oninput="validateFirstName(this);"
 									/>
 								</div>
 								<div class="form-group col-lg-6 m-0 mb-1">
@@ -60,6 +61,7 @@
 										id="inputLastName"
 										placeholder="lastname"
 										value="<?php print( $userData['lastname'] ); ?>"
+										oninput="validateLastName(this);"
 									/>
 								</div>
 							</div>
@@ -73,6 +75,7 @@
 										id="inputUsername"
 										placeholder="username"
 										value="<?php print( $userData['username'] ); ?>"
+										oninput="validateUsername(this);"
 									/>
 								</div>
 								<div class="form-group col-lg-8 m-0 mb-1">
@@ -84,6 +87,7 @@
 										id="inputEmail"
 										placeholder="email"
 										value="<?php print( $userData['email'] ); ?>"
+										oninput="validateEmail(this);"
 									/>
 								</div>
 							</div>
@@ -94,6 +98,7 @@
 										id="choice-gender"
 										class="custom-select"
 										name="gender"
+										onchange="validateGender(this);"
 									>
 										<option
 										<?php 
@@ -118,6 +123,7 @@
 										id="inputAddress"
 										placeholder="address"
 										value="<?php if ( isset($userData['address']) ) { print( $userData['address'] ); } ?>"
+										oninput="validateAddress(this);"
 									/>
 								</div>
 							</div>
@@ -149,4 +155,5 @@
 		<?php require_once(VIEWS . "_footer.php"); ?>
 	</body>
 	<script type="text/javascript" src="/public/js/_header.js"></script>
+	<script type="text/javascript" src="/public/js/user/editinfos.js"></script>
 </html>
