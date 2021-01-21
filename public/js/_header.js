@@ -210,10 +210,11 @@ const					navSlide = () => {
 		nav.classList.toggle('nav-active');
 		
 		// Animate nav links
-		navLinks.forEach((link, index) => {
-			if ( link.style.animation ) { link.style.animation = ""; }
-			else { link.style.animation = `navLinkFade 0.5s ease forwards ${index / 6 + 0.4}s`; }
-		});
+		var i = 0;
+		for ( i = 0; i < navLinks.length; i++ ) {
+			if ( navLinks[i].style.animation ) { navLinks[i].style.animation = ""; }
+			else { navLinks[i].style.animation = `navLinkFade 0.5s ease forwards ${i / 4 + 0.5}s`; }
+		}
 
 		// Burger animation
 		burger.classList.toggle('toggle');
