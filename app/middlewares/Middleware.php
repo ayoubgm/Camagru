@@ -27,7 +27,7 @@
 
 		public function				validateUsername ( $username )
 		{
-			return ( !preg_match( "/^(?=.{3,20}$)(?![-_.])(?!.*[-_.]{2})[a-z0-9._-]+(?<![-_.])$/", strtolower( $username ) ) )
+			return ( strlen( $username ) < 3 || strlen( $username ) > 20 || !preg_match( "/^[a-zA-Z]+(([-_.]?[a-zA-Z0-9])?)+$/", strtolower( $username ) ) )
 			? "The username should contain between 3 and 20 letters or numbers ( -, _ or . ) !"
 			: null;
 		}
