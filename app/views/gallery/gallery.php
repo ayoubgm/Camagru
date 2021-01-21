@@ -130,7 +130,7 @@
 							<img
 								id="comments-img-<?php echo $image['id']; ?>"
 								src="/public/images/comment-icone.png"
-								onclick="getComments( this.id, <?php echo $_SESSION['userid']; ?> );"
+								onclick="getComments( this.id, <?php echo ( isset( $_SESSION['userid'] ) ) ? $_SESSION['userid'] : 0; ?> );"
 							/>
 						</div>
 					</div>
@@ -173,7 +173,7 @@
 								type="submit"
 								name="btn-comment"
 								value="Send"
-								onclick="addComment( this.id, <?php echo ( isset( $_SESSION['userid'] ) ) ? $_SESSION['userid'] : ""; ?> )"
+								onclick="addComment( this.id, <?php echo ( isset( $_SESSION['userid'] ) ) ? $_SESSION['userid'] : 0; ?> )"
 							>
 						</div>
 					</div>

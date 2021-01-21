@@ -121,6 +121,7 @@
 		<?php require_once(VIEWS . "_footer.php"); ?>
 	</body>
 	<script type="text/javascript" src="/public/js/_header.js"></script>
+	<script type="text/javascript" src="/public/js/user/editing.js"></script>
 	<script>
 		// Older browsers might not implement mediaDevices at all, so we set an empty object first
 		if (navigator.mediaDevices === undefined) {
@@ -161,8 +162,7 @@
 			};
 		})
 		.catch( (err) => {
-			console.log(err.name + ": " + err.message);
+			alertMessage(err.message, "error"); HideAlert();
 		});
 	</script>
-	<script type="text/javascript" src="/public/js/user/editing.js"></script>
 </html>
