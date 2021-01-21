@@ -60,24 +60,16 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 ALTER TABLE `users`
 ADD CONSTRAINT uk_email_username UNIQUE ( email, username );
 
-
-
 ALTER TABLE `gallery`
 ADD CONSTRAINT fk_userid_img FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
 
 ALTER TABLE `likes`
 ADD CONSTRAINT fk_userid_like FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT fk_imgid_like FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
-
-
 ALTER TABLE `comments`
 ADD CONSTRAINT fk_userid_comment FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT fk_imgid_comment FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-
 
 ALTER TABLE `notifications`
 ADD CONSTRAINT fk_userid_notif FOREIGN KEY ( userid ) REFERENCES users( id ) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -85,17 +77,8 @@ ADD CONSTRAINT fk_imgid_notif FOREIGN KEY ( imgid ) REFERENCES gallery( id ) ON 
 ADD CONSTRAINT fk_likeid_notif FOREIGN KEY ( likeid ) REFERENCES likes( id ) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD CONSTRAINT fk_commentid_notif FOREIGN KEY ( commentid ) REFERENCES comments( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
-
-
-
-
-
--- Trigger for increment count likes of an image and create a notification for author
-
-
 DROP TRIGGER IF EXISTS`tr_insert_like`;
 DELIMITER //
-
 
 
 CREATE TRIGGER `tr_insert_like`
@@ -118,15 +101,9 @@ BEGIN
 	END IF;
 END//
 
-
-
-
 DELIMITER ;
 DROP TRIGGER IF EXISTS `tr_delete_like`;
 DELIMITER //
-
-
--- Trigger for decrement count likes of an image and remove notification of the like
 
 
 CREATE TRIGGER `tr_delete_like`
@@ -140,14 +117,10 @@ BEGIN
 END//
 
 
--- Trigger for increment count comments of an image and create a notification for author
-
 DELIMITER ;
 
 DROP TRIGGER IF EXISTS `tr_insert_com`;
 DELIMITER //
-
-
 
 
 CREATE TRIGGER `tr_insert_com`
@@ -171,16 +144,9 @@ BEGIN
 END//
 
 
-
 DELIMITER ;
 DROP TRIGGER IF EXISTS `tr_delete_com`;
 DELIMITER //
-
-
-
-
-
--- Trigger for decrement count comments of an image and remove notification of the comment
 
 
 CREATE TRIGGER `tr_delete_com`
@@ -192,7 +158,5 @@ BEGIN
 	-- Remove like notification 
 	DELETE FROM notifications WHERE commentid = OLD.id;
 END//
-
-
 
 DELIMITER ;
