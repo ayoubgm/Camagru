@@ -16,14 +16,10 @@
 		{
 			$this->url = $this->parseURL();
 			$setup = new setup;
-			$setup->connect();
-			$this->setControllerAndMethod();
-			// Create or recreate database `db_camagru` on the mysql server 
-			if ( $this->controller instanceof homeController && $this->method === "index" ) {
-				if ( !$setup->setupDatabase() ) {
-					echo "Failed to create or recreate the database !";
-				}
+			if ( !$setup->setupDatabase() ) {
+				die("Failed to create or recreate the database !");
 			}
+			$this->setControllerAndMethod();
 			$this->redirect();
 		}
 		

@@ -1,5 +1,3 @@
-DROP DATABASE IF EXISTS `db_camagru`;
-
 CREATE DATABASE `db_camagru`;
 
 USE `db_camagru`;
@@ -78,9 +76,6 @@ ADD CONSTRAINT fk_likeid_notif FOREIGN KEY ( likeid ) REFERENCES likes( id ) ON 
 ADD CONSTRAINT fk_commentid_notif FOREIGN KEY ( commentid ) REFERENCES comments( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
 DROP TRIGGER IF EXISTS`tr_insert_like`;
-DELIMITER //
-
-
 CREATE TRIGGER `tr_insert_like`
 AFTER INSERT ON likes
 FOR EACH ROW
@@ -99,13 +94,9 @@ BEGIN
     	INSERT INTO notifications (content, userid, likeid, imgid)
     	VALUES ("New like on your picture !", @author_id, NEW.id, NEW.imgid);
 	END IF;
-END//
+END;
 
-DELIMITER ;
 DROP TRIGGER IF EXISTS `tr_delete_like`;
-DELIMITER //
-
-
 CREATE TRIGGER `tr_delete_like`
 AFTER DELETE on likes
 FOR EACH ROW
@@ -114,15 +105,11 @@ BEGIN
 	UPDATE gallery SET countlikes = countlikes - 1 WHERE id = OLD.imgid;
 	-- Remove like notification 
 	DELETE FROM notifications WHERE likeid = OLD.id;
-END//
+END;
 
 
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS `tr_insert_com`;
-DELIMITER //
-
-
 CREATE TRIGGER `tr_insert_com`
 AFTER INSERT ON comments
 FOR EACH ROW
@@ -141,14 +128,10 @@ BEGIN
     	INSERT INTO notifications (content, userid, commentid, imgid)
     	VALUES ("New comment on your picture !", @author_id, NEW.id, NEW.imgid);
 	END IF;
-END//
+END;
 
 
-DELIMITER ;
 DROP TRIGGER IF EXISTS `tr_delete_com`;
-DELIMITER //
-
-
 CREATE TRIGGER `tr_delete_com`
 AFTER DELETE on comments
 FOR EACH ROW
@@ -157,6 +140,4 @@ BEGIN
 	UPDATE gallery SET countcomments = countcomments - 1 WHERE id = OLD.imgid;
 	-- Remove like notification 
 	DELETE FROM notifications WHERE commentid = OLD.id;
-END//
-
-DELIMITER ;
+END;

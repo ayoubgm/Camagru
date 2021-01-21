@@ -30,11 +30,12 @@
 					return $this->pdo;
 				}
 			} catch( PDOException $e ) {
-				echo "Something went wrong while connect to database (".$e->getMessage().")";
+				die($e->getMessage());
+				die("Something went wrong while connect to database ".$e->getMessage());
 			}
 		}
 
-		protected function					query( $query, $params = [] )
+		public function					query( $query, $params = [] )
 		{
 			try {
 				$stmt = $this->pdo->prepare( $query );
@@ -42,7 +43,7 @@
 					return $stmt;
 				}
 			} catch( PDOException $e ) {
-				echo "Something went wrong while execute the query (".$e->getMessage().")";
+				die("Something went wrong while execute the query ".$e->getMessage());
 			}
 		}
 		
