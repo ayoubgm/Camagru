@@ -7,9 +7,7 @@
 		<ul class="nav-links">
 			<li class="active-link"><a href="/">Home</a></li>
 			<li><a href="/user/editing">Editing</a></li>
-			<?php if ( $gallery ) { ?><li><a href="/gallery">Gallery</a></li><?php } ?>
-			<li><a href="/help">Help</a></li>
-			<li><a href="/aboutus">About us</a></li>
+			<li><a href="/gallery">Gallery</a></li>
 			<?php if ( !isset($_SESSION['userid']) ) { ?>
 				<li><a href="/signin" id="btn-signin">Signin</a></li>
 				<li><a href="/signup" id="btn-signup">Signup</a></li>
