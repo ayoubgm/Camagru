@@ -109,8 +109,8 @@
 			if ( !$data["oldpassword"] || !$data["newpassword"] || !$data["confirmation_password"] ) {
 				return "Invalid data provided !";
 			} else if (
-				( $error = $this->validateOldPassword( $data['oldpassword'] ) ) ||
-				( $error = $this->validateNewPassword( $data['newpassword'] ) )
+				( $error = $this->validatePassword( $data['oldpassword'] ) ) ||
+				( $error = $this->validatePassword( $data['newpassword'] ) )
 			) {
 				return $error;
 			} else if ( $data['newpassword'] != $data['confirmation_password'] ) {

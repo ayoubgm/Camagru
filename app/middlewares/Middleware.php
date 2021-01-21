@@ -60,21 +60,6 @@
 			: null;
 		}
 
-		public function				validateOldPassword ( $oldpassword )
-		{
-			return ( $this->validatePassword( $oldpassword ) )
-			? "The old password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !"
-			: null;
-		}
-
-		public function				validateNewPassword ( $newpassword )
-		{
-			return ( $this->validatePassword( $newpassword ) )
-			? "The new password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character !"
-			: null;
-		}
-		
-
 		public function				isFullnameExists ( $firstname, $lastname )
 		{
 			if ( $stt = $this->query("SELECT * FROM `users` WHERE firstname = ? AND lastname = ?", [ strtolower($firstname), strtolower($lastname) ]) ) {
