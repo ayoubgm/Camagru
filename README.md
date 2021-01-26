@@ -49,7 +49,7 @@ The project will stuctured with MVC design pattern (concept), it separates appli
 
 ## :camera: `Screen shots`</br>
 ### :triangular_flag_on_post: `Home`</br>
-![Image of camagru home](https://i.ibb.co/mb93yHG/camagru-home.png)</br>
+![Image of camagru home](https://i.ibb.co/bKMH54N/Screen-Shot-2021-01-26-at-9-39-09-AM.png)</br>
 </br>
 ### :triangular_flag_on_post: `Sign up`</br>
 ![Image of camagru sign up](https://i.ibb.co/Rp41ST3/camagru-signup.png)</br>
@@ -81,5 +81,3 @@ The project will stuctured with MVC design pattern (concept), it separates appli
 ### :triangular_flag_on_post: `Notification preference`</br>
 ![Image of camagru Notification preference](https://i.ibb.co/sqxBDSq/9-notif-preference.png)</br>
 <br/>
-
-Work-in-Progress !
