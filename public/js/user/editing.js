@@ -65,8 +65,8 @@ fileInput.addEventListener('change', (e) => {
 		}
 		if ( !found ) {
 			alertMessage("File not supported, try jpeg, jpg or png", "error"); HideAlert();
-		} else if ( sizefile > 4096 || sizefile < 2048 ) {
-			alertMessage("The size of the file must be between 2-4 MB", "error"); HideAlert();
+		} else if ( sizefile < 1 ) {
+			alertMessage("The size of the file is too small !", "error"); HideAlert();
 		} else if ( x.value < 0 || y.value < 0 ) {
 			alertMessage("Coordinates of the sticker must be positive", "error"); HideAlert();
 		} else {
