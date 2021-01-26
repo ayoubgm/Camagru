@@ -16,6 +16,8 @@
 				<li><a href="/user/settings" id="settings">Settings</a></li>
 				<li><a href="#" id="logout" onclick="logout();">Logout</a></li>
 			<?php } ?>
+			<li><a href="#">Help</a></li>
+			<li><a href="#">About us</a></li>
 		</ul>
 		<div class="btn-auth m-0">
 			<?php if ( !isset($_SESSION['userid']) ) { ?>
